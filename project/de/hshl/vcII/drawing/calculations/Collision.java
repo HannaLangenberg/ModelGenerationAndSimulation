@@ -17,17 +17,18 @@ public class Collision {
     }
 
     private static void ballOnBall(Ball b, Ball b2) {
-        // finds the radii of k1, and k2
+        // finds the radii of b, and b2
         double r_b = b.getRadius(),
                 r_b2 = b2.getRadius();
 
-        // finds the center-points of k1, and k2
+        // finds the center-points of b, and b2
         MyVector pos_b = b.getPosVec(),
                   pos_b2 = b2.getPosVec();
 
-        if(Math.sqrt(Math.pow(pos_b.y-pos_b.x,2)+Math.pow(pos_b2.y-pos_b2.x,2)) < r_b+r_b2)
+        if(MyVector.distance(pos_b, pos_b2) > r_b+r_b2)
             return;
 
+        
     }
 /*
     public static void collide(Kugel k){
