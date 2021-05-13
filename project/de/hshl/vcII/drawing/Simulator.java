@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing;
 
 import project.de.hshl.vcII.drawing.calculations.Movement;
-import project.de.hshl.vcII.entities.Ball;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;

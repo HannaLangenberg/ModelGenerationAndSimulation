@@ -8,9 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Polygon;
-import project.de.hshl.vcII.entities.Ball;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.Entity;
 import project.de.hshl.vcII.entities.stationary.BlockNormal;
 
@@ -169,7 +168,6 @@ public class MainWindowController implements Initializable {
     @FXML
     private void clearScreen() {
         mainWindowModel.getEntityManager().getBlocks().removeAll(mainWindowModel.getEntityManager().getBlocks());
-        mainWindowModel.getEntityManager().getKugeln().removeAll(mainWindowModel.getEntityManager().getKugeln());
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
         d_play.setVisible(false);

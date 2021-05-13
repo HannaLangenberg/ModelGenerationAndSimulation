@@ -4,7 +4,7 @@ package project.de.hshl.vcII.mvc;
 import project.de.hshl.vcII.KeyManager;
 import project.de.hshl.vcII.drawing.visuals.Grid;
 import project.de.hshl.vcII.drawing.visuals.Mode;
-import project.de.hshl.vcII.entities.BallManager;
+import project.de.hshl.vcII.entities.moving.BallManager;
 import project.de.hshl.vcII.entities.EntityManager;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -43,11 +43,6 @@ public class MainWindowModel {
     private double screenWidth, screenHeight;
     private double savedSceneX, savedSceneY, savedSceneWidth, savedSceneHeight;
     private final int taskbarHeight = 36;
-    // Variables to maintain the simulation
-    private boolean intersects = false;
-    private boolean sphereAndBlockintersect = false;
-    private boolean blocksIntersect = false;
-    private boolean spheresIntersect = false;
 
     // Private to make it a Singleton-class.
     private MainWindowModel(){
@@ -122,38 +117,6 @@ public class MainWindowModel {
 
     public AnchorPane getASettingsPane() {
         return aSettingsPane;
-    }
-
-    public boolean isIntersects() {
-        return intersects;
-    }
-
-    public void setIntersects(boolean intersects) {
-        this.intersects = intersects;
-    }
-
-    public boolean isSphereAndBlockintersect() {
-        return sphereAndBlockintersect;
-    }
-
-    public void setSphereAndBlockintersect(boolean sphereAndBlockintersect) {
-        this.sphereAndBlockintersect = sphereAndBlockintersect;
-    }
-
-    public boolean isBlocksIntersect() {
-        return blocksIntersect;
-    }
-
-    public void setBlocksIntersect(boolean blocksIntersect) {
-        this.blocksIntersect = blocksIntersect;
-    }
-
-    public boolean isSpheresIntersect() {
-        return spheresIntersect;
-    }
-
-    public void setSpheresIntersect(boolean spheresIntersect) {
-        this.spheresIntersect = spheresIntersect;
     }
 
     public boolean isChoiceEnabled() {

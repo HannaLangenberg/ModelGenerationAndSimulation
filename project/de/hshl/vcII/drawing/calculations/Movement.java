@@ -1,6 +1,6 @@
 package project.de.hshl.vcII.drawing.calculations;
 
-import project.de.hshl.vcII.entities.Ball;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;

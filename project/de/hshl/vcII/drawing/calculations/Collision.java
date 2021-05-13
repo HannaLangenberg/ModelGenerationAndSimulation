@@ -1,11 +1,8 @@
 package project.de.hshl.vcII.drawing.calculations;
 
-import project.de.hshl.vcII.entities.Ball;
-import project.de.hshl.vcII.entities.Entity;
-import project.de.hshl.vcII.entities.stationary.Block;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
-import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
@@ -31,7 +28,6 @@ public class Collision {
         if(Math.sqrt(Math.pow(pos_b.y-pos_b.x,2)+Math.pow(pos_b2.y-pos_b2.x,2)) < r_b+r_b2)
             return;
 
-        
     }
 /*
     public static void collide(Kugel k){

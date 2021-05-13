@@ -1,11 +1,8 @@
 package project.de.hshl.vcII.drawing;
 
-import javafx.scene.paint.Color;
-import project.de.hshl.vcII.entities.Ball;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.entities.Entity;
-import project.de.hshl.vcII.entities.stationary.Block;
-import project.de.hshl.vcII.entities.moving.Kugel;
 import javafx.scene.input.MouseEvent;
 import project.de.hshl.vcII.utils.MyVector;
 
@@ -38,7 +35,6 @@ public class Placer {
             ball.setCenterX(x);
             ball.setCenterY(y);
             ball.setPosVec(new MyVector(x, y));
-            mainWindowModel.getADrawingPane().getChildren().remove(ball);
         }
     }
 

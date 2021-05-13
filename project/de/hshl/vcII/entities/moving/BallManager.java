@@ -1,4 +1,4 @@
-package project.de.hshl.vcII.entities;
+package project.de.hshl.vcII.entities.moving;
 
 import java.util.ArrayList;
 import java.util.List;

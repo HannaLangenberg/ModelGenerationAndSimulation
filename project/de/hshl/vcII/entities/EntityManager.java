@@ -1,7 +1,6 @@
 package project.de.hshl.vcII.entities;
 
 import project.de.hshl.vcII.entities.stationary.Block;
-import project.de.hshl.vcII.entities.moving.Kugel;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -12,14 +11,10 @@ import java.util.List;
  * uses two lists; One for Objects with the type Kugel, on for Objects with the type Block
  */
 public class EntityManager {
-    private List<Kugel> kugeln = new ArrayList<>();
     private List<Block> blocks = new ArrayList<>();
 
     private Entity e;
 
-    public void addKugel(Kugel kugel){
-        kugeln.add(kugel);
-    }
 
     public void  addBlock(Block block){
         blocks.add(block);
@@ -33,10 +28,6 @@ public class EntityManager {
 
     public List<Block> getBlocks() {
         return blocks;
-    }
-
-    public List<Kugel> getKugeln() {
-        return kugeln;
     }
 
     public Entity getE(){
