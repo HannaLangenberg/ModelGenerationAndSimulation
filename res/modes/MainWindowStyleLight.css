@@ -1,0 +1,22 @@
+.root{
+    -fx-background-color: #FEFEFE;
+}
+
+.anchor-drawing-pane{
+    -fx-background-color: #DCDCDC;
+}
+
+.menu-bar{
+    -fx-text-fill: #808080;
+    -fx-background-color: #FEFEFE;
+}
+
+
+.button{
+    -fx-background-color: #FEFEFE;
+}
+
+.button:hover{
+    -fx-text-fill: #FEFEFE;
+    -fx-background-color: #1999C9;
+}

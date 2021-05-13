@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
+   <children>
+      <BorderPane layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <HBox fx:id="hHeader" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="36.0" BorderPane.alignment="CENTER_LEFT">
+               <children>
+                  <HBox>
+                     <children>
+                        <ImageView fitHeight="36.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" />
+                        <Region />
+                     </children></HBox>
+                  <MenuBar>
+                     <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#clearScreen" text="Clear Screen" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#choiceBall" text="Ball" />
+                              <MenuItem disable="true" mnemonicParsing="false" onAction="#choiceBlock" text="Block" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Grid">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#toggleGrid" text="Toggle Grid" />
+                              <MenuItem fx:id="miSnap" mnemonicParsing="false" onAction="#snapToGrid" text="Snap To Grid" />
+                           </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false">
+                           <graphic>
+                              <Label fx:id="lMode" onMouseClicked="#switch_mode" text="Light" />
+                           </graphic></Menu>
+                     </menus>
+                  </MenuBar>
+                  <FlowPane fx:id="fpActiveControls" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="386.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                     <children>
+                        <Button fx:id="btn_start_stop" mnemonicParsing="false" onAction="#run" text="Start/Stop">
+                           <FlowPane.margin>
+                              <Insets right="20.0" />
+                           </FlowPane.margin></Button>
+                        <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="50.0">
+                           <children>
+                              <Polygon fx:id="d_play" fill="GREEN" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="90.0" scaleX="0.15" scaleY="0.125" scaleZ="0.25" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+                              <HBox fx:id="hb_pause" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="50.0" visible="false">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="18.0" translateY="9.75" width="3.0" />
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="15.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="23.0" translateY="9.75" width="3.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <Label fx:id="lGridSnapActive" text="GridSnap aktiv!" textFill="GREEN" visible="false">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <FlowPane.margin>
+                              <Insets left="10.0" />
+                           </FlowPane.margin>
+                        </Label>
+                     </children>
+                  </FlowPane>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="105.0" style="-fx-background-color: TRANSPARENT;">
+                     <children>
+                        <StackPane fx:id="sMinPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#minimize" onMouseEntered="#mouseEnteredMinimize" onMouseExited="#mouseExitedMinimize" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
+                           <children>
+                              <Line endX="5.0" startX="-5.0" stroke="#c9c9c9">
+                                 <StackPane.margin>
+                                    <Insets top="4.0" />
+                                 </StackPane.margin>
+                              </Line>
+                           </children>
+                        </StackPane>
+                        <StackPane fx:id="sMinMaxPane" layoutX="82.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#minMax" onMouseEntered="#mouseEnteredMinMax" onMouseExited="#mouseExitedMinMax" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
+                           <children>
+                              <Rectangle fill="#ffffff00" height="8.0" stroke="#c9c9c9" strokeType="INSIDE" width="11.0" />
+                           </children>
+                        </StackPane>
+                        <StackPane fx:id="sExitPane" layoutX="82.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#exit" onMouseEntered="#mouseEnteredExit" onMouseExited="#mouseExitedExit" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
+                           <children>
+                              <Line endX="4.0" endY="4.0" startX="-4.0" startY="-4.0" stroke="#c9c9c9">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Line>
+                              <Line endX="-4.0" endY="4.0" startX="4.0" startY="-4.0" stroke="#c9c9c9">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </Line>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </top>
+         <left>
+            <AnchorPane fx:id="aDrawingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMouse" prefHeight="364.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+            </AnchorPane>
+         </left>
+         <right>
+            <AnchorPane fx:id="aSettingsPane" disable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0">
+                     <children>
+                        <Label text="Einstellungen">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <VBox>
+                           <children>
+                              <Label text="Startgeschwindigkeit" />
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="80.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="140.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="x-Richtung:" />
+                                    <Label text="y-Richtung:" GridPane.rowIndex="1" />
+                                    <TextField fx:id="tf_v0_X" onAction="#tf_v0_X_OnAction" onKeyPressed="#tf_v0_X_OnKeyPressed" onMouseExited="#tf_v0_X_OnMouseExited" text="0" GridPane.columnIndex="1" />
+                                    <TextField fx:id="tf_v0_Y" onAction="#tf_v0_Y_OnAction" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="15.0" right="10.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <CheckBox fx:id="chb_Wind" mnemonicParsing="false" onAction="#chb_Wind_OnAction" text="Wind">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </CheckBox>
+                              <GridPane fx:id="gp_Wind" disable="true" layoutX="20.0" layoutY="27.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="80.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="140.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="x-Richtung:" />
+                                    <Label text="y-Richtung:" GridPane.rowIndex="1" />
+                                    <TextField fx:id="tf_Wind_X" onAction="#tf_Wind_X_OnAction" text="0" GridPane.columnIndex="1" />
+                                    <TextField fx:id="tf_Wind_Y" onAction="#tf_Wind_Y_OnAction" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="15.0" right="10.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <Label layoutX="10.0" layoutY="10.0" text="Simulationsgeschwindigkeit">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Slider fx:id="sl_SimSpd" blockIncrement="0.25" majorTickUnit="0.5" max="1.75" min="0.25" minorTickCount="1" onMouseReleased="#sl_SimSpd_OnDragDetected" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="15.0" right="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </Slider>
+                              <Label layoutX="10.0" layoutY="194.0" text="WIP: Material" />
+                              <ChoiceBox fx:id="cb_Material" onDragDetected="#cb_Material_OnAction" prefWidth="225.0">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="15.0" right="10.0" top="5.0" />
+                                 </VBox.margin>
+                              </ChoiceBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </children></AnchorPane>
+         </right>
+      </BorderPane>
+   </children>
+</AnchorPane>

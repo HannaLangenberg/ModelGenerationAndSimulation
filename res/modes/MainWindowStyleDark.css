@@ -1,0 +1,37 @@
+.root{
+    -fx-background-color: #808080;
+}
+
+.anchor-drawing-pane{
+    -fx-background-color: #505050;
+}
+
+.menu-bar{
+    -fx-text-fill: #FEFEFE;
+    -fx-background-color: #808080;
+}
+
+.menu{
+    -fx-background-color: #808080;
+}
+
+.menu:hover{
+    -fx-background-color: #8080B0;
+ }
+
+.context-menu{
+    -fx-background-color: #808080;
+}
+
+.menu-item:hover{
+    -fx-background-color: #8080B0;
+}
+
+.button{
+    -fx-text-fill: #FEFEFE;
+    -fx-background-color: #808080;
+}
+
+.button:hover{
+    -fx-background-color: #8080B0;
+}
