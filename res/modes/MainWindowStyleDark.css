@@ -6,6 +6,10 @@
     -fx-background-color: #505050;
 }
 
+.check-box *.box {
+    -fx-background-color: #c0c0c0;
+}
+
 .menu-bar{
     -fx-text-fill: #FEFEFE;
     -fx-background-color: #808080;
