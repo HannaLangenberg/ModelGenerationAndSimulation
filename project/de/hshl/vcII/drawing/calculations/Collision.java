@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Collision {
     public static void collide(Ball b){
+        //-Collision-test-----------------------------------------------------------------------------------------------
         List<Ball> balls = MainWindowModel.get().getBallManager().getBalls();
         int ballIndex = balls.indexOf(b);
         for(int i = ballIndex + 1; i < balls.size(); i++){
@@ -16,19 +17,65 @@ public class Collision {
         }
     }
 
-    private static void ballOnBall(Ball b, Ball b2) {
-        // finds the radii of b, and b2
-        double r_b = b.getRadius(),
+    private static void ballOnBall(Ball b1, Ball b2) {
+        //-Do-two-balls-collide-----------------------------------------------------------------------------------------
+
+        // finds the radii of b1, and b2
+        double r_b1 = b1.getRadius(),
                 r_b2 = b2.getRadius();
 
-        // finds the center-points of b, and b2
-        MyVector pos_b = b.getPosVec(),
+        // finds the center-points of b1, and b2
+        MyVector pos_b1 = b1.getPosVec(),
                   pos_b2 = b2.getPosVec();
 
-        if(MyVector.distance(pos_b, pos_b2) > r_b+r_b2)
+        if(MyVector.distance(pos_b1, pos_b2) > r_b1+r_b2)
             return;
 
-        
+        //-If-they-collide----------------------------------------------------------------------------------------------
+        angledShock(b1, b2);
+    }
+
+    private static void centerShock(Ball b1, Ball b2){
+        //-------Calculate-values---------------------------------------------------------------------------------------
+
+        MyVector schritt1_b1 = MyVector.add(MyVector.multiply(b1.getVelVec(), b1.getMass()), MyVector.multiply(b2.getVelVec(), b2.getMass()));
+        MyVector schritt1_b2 = MyVector.add(MyVector.multiply(b1.getVelVec(), b1.getMass()), MyVector.multiply(b2.getVelVec(), b2.getMass()));
+
+        MyVector schritt2_b1 = MyVector.divide(schritt1_b1, b1.getMass() + b2.getMass());
+        MyVector schritt2_b2 = MyVector.divide(schritt1_b2, b1.getMass() + b2.getMass());
+
+        MyVector schritt3_b1 = MyVector.multiply(schritt2_b1, 2);
+        MyVector schritt3_b2 = MyVector.multiply(schritt2_b2, 2);
+
+        MyVector schritt4_b1 = MyVector.subtract(schritt3_b1, b1.getVelVec());
+        MyVector schritt4_b2 = MyVector.subtract(schritt3_b2, b2.getVelVec());
+
+        //-------Set-values---------------------------------------------------------------------------------------------
+
+        b1.setVelVec(schritt4_b1);
+        b2.setVelVec(schritt4_b2);
+    }
+
+    private static void angledShock(Ball b1, Ball b2){
+        //-------Calculate-values---------------------------------------------------------------------------------------
+
+        // Norm the line between the two centers of b1 and b2.
+        MyVector centerLine = MyVector.norm(MyVector.subtract(b2.getPosVec(), b1.getPosVec()));
+
+        // Find the orthogonal velocity vector of b1
+        MyVector v1Orthogonal = MyVector.subtract(b1.getVelVec(), MyVector.multiply(centerLine, MyVector.dot(b1.getVelVec(), centerLine)));
+        // Find the parallel velocity vector of b2
+        MyVector v2Parallel = MyVector.multiply(centerLine, MyVector.dot(b2.getVelVec(), centerLine));
+
+        // Find the orthogonal velocity vector of b2
+        MyVector v2Orthogonal = MyVector.subtract(b2.getVelVec(), MyVector.multiply(centerLine, MyVector.dot(b2.getVelVec(), centerLine)));
+        // Find the parallel velocity vector of b1
+        MyVector v1Parallel = MyVector.multiply(centerLine, MyVector.dot(b1.getVelVec(), centerLine));
+
+        //-------Set-values---------------------------------------------------------------------------------------------
+
+        b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
+        b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
     }
 /*
     public static void collide(Kugel k){
