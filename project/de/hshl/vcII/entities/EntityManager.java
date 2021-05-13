@@ -15,14 +15,17 @@ public class EntityManager {
 
     private Entity e;
 
+
     public void  addBlock(Block block){
         blocks.add(block);
     }
 
 
+
     /*
      * Getters and setters
      */
+
     public List<Block> getBlocks() {
         return blocks;
     }

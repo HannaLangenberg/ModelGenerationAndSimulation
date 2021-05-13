@@ -23,7 +23,7 @@ public class Collision {
 
         // finds the center-points of k1, and k2
         MyVector pos_b = b.getPosVec(),
-                pos_b2 = b2.getPosVec();
+                  pos_b2 = b2.getPosVec();
 
         if(Math.sqrt(Math.pow(pos_b.y-pos_b.x,2)+Math.pow(pos_b2.y-pos_b2.x,2)) < r_b+r_b2)
             return;
@@ -132,3 +132,4 @@ public class Collision {
     }
  */
 }
+
