@@ -28,13 +28,18 @@ public class Placer {
         x = e.getX();
         y = e.getY();
 
-//        if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
+        if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
             ball.setCenterX(x);
             ball.setCenterY(y);
             ball.setPosVec(new MyVector(x, y));
             mainWindowModel.getBallManager().addBall(ball);
             mainWindowModel.getADrawingPane().getChildren().add(ball);
-//        }
+        } else {
+            ball.setCenterX(x);
+            ball.setCenterY(y);
+            ball.setPosVec(new MyVector(x, y));
+            mainWindowModel.getADrawingPane().getChildren().remove(ball);
+        }
     }
 
     public double getX() {

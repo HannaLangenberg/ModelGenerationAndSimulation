@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
+import project.de.hshl.vcII.entities.Ball;
 import project.de.hshl.vcII.entities.Entity;
-import project.de.hshl.vcII.entities.moving.Kugel;
 import project.de.hshl.vcII.entities.stationary.Block;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
@@ -10,7 +10,30 @@ import javafx.scene.shape.Rectangle;
 import java.util.List;
 
 public class Collision {
+    public static void collide(Ball b){
+        List<Ball> balls = MainWindowModel.get().getBallManager().getBalls();
+        int ballIndex = balls.indexOf(b);
+        for(int i = ballIndex + 1; i < balls.size(); i++){
+            Ball b2 = balls.get(i);
+            ballOnBall(b, b2);
+        }
+    }
 
+    private static void ballOnBall(Ball b, Ball b2) {
+        // finds the radii of k1, and k2
+        double r_b = b.getRadius(),
+                r_b2 = b2.getRadius();
+
+        // finds the center-points of k1, and k2
+        MyVector pos_b = b.getPosVec(),
+                  pos_b2 = b2.getPosVec();
+
+        if(Math.sqrt(Math.pow(pos_b.y-pos_b.x,2)+Math.pow(pos_b2.y-pos_b2.x,2)) < r_b+r_b2)
+            return;
+
+        
+    }
+/*
     public static void collide(Kugel k){
         if(insideWorld(k)){
             List<Kugel> kugelList = MainWindowModel.get().getEntityManager().getKugeln();
@@ -87,7 +110,7 @@ public class Collision {
         return null;
 
 
-        /*if(k.getCollision().getBoundsInParent().intersects(b.getCollision().getBoundsInParent())){
+        if(k.getCollision().getBoundsInParent().intersects(b.getCollision().getBoundsInParent())){
             if(k.getV().x < b.getPosX()){
                 if(k.getV().y < b.getPosY()){
                     if(MyVector.distance(new MyVector(k.getPosX(), k.getPosY()), new MyVector(b.getPosX(), b.getPosY())) < Entity.DEFAULT_RADIUS){
@@ -105,11 +128,12 @@ public class Collision {
             }
             return true;
         }
-        return false;*/
+        return false;
     }
 
     private static void handleCollisions(MyVector intersectionLine) {
 
     }
+ */
 }
 
