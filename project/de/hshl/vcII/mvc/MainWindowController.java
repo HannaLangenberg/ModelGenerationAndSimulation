@@ -1,7 +1,5 @@
 package project.de.hshl.vcII.mvc;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -59,6 +57,16 @@ public class MainWindowController implements Initializable {
     public HBox hb_pause;
     @FXML
     public Label l_fps;
+    @FXML
+    public VBox vb_currentParam;
+    @FXML
+    public GridPane gp_Wind1;
+    @FXML
+    public Label l_currentPos;
+    @FXML
+    public Label l_currentVel;
+    @FXML
+    public Label l_currentAcc;
     // Declaration of original model.
     private MainWindowModel mainWindowModel;
 
@@ -86,20 +94,17 @@ public class MainWindowController implements Initializable {
     @FXML
     private HBox hHeader;
 
-    final ObservableList<String> cb_material_List = FXCollections.observableArrayList("Wood", "Other options WIP");
+    private Ball b;
+
+//    final ObservableList<String> cb_material_List = FXCollections.observableArrayList("Wood", "Other options WIP");
 
     // Used for resizing.
     private ResizePane resizePane;
 
-    @FXML
-    private void fillBoxes() {
-        cb_Material.setValue("Wood");
-        cb_Material.setItems(cb_material_List);
-    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fillBoxes();
         btn_start_stop.setDisable(true);
 
         // Initialise the original MainWindowModel
@@ -148,10 +153,16 @@ public class MainWindowController implements Initializable {
             if (mainWindowModel.getSimulator().isRunning()) {
                 d_play.setVisible(true);
                 hb_pause.setVisible(false);
+                vb_currentParam.setVisible(false);
             }
             else {
                 d_play.setVisible(false);
                 hb_pause.setVisible(true);
+                b = mainWindowModel.getBallManager().getB();
+                l_currentPos.setText("(" + Math.round(b.getPosVec().x) + "/" + Math.round(b.getPosVec().y) + ")");
+                l_currentVel.setText("(" + Math.round(b.getVelVec().x) + "/" + Math.round(b.getVelVec().y) + ")");
+                l_currentAcc.setText("(" + Math.round(b.getAccVec().x) + "/" + Math.round(b.getAccVec().y) + ")");
+                vb_currentParam.setVisible(true);
             }
             // check all TextFields for values
         fillVariables();

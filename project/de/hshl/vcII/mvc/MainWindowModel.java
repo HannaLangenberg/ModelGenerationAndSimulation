@@ -19,10 +19,6 @@ import project.de.hshl.vcII.drawing.Simulator;
 public class MainWindowModel {
     // Singleton
     private static MainWindowModel mainWindowModel;
-
-    // TMP
-    public static boolean WINDON = true;
-
     // Objects programed by the Authors
     private Rotation spin;
     private KeyManager keyManager;
@@ -74,7 +70,6 @@ public class MainWindowModel {
     /*
      * Getters and setters.
      */
-
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -203,4 +198,3 @@ public class MainWindowModel {
         return taskbarHeight;
     }
 }
-

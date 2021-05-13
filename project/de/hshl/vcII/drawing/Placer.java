@@ -31,7 +31,8 @@ public class Placer {
             ball.setPosVec(new MyVector(x, y));
             mainWindowModel.getBallManager().addBall(ball);
             mainWindowModel.getADrawingPane().getChildren().add(ball);
-        } else {
+        }
+        else {
             ball.setCenterX(x);
             ball.setCenterY(y);
             ball.setPosVec(new MyVector(x, y));
