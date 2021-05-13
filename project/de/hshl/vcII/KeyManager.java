@@ -33,7 +33,7 @@ public class KeyManager {
             System.out.println(1);
             if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(b.getPosX(), b.getPosY(), Block.DEFAULT_WIDTH, Block.DEFAULT_HEIGHT)){
                 b.getCollision().setStyle("-fx-stroke-type: outside; " +
-                        "-fx-stroke: #00AA00;" +
+                        "-fx-stroke: #008000;" +
                         "-fx-stroke-width: 2;");
                 b.getCollision().setFill(Color.TRANSPARENT);
                 mainWindowModel.setChoiceMade(true);
