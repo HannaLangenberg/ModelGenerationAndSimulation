@@ -7,7 +7,9 @@ import javafx.scene.shape.Circle;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Ball extends Circle {
-    private static final double RADIUS = 25;
+    private static final double RADIUS = 25, MASS = 20;
+
+    private double mass;
     private MyVector posVec;
     private MyVector velVec;
     private MyVector accVec;
@@ -15,6 +17,7 @@ public class Ball extends Circle {
     private double randomSeed = Math.random();
 
     public Ball() {
+        this.mass = MASS;
         this.setRadius(RADIUS);
         this.setFill(randomCol);
         this.setStroke(randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker());
@@ -55,5 +58,12 @@ public class Ball extends Circle {
     }
     public MyVector getAccVec() {
         return accVec;
+    }
+
+    public double getMass() {
+        return mass;
+    }
+    public void setMass(double mass) {
+        this.mass = mass;
     }
 }
