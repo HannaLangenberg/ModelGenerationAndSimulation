@@ -39,6 +39,7 @@
         return Math.acos(Math.abs( dot(v1, v2) ) / Math.abs( length(v1) * length(v2) ));
     }
 
+    // Norm the MyVector vec (make it's length 1)
     public  static MyVector norm(MyVector vec){
         return MyVector.multiply(new MyVector(1/vec.x, 1/vec.y), length(vec));
     }
