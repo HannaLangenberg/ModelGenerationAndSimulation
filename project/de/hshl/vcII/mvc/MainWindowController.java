@@ -37,7 +37,6 @@ import java.util.ResourceBundle;
  */
 
 public class MainWindowController implements Initializable {
-
     @FXML
     private HBox hHeader, hb_pause;
     @FXML
@@ -75,21 +74,14 @@ public class MainWindowController implements Initializable {
     private double windowCursorPosX, windowCursorPosY;
     private double sceneOnWindowPosX, sceneOnWindowPosY;
     private boolean mousePressedInHeader = false;
-
     private boolean lightMode = true;
+    private boolean currentParamsOpen = false;
 
     private Ball b;
-    private boolean currentParamsOpen = false;
     CurrentParamsController currentParamsController;
-
-//    final ObservableList<String> cb_material_List = FXCollections.observableArrayList("Wood", "Other options WIP");
 
     // Used for resizing.
     private ResizePane resizePane;
-
-    public void showCurrentParams() throws IOException {
-        currentParamsController.update();
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -128,38 +120,82 @@ public class MainWindowController implements Initializable {
         });
     }
 
-    public AnchorPane getASettingsPane() { return aSettingsPane;}
+
+    //-Menu-Controls----------------------------------------------------------------------------------------------------
+    // Is called whenever 'Clear Screen' is clicked in the 'File' menu
+    @FXML
+    private void clearScreen() {
+        mainWindowModel.getBallManager().getBalls().clear();
+        mainWindowModel.getEntityManager().getBlocks().removeAll(mainWindowModel.getEntityManager().getBlocks());
+        aDrawingPane.getChildren().clear();
+        hb_pause.setVisible(false);
+        d_play.setVisible(false);
+        btn_start_stop.setDisable(true);
+        aSettingsPane.setDisable(true);
+        currentParamsController.reset();
+    }
 
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
         mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
     }
-
     // Is called whenever 'Block' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBlock(){
         mainWindowModel.getEntityManager().setE(new BlockNormal(Entity.DEFAULT_SPIN));
     }
 
+    // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
+    @FXML
+    private void toggleGrid() {
+        mainWindowModel.getGrid().toggleGrid(aDrawingPane);
+    }
+    // Is called whenever 'Snap To Grid' is clicked in the 'Grid' menu
+    @FXML
+    private void snapToGrid() {
+        mainWindowModel.getGrid().toggleSnapToGrid();
+        if(mainWindowModel.getGrid().isSnapOn()){
+            lGridSnapActive.setVisible(true);
+            miSnap.setStyle("-fx-border-color: green;" +
+                    "-fx-border-width: 0 0 2 0;");
+        }
+        else {
+            lGridSnapActive.setVisible(false);
+            miSnap.setStyle("-fx-border-width: 0 0 0 0;");
+        }
+    }
+
+    @FXML
+    public void switch_mode(MouseEvent actionEvent) {
+        mainWindowModel.getMode().toggleMode(!lightMode);
+        lightMode = !lightMode;
+        if (!lightMode) {
+            lMode.setText("Dark");
+        }
+        else {
+            lMode.setText("Light");
+        }
+        System.out.println(lightMode);
+    }
+
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
     private void run() throws IOException {
         mainWindowModel.getSimulator().run();
-            if (mainWindowModel.getSimulator().isRunning()) {
-                d_play.setVisible(true);
-                hb_pause.setVisible(false);
-            }
-            else {
-                d_play.setVisible(false);
-                hb_pause.setVisible(true);
-                b = mainWindowModel.getBallManager().getB();
-                showCurrentParams();
-            }
+        if (mainWindowModel.getSimulator().isRunning()) {
+            d_play.setVisible(true);
+            hb_pause.setVisible(false);
+        }
+        else {
+            d_play.setVisible(false);
+            hb_pause.setVisible(true);
+            b = mainWindowModel.getBallManager().getB();
+            showCurrentParams();
+        }
         // check all TextFields for values
         fillVariables();
     }
-
     private void fillVariables() {
         Utils.setWind(new MyVector( isInt(tf_Wind_X), isInt(tf_Wind_Y)));
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
@@ -167,23 +203,73 @@ public class MainWindowController implements Initializable {
             b.setAccVec(new MyVector(0,0));
         }
     }
-    // Is called whenever 'Clear Screen' is clicked in the 'File' menu
-    @FXML
-    private void clearScreen() {
-        mainWindowModel.getEntityManager().getBlocks().removeAll(mainWindowModel.getEntityManager().getBlocks());
-        aDrawingPane.getChildren().clear();
-        hb_pause.setVisible(false);
-        d_play.setVisible(false);
-        btn_start_stop.setDisable(true);
-        aSettingsPane.setDisable(true);
+
+
+    //-Parameter-Setting------------------------------------------------------------------------------------------------
+    public void tf_v0_X_OnAction(ActionEvent actionEvent) {
+    }
+    public void tf_v0_Y_OnAction(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_X_OnAction(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_Y_OnAction(ActionEvent actionEvent) {
     }
 
-    // Is called whenever a key is pressed.
-    @FXML
-    private void onKey(KeyEvent e) {
-        mainWindowModel.getKeyManager().manageInputs(e.getCode());
+    public void chb_Wind_OnAction(ActionEvent actionEvent) {
+        gp_Wind.setDisable(!chb_Wind.isSelected());
+    }
+    public void sl_SimSpd_OnDragDetected(MouseEvent mouseEvent) {
+        Utils.setSim_Spd(sl_SimSpd.getValue());
+        System.out.println("-----"+sl_SimSpd.getValue()+"-----");
+    } //TODO implement simSpd
+
+    private double isInt(TextField tf) {
+        try {
+            return Double.parseDouble(tf.getText());
+        }
+        catch (NumberFormatException e) {
+            tf.setStyle("-fx-border-color: red;");
+            /*Alert err = new Alert(Alert.AlertType.ERROR);
+            err.setTitle("Keine Zahl!");
+            err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
+            err.show();*/
+            tf.requestFocus();
+            return 0.0;
+        }
     }
 
+    //TODO evaluate need
+    public void tf_v0_X_OnKeyPressed(KeyEvent keyEvent) {
+    }
+    public void tf_v0_X_OnMouseExited(MouseEvent mouseEvent) {
+//        isInt(tf_v0_X.getText()); //TODO clicked elsewhere
+    }
+
+    //-Parameter-Display------------------------------------------------------------------------------------------------
+    public void showCurrentParams() throws IOException {
+        currentParamsController.update();
+    }
+    public void btn_showCurrentParams_OnAction(ActionEvent actionEvent) throws IOException {
+        Stage stage = mainWindowModel.getStage();
+
+        if(currentParamsOpen)
+        {
+            stage.setHeight(mainWindowModel.getSavedSceneHeight());
+            vb_displayCurrentParams.getChildren().remove(cRootPane);
+            currentParamsOpen = false;
+        }
+        else
+        {
+            mainWindowModel.setSavedSceneHeight(stage.getHeight());
+
+            stage.setHeight(600);
+
+            vb_displayCurrentParams.getChildren().add(cRootPane);
+            currentParamsOpen = true;
+        }
+    }
+
+    //-Mouse-&-Key-Listener---------------------------------------------------------------------------------------------
     // Is called whenever the mouse is clicked.
     @FXML
     private void onMouse(MouseEvent e){
@@ -205,27 +291,12 @@ public class MainWindowController implements Initializable {
                 mainWindowModel.getKeyManager().manageMouse(e);
         }
     }
-
-    // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
+    // Is called whenever a key is pressed.
     @FXML
-    private void toggleGrid() {
-        mainWindowModel.getGrid().toggleGrid(aDrawingPane);
+    private void onKey(KeyEvent e) {
+        mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
 
-    // Is called whenever 'Snap To Grid' is clicked in the 'Grid' menu
-    @FXML
-    private void snapToGrid() {
-        mainWindowModel.getGrid().toggleSnapToGrid();
-        if(mainWindowModel.getGrid().isSnapOn()){
-            lGridSnapActive.setVisible(true);
-            miSnap.setStyle("-fx-border-color: green;" +
-                    "-fx-border-width: 0 0 2 0;");
-        }
-        else {
-            lGridSnapActive.setVisible(false);
-            miSnap.setStyle("-fx-border-width: 0 0 0 0;");
-        }
-    }
 
     // - Custom header -------------------------------------------------------------------------------------------------
     // - No need for comments as it is of no interest for mod. sim. but if the authors are asked they explain it. ------
@@ -396,86 +467,5 @@ public class MainWindowController implements Initializable {
     @FXML
     private void exit() {
         System.exit(0);
-    }
-
-    @FXML
-    public void switch_mode(MouseEvent actionEvent) {
-        mainWindowModel.getMode().toggleMode(!lightMode);
-        lightMode = !lightMode;
-        if (!lightMode) {
-            lMode.setText("Dark");
-        }
-        else {
-            lMode.setText("Light");
-        }
-        System.out.println(lightMode);
-    }
-
-
-    public void tf_v0_X_OnAction(ActionEvent actionEvent) {
-    }
-
-    public void tf_v0_Y_OnAction(ActionEvent actionEvent) {
-    }
-
-    public void chb_Wind_OnAction(ActionEvent actionEvent) {
-        gp_Wind.setDisable(!chb_Wind.isSelected());
-    }
-
-    public void tf_Wind_X_OnAction(ActionEvent actionEvent) {
-    }
-
-    public void tf_Wind_Y_OnAction(ActionEvent actionEvent) {
-    }
-
-    public void sl_SimSpd_OnDragDetected(MouseEvent mouseEvent) {
-        Utils.setSim_Spd(sl_SimSpd.getValue());
-        System.out.println("-----"+sl_SimSpd.getValue()+"-----");
-    }
-
-    public void cb_Material_OnAction(MouseEvent mouseEvent) {
-    }
-
-    private double isInt(TextField tf) {
-        try {
-            return Double.parseDouble(tf.getText());
-        }
-        catch (NumberFormatException e) {
-            tf.setStyle("-fx-border-color: red;");
-            /*Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("Keine Zahl!");
-            err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
-            err.show();*/
-            tf.requestFocus();
-            return 0.0;
-        }
-    }
-
-    public void tf_v0_X_OnKeyPressed(KeyEvent keyEvent) {
-    }
-
-    public void tf_v0_X_OnMouseExited(MouseEvent mouseEvent) {
-//        isInt(tf_v0_X.getText()); //TODO clicked elsewhere
-    }
-
-
-    public void btn_showCurrentParams_OnAction(ActionEvent actionEvent) throws IOException {
-        Stage stage = mainWindowModel.getStage();
-
-        if(currentParamsOpen)
-        {
-            stage.setHeight(mainWindowModel.getSavedSceneHeight());
-            vb_displayCurrentParams.getChildren().remove(cRootPane);
-            currentParamsOpen = false;
-        }
-        else
-        {
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-
-            stage.setHeight(600);
-
-            vb_displayCurrentParams.getChildren().add(cRootPane);
-            currentParamsOpen = true;
-        }
     }
 }

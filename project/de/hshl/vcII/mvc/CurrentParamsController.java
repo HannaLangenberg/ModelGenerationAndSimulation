@@ -47,4 +47,8 @@ public class CurrentParamsController {
         }
         lv_balls.setItems(observableList);
     }
+
+    public void reset() {
+        observableList.clear();
+    }
 }
