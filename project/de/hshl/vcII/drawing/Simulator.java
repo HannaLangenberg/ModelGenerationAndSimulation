@@ -60,7 +60,7 @@ public class Simulator {
         }*/
         for (Ball b: mainWindowModel.getBallManager().getBalls()) {
 //            Movement.doSmth(b);
-            Collision.collide(b);
+//            Collision.collide(b);
             Movement.calcAcceleration(b);
             Movement.calcVelocity(b);
             Movement.checkPosition(b);

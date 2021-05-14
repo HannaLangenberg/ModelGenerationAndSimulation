@@ -6,6 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import project.de.hshl.vcII.utils.MyVector;
 
+import java.util.Arrays;
+
 public class Ball extends Circle {
     private static final double RADIUS = 25, MASS = 20;
 
@@ -15,6 +17,7 @@ public class Ball extends Circle {
     private MyVector accVec;
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private double randomSeed = Math.random();
+    private int number;
 
     public Ball() {
         this.mass = MASS;
@@ -24,19 +27,38 @@ public class Ball extends Circle {
         this.setStrokeWidth(5);
     }
 
-    public Ball(MyVector posVec, MyVector velVec, MyVector accVec) {
+    public Ball(int number, MyVector posVec, MyVector velVec, MyVector accVec, double radius, double mass) {
+        this.number = number;
         this.posVec = posVec;
         this.velVec = velVec;
         this.accVec = accVec;
+        setRadius(radius);
+        this.mass = mass;
+
+        this.setFill(randomCol);
+        this.setStroke(randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker());
+        this.setStrokeWidth(5);
     }
+
     public void draw(AnchorPane aDrawingPane) {
         Platform.runLater(() -> {
             aDrawingPane.getChildren().remove(this);
             aDrawingPane.getChildren().add(this);
         });
     }
+    @Override
+    public String toString() {
+        return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
+                + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
+                + ") -- a: (" + Math.round(this.accVec.x) +"/"+ Math.round(this.accVec.y)
+                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius();
+    }
 
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public void setPosVec(MyVector posVec) {
         this.posVec = posVec;
         this.setCenterX(posVec.x);

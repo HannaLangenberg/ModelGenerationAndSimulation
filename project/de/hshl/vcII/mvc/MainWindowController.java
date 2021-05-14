@@ -1,6 +1,9 @@
 package project.de.hshl.vcII.mvc;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +28,7 @@ import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -33,40 +37,37 @@ import java.util.ResourceBundle;
  */
 
 public class MainWindowController implements Initializable {
+
     @FXML
-    public ChoiceBox<String> cb_Material;
+    private HBox hHeader, hb_pause;
     @FXML
-    public Slider sl_SimSpd;
-    @FXML
-    public TextField tf_Wind_Y;
-    @FXML
-    public TextField tf_Wind_X;
-    @FXML
-    public GridPane gp_Wind;
+    public VBox vb_displayCurrentParams;
     @FXML
     public CheckBox chb_Wind;
     @FXML
-    public TextField tf_v0_Y;
+    public Slider sl_SimSpd;
     @FXML
-    public TextField tf_v0_X;
+    public TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
-    public Button btn_start_stop;
+    public Label lMode, lGridSnapActive;
+    @FXML
+    public Button btn_start_stop, btn_showCurrentParams;
     @FXML
     public Polygon d_play;
     @FXML
-    public HBox hb_pause;
+    public MenuItem miSnap;
     @FXML
-    public Label l_fps;
+    public BorderPane bp_borderPane;
     @FXML
-    public VBox vb_currentParam;
+    public AnchorPane aSettingsPane;
     @FXML
-    public GridPane gp_Wind1;
+    public GridPane gp_Wind;
     @FXML
-    public Label l_currentPos;
+    public FlowPane fpActiveControls;
     @FXML
-    public Label l_currentVel;
+    private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
-    public Label l_currentAcc;
+    private AnchorPane aRootPane, aDrawingPane, cRootPane;
     // Declaration of original model.
     private MainWindowModel mainWindowModel;
 
@@ -77,34 +78,29 @@ public class MainWindowController implements Initializable {
 
     private boolean lightMode = true;
 
-    @FXML
-    public AnchorPane aSettingsPane;
-    @FXML
-    public Label lMode;
-    @FXML
-    public Label lGridSnapActive;
-    @FXML
-    public FlowPane fpActiveControls;
-    @FXML
-    public MenuItem miSnap;
-    @FXML
-    private StackPane sMinPane, sMinMaxPane, sExitPane;
-    @FXML
-    private AnchorPane aRootPane, aDrawingPane;
-    @FXML
-    private HBox hHeader;
-
     private Ball b;
+    private boolean currentParamsOpen = false;
+    CurrentParamsController currentParamsController;
 
 //    final ObservableList<String> cb_material_List = FXCollections.observableArrayList("Wood", "Other options WIP");
 
     // Used for resizing.
     private ResizePane resizePane;
 
-
+    public void showCurrentParams() throws IOException {
+        currentParamsController.update();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
+            cRootPane = loader.load();
+            currentParamsController = loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         btn_start_stop.setDisable(true);
 
         // Initialise the original MainWindowModel
@@ -137,7 +133,7 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
-        mainWindowModel.getBallManager().setB(new Ball());
+        mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
     }
 
     // Is called whenever 'Block' is clicked in the 'Edit' menu.
@@ -148,23 +144,19 @@ public class MainWindowController implements Initializable {
 
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
-    private void run() {
+    private void run() throws IOException {
         mainWindowModel.getSimulator().run();
             if (mainWindowModel.getSimulator().isRunning()) {
                 d_play.setVisible(true);
                 hb_pause.setVisible(false);
-                vb_currentParam.setVisible(false);
             }
             else {
                 d_play.setVisible(false);
                 hb_pause.setVisible(true);
                 b = mainWindowModel.getBallManager().getB();
-                l_currentPos.setText("(" + Math.round(b.getPosVec().x) + "/" + Math.round(b.getPosVec().y) + ")");
-                l_currentVel.setText("(" + Math.round(b.getVelVec().x) + "/" + Math.round(b.getVelVec().y) + ")");
-                l_currentAcc.setText("(" + Math.round(b.getAccVec().x) + "/" + Math.round(b.getAccVec().y) + ")");
-                vb_currentParam.setVisible(true);
+                showCurrentParams();
             }
-            // check all TextFields for values
+        // check all TextFields for values
         fillVariables();
     }
 
@@ -467,4 +459,23 @@ public class MainWindowController implements Initializable {
     }
 
 
+    public void btn_showCurrentParams_OnAction(ActionEvent actionEvent) throws IOException {
+        Stage stage = mainWindowModel.getStage();
+
+        if(currentParamsOpen)
+        {
+            stage.setHeight(mainWindowModel.getSavedSceneHeight());
+            vb_displayCurrentParams.getChildren().remove(cRootPane);
+            currentParamsOpen = false;
+        }
+        else
+        {
+            mainWindowModel.setSavedSceneHeight(stage.getHeight());
+
+            stage.setHeight(600);
+
+            vb_displayCurrentParams.getChildren().add(cRootPane);
+            currentParamsOpen = true;
+        }
+    }
 }
