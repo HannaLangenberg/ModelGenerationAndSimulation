@@ -14,14 +14,17 @@
    <children>
       <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="900.0" spacing="30.0">
          <children>
-            <VBox alignment="CENTER" minHeight="-Infinity" prefHeight="155.0">
+            <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="155.0">
                <children>
-                  <Label text="Current Ball Parameters">
+                  <Label text="Aktuelle Ball Parameter">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Label>
-                  <ListView fx:id="lv_balls" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="550.0" />
+                  <ListView fx:id="lv_balls" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="550.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></ListView>
                </children>
                <padding>
                   <Insets bottom="30.0" top="30.0" />
