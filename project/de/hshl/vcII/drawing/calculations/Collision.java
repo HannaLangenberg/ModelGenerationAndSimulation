@@ -31,11 +31,10 @@ public class Collision {
         MyVector pos_b1 = b1.getPosVec(),
                   pos_b2 = b2.getPosVec();
 
-        if(MyVector.distance(pos_b1, pos_b2) > r_b1+r_b2)
-            return;
+        if(MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2)
+            angledShock(b1, b2);
 
         //-If-they-collide----------------------------------------------------------------------------------------------
-        angledShock(b1, b2);
     }
 
     private static void centerShock(Ball b1, Ball b2){
@@ -60,22 +59,22 @@ public class Collision {
 
         // Norm the line between the two centers of b1 and b2.
         MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b2.getPosVec(), b1.getPosVec()));
-
         // Find the orthogonal velocity vector of b1 and the parallel velocity vector of b2
-        MyVector v1Orthogonal = MyVector.subtract(b1.getVelVec(), MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b1.getVelVec())));
-        MyVector v2Parallel = MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b2.getVelVec()));
+        MyVector v1Orthogonal = MyVector.subtract(b1.getVelVec(), MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine));
+        MyVector v2Parallel = MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine);
 
         // Switch normedCenterLine's orientation
         normedCenterLine = MyVector.multiply(normedCenterLine, -1);
         // Find the orthogonal velocity vector of b2 and the parallel velocity vector of b1
-        MyVector v2Orthogonal = MyVector.subtract(b2.getVelVec(), MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b2.getVelVec())));
-        MyVector v1Parallel = MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b1.getVelVec()));
+        MyVector v2Orthogonal = MyVector.subtract(b2.getVelVec(), MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine));
+        MyVector v1Parallel = MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine);
 
         //-------Set-values---------------------------------------------------------------------------------------------
 
         b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
         b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
     }
+
 /*
     public static void collide(Kugel k){
         if(insideWorld(k)){

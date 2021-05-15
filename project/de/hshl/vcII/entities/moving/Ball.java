@@ -46,13 +46,6 @@ public class Ball extends Circle {
             aDrawingPane.getChildren().add(this);
         });
     }
-    @Override
-    public String toString() {
-        return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
-                + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
-                + ") -- a: (" + Math.round(this.accVec.x) +"/"+ Math.round(this.accVec.y)
-                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius();
-    }
 
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
     public void setNumber(int number) {
@@ -87,5 +80,14 @@ public class Ball extends Circle {
     }
     public void setMass(double mass) {
         this.mass = mass;
+    }
+
+    
+    @Override
+    public String toString() {
+        return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
+                + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
+                + ") -- a: (" + Math.round(this.accVec.x) +"/"+ accVec.y
+                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius();
     }
 }

@@ -44,6 +44,11 @@
         return MyVector.divide(vec, length(vec));
     }
 
+    // Calculate the orthogonal projection between given vector and shock normal
+    public static MyVector orthogonalProjection(MyVector vec, MyVector normal) {
+        return MyVector.multiply(normal, MyVector.dot(normal, vec));
+    }
+
     // Method for multiplying two 2D vectors from each other.
     public static MyVector multiply(MyVector vec, double lambda){
        return new MyVector(vec.x * lambda, vec.y * lambda);
@@ -63,4 +68,7 @@
     public static MyVector subtract(MyVector v1, MyVector v2){
         return new MyVector(v1.x - v2.x, v1.y - v2.y);
     }
+
+
+
  }
