@@ -59,14 +59,16 @@ public class Collision {
         //-------Calculate-values---------------------------------------------------------------------------------------
 
         // Norm the line between the two centers of b1 and b2.
-        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b2.getPosVec(), b1.getPosVec()));
+        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b1.getPosVec(), b2.getPosVec()));
 
         // Find the orthogonal velocity vector of b1 and the parallel velocity vector of b2
-        MyVector v1Orthogonal = MyVector.subtract(b1.getVelVec(), MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b1.getVelVec())));
+        MyVector v1Orthogonal = MyVector.subtract(MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b1.getVelVec())), b1.getVelVec());
         MyVector v2Parallel = MyVector.multiply(normedCenterLine, MyVector.dot(b2.getVelVec(), normedCenterLine));
 
+        // Switch normedCenterLine's orientation
+        normedCenterLine = MyVector.multiply(normedCenterLine, -1);
         // Find the orthogonal velocity vector of b2 and the parallel velocity vector of b1
-        MyVector v2Orthogonal = MyVector.subtract(b2.getVelVec(), MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b2.getVelVec())));
+        MyVector v2Orthogonal = MyVector.subtract(MyVector.multiply(normedCenterLine, MyVector.dot(normedCenterLine, b2.getVelVec())), b2.getVelVec());
         MyVector v1Parallel = MyVector.multiply(normedCenterLine, MyVector.dot(b1.getVelVec(), normedCenterLine));
 
         //-------Set-values---------------------------------------------------------------------------------------------

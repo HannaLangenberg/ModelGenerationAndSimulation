@@ -41,7 +41,7 @@
 
     // Norm the MyVector vec (make it's length 1)
     public  static MyVector norm(MyVector vec){
-        return MyVector.multiply(new MyVector(1/vec.x, 1/vec.y), length(vec));
+        return MyVector.divide(new MyVector(vec.x, vec.y), length(vec));
     }
 
     // Method for multiplying two 2D vectors from each other.
