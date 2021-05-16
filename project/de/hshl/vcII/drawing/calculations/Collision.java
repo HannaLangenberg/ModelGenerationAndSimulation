@@ -87,8 +87,8 @@ public class Collision {
                     handleCollisions(intersectionLine); //TODO Collision handling
                 }
             }
-            List<Block> blockList = MainWindowModel.get().getEntityManager().getBlocks();
-            for(Block b: blockList) {
+            List<Wall> blockList = MainWindowModel.get().getEntityManager().getBlocks();
+            for(Wall b: blockList) {
                 int blockIndex = blockList.indexOf(b);
                 MyVector intersectionLine = sphereOnBlock(k, b);
                 if (intersectionLine != null) {
@@ -96,7 +96,7 @@ public class Collision {
                     handleCollisions(intersectionLine); //TODO Collision handling
                 }
                 for(int i = blockIndex + 1 ; i < blockList.size(); i++){
-                    Block b2 = MainWindowModel.get().getEntityManager().getBlocks().get(i);
+                    Wall b2 = MainWindowModel.get().getEntityManager().getBlocks().get(i);
                     intersectionLine = blockOnBlock(b, b2);
                     if (intersectionLine != null) {
                         System.out.println("BOB: INTERSECTION");
@@ -131,14 +131,14 @@ public class Collision {
         return null;
     }
 
-    private static MyVector blockOnBlock(Block b1, Block b2){
+    private static MyVector blockOnBlock(Wall b1, Wall b2){
         if(!b1.getCollision().getBoundsInParent().intersects(b2.getCollision().getBoundsInParent()))
             return null;
 
         return null;
     }
 
-    private static MyVector sphereOnBlock(Kugel k, Block b) {
+    private static MyVector sphereOnBlock(Kugel k, Wall b) {
         Rectangle rec = b.getCollision();
         if (!k.getCollision().intersects(
                 rec.getX() - Entity.DEFAULT_RADIUS,

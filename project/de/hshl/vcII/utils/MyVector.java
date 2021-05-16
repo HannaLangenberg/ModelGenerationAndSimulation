@@ -68,7 +68,4 @@
     public static MyVector subtract(MyVector v1, MyVector v2){
         return new MyVector(v1.x - v2.x, v1.y - v2.y);
     }
-
-
-
  }

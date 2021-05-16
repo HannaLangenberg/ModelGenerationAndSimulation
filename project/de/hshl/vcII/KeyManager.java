@@ -1,6 +1,6 @@
 package project.de.hshl.vcII;
 
-import project.de.hshl.vcII.entities.stationary.Block;
+import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import javafx.scene.input.KeyCode;
@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 public class KeyManager {
     private MainWindowModel mainWindowModel;
     private MainWindowController mainWindowController;
-    private Block b;
+    private Wall w;
 
     public KeyManager(){
         mainWindowModel = MainWindowModel.get();
@@ -23,24 +23,24 @@ public class KeyManager {
 
     /**
      * Toggles only if the 'G' key is pushed.
-     * chooses a Block and highlights it green,
+     * chooses a Wall and highlights it green,
      * @param e to know where the cursor currently is
      */
     public void manageMouse(MouseEvent e){
         mainWindowModel.setChoiceMade(false);
-        this.b = null;
-        for(Block b : mainWindowModel.getEntityManager().getBlocks()){
+        this.w = null;
+        for(Wall w : mainWindowModel.getWallManager().getWalls()){
             System.out.println(1);
-            if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(b.getPosX(), b.getPosY(), Block.DEFAULT_WIDTH, Block.DEFAULT_HEIGHT)){
-                b.getCollision().setStyle("-fx-stroke-type: outside; " +
+            if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
+                w.getCollision().setStyle("-fx-stroke-type: outside; " +
                         "-fx-stroke: #008000;" +
                         "-fx-stroke-width: 2;");
-                b.getCollision().setFill(Color.TRANSPARENT);
+                w.getCollision().setFill(Color.TRANSPARENT);
                 mainWindowModel.setChoiceMade(true);
-                this.b = b;
-                if(mainWindowModel.getADrawingPane().getChildren().contains(b.getCollision()))
+                this.w = w;
+                if(mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision()))
                     return;
-                mainWindowModel.getADrawingPane().getChildren().add(b.getCollision());
+                mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
 
             }
         }
@@ -56,16 +56,16 @@ public class KeyManager {
                 // The chosen block can be picked
                 mainWindowModel.setChoiceEnabled(!mainWindowModel.isChoiceEnabled());
                 mainWindowModel.setChoiceMade(false);
-                // Only if one Block is chosen:
-                mainWindowModel.getADrawingPane().getChildren().removeAll(mainWindowModel.getEntityManager().getBlockCollisionBounds());
+                // Only if a Wall is chosen:
+                mainWindowModel.getADrawingPane().getChildren().removeAll(mainWindowModel.getWallManager().getWallCollisionBounds());
                 break;
             case E:
                 // The chosen block is rotated left
-                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateRight(b);
+                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateRight(w);
                 break;
             case Q:
                 // The chosen block is rotated right
-                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateLeft(b);
+                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateLeft(w);
                 break;
             case DELETE:
                 // The chosen block is deleted
@@ -78,9 +78,9 @@ public class KeyManager {
 
     // Helper
     private void deleteBlock() {
-        mainWindowModel.getADrawingPane().getChildren().remove(b.getCollision());
-        mainWindowModel.getADrawingPane().getChildren().remove(b.getTexture());
-        mainWindowModel.getEntityManager().getBlocks().remove(b);
+        mainWindowModel.getADrawingPane().getChildren().remove(w.getCollision());
+        mainWindowModel.getADrawingPane().getChildren().remove(w.getTexture());
+        mainWindowModel.getWallManager().getWalls().remove(w);
         mainWindowModel.setChoiceMade(false);
     }
 }

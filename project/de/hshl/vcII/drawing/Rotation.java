@@ -1,10 +1,10 @@
 package project.de.hshl.vcII.drawing;
 
-import project.de.hshl.vcII.entities.stationary.Block;
+import project.de.hshl.vcII.entities.stationary.Wall;
 
 public class Rotation {
 
-    public void rotateLeft(Block b){
+    public void rotateLeft(Wall b){
         b.getCollision().setRotate(b.getCollision().getRotate() < 90 ? b.getCollision().getRotate() - 1 : b.getCollision().getRotate());
         b.getTexture().setRotate(b.getTexture().getRotate() < 90 ? b.getTexture().getRotate() - 1 : b.getTexture().getRotate());
         b.setSpin(b.getSpin()+1);
@@ -12,7 +12,7 @@ public class Rotation {
         System.out.println("RotateLeft: " + b.getSpin());
     }
 
-    public void rotateRight(Block b){
+    public void rotateRight(Wall b){
         b.getCollision().setRotate(b.getCollision().getRotate() > -90 ? b.getCollision().getRotate() + 1 : b.getCollision().getRotate());
         b.getTexture().setRotate(b.getTexture().getRotate() > -90 ? b.getTexture().getRotate() + 1 : b.getTexture().getRotate());
         b.setSpin(b.getSpin()-1);

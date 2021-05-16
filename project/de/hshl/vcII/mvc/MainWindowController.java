@@ -2,8 +2,6 @@ package project.de.hshl.vcII.mvc;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,8 +9,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.entities.Entity;
-import project.de.hshl.vcII.entities.stationary.BlockNormal;
+import project.de.hshl.vcII.entities.stationary.Wall;
+import project.de.hshl.vcII.entities.stationary.WallManager;
 
 import project.de.hshl.vcII.mvc.view.ResizePane;
 import javafx.event.EventHandler;
@@ -126,7 +124,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().clear();
-        mainWindowModel.getEntityManager().getBlocks().removeAll(mainWindowModel.getEntityManager().getBlocks());
+        mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
         d_play.setVisible(false);
@@ -140,10 +138,10 @@ public class MainWindowController implements Initializable {
     private void choiceBall() {
         mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
     }
-    // Is called whenever 'Block' is clicked in the 'Edit' menu.
+    // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBlock(){
-        mainWindowModel.getEntityManager().setE(new BlockNormal(Entity.DEFAULT_SPIN));
+        mainWindowModel.getWallManager().setW(new Wall());
     }
 
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu

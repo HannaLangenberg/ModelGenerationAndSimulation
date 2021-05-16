@@ -5,12 +5,12 @@ import project.de.hshl.vcII.KeyManager;
 import project.de.hshl.vcII.drawing.visuals.Grid;
 import project.de.hshl.vcII.drawing.visuals.Mode;
 import project.de.hshl.vcII.entities.moving.BallManager;
-import project.de.hshl.vcII.entities.EntityManager;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import project.de.hshl.vcII.drawing.Placer;
 import project.de.hshl.vcII.drawing.Rotation;
 import project.de.hshl.vcII.drawing.Simulator;
+import project.de.hshl.vcII.entities.stationary.WallManager;
 
 /**
  * MainWindowModel is a class used as a model for a mvc-pattern-styled class structure, it is also a representative of a singleton-class.
@@ -26,7 +26,7 @@ public class MainWindowModel {
     // Objects programed by the Authors
     private Rotation spin;
     private KeyManager keyManager;
-    private EntityManager entityManager;
+    private WallManager wallManager;
     private BallManager ballManager;
     private Mode mode;
     private Placer placer;
@@ -56,7 +56,7 @@ public class MainWindowModel {
 
     // To initialise all Objects
     public void init(AnchorPane aDrawingPane){
-        entityManager = new EntityManager();
+        wallManager = new WallManager();
         ballManager = new BallManager();
         keyManager = new KeyManager();
         simulator = new Simulator();
@@ -83,8 +83,8 @@ public class MainWindowModel {
         return placer;
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
+    public WallManager getWallManager() {
+        return wallManager;
     }
 
     public BallManager getBallManager() {
