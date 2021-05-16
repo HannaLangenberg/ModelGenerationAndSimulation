@@ -3,6 +3,7 @@ package project.de.hshl.vcII.drawing.visuals;
 import project.de.hshl.vcII.drawing.Placer;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +64,13 @@ public class Grid {
         return gridOn;
     }
 
-    //---Snap---------------------------------
+    //---Snap-----------------------------------------------------------------------------------------------------------
     public void toggleSnapToGrid(){
         snapOn = !snapOn;
     }
 
     public void snapToGrid(Placer placer){
+        if(placer.getBall() != null) return;
         placer.setX(closestTo(gridSpacingX, placer.getX()));
         placer.setY(closestTo(gridSpacingY, placer.getY()));
     }
