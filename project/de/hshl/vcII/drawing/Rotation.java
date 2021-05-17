@@ -4,19 +4,19 @@ import project.de.hshl.vcII.entities.stationary.Wall;
 
 public class Rotation {
 
-    public void rotateLeft(Wall b){
-        b.getCollision().setRotate(b.getCollision().getRotate() < 90 ? b.getCollision().getRotate() - 1 : b.getCollision().getRotate());
-        b.getTexture().setRotate(b.getTexture().getRotate() < 90 ? b.getTexture().getRotate() - 1 : b.getTexture().getRotate());
-        b.setSpin(b.getSpin()+1);
+    public void rotateLeft(Wall w){
+        w.getCollision().setRotate(w.getCollision().getRotate() < 90 ? w.getCollision().getRotate() - 1 : w.getCollision().getRotate());
+        w.getTexture().setRotate(w.getTexture().getRotate() < 90 ? w.getTexture().getRotate() - 1 : w.getTexture().getRotate());
+        w.setSpin(w.getSpin()+1);
 
-        System.out.println("RotateLeft: " + b.getSpin());
+        System.out.println("RotateLeft: " + w.getSpin());
     }
 
-    public void rotateRight(Wall b){
-        b.getCollision().setRotate(b.getCollision().getRotate() > -90 ? b.getCollision().getRotate() + 1 : b.getCollision().getRotate());
-        b.getTexture().setRotate(b.getTexture().getRotate() > -90 ? b.getTexture().getRotate() + 1 : b.getTexture().getRotate());
-        b.setSpin(b.getSpin()-1);
+    public void rotateRight(Wall w){
+        w.getCollision().setRotate(w.getCollision().getRotate() > -90 ? w.getCollision().getRotate() + 1 : w.getCollision().getRotate());
+        w.getTexture().setRotate(w.getTexture().getRotate() > -90 ? w.getTexture().getRotate() + 1 : w.getTexture().getRotate());
+        w.setSpin(w.getSpin()-1);
 
-        System.out.println("RotateRight: " + b.getSpin());
+        System.out.println("RotateRight: " + w.getSpin());
     }
 }

@@ -14,7 +14,6 @@ import javafx.scene.shape.Rectangle;
  */
 public class KeyManager {
     private MainWindowModel mainWindowModel;
-    private MainWindowController mainWindowController;
     private Wall w;
 
     public KeyManager(){
@@ -30,7 +29,6 @@ public class KeyManager {
         mainWindowModel.setChoiceMade(false);
         this.w = null;
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
-            System.out.println(1);
             if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
                 w.getCollision().setStyle("-fx-stroke-type: outside; " +
                         "-fx-stroke: #008000;" +
@@ -39,9 +37,8 @@ public class KeyManager {
                 mainWindowModel.setChoiceMade(true);
                 this.w = w;
                 if(mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision()))
-                    return;
+                    continue;
                 mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
-
             }
         }
     }
@@ -82,5 +79,5 @@ public class KeyManager {
         mainWindowModel.getADrawingPane().getChildren().remove(w.getTexture());
         mainWindowModel.getWallManager().getWalls().remove(w);
         mainWindowModel.setChoiceMade(false);
-    }
+    } 
 }
