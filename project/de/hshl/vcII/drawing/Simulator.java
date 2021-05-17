@@ -19,13 +19,14 @@ public class Simulator {
     private boolean running = false;
     private int secondsPassed = 0;
     private int runSim_called = 0;
-    int fps = 60;
-    double timePerTick = 1000000000.0 / fps;
-    double delta = 0;
-    long now, lastTime = System.nanoTime();
+    private int fps = 60;
+    private double timePerTick = 1000000000.0 / fps;
+    private double delta = 0;
+    private long now, lastTime = System.nanoTime();
+    private double epsilon = 5;
 
-    long time_btw_frames = 0;
-    int ticks = 0;
+    private long time_btw_frames = 0;
+    private int ticks = 0;
 
 
     /**
@@ -60,7 +61,7 @@ public class Simulator {
         }*/
         for (Ball b: mainWindowModel.getBallManager().getBalls()) {
 //            Movement.doSmth(b);
-            Collision.collide(b);
+            Collision.collide(b, epsilon);
             Movement.calcAcceleration(b);
             Movement.calcVelocity(b);
             Movement.checkPosition(b);

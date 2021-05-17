@@ -1,26 +1,56 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Collision {
-    public static void collide(Ball b){
+    public static void collide(Ball b, double epsilon){
         //-Collision-test-----------------------------------------------------------------------------------------------
         // Make a deep copy of the balls list
         List<Ball> balls = new ArrayList<>(MainWindowModel.get().getBallManager().getBalls());
         // Don't copy the Ball given as a parameter
         balls.remove(b);
 
+        // Get all walls.
+        List<Wall> walls = MainWindowModel.get().getWallManager().getWalls();
+
         // Iterate though every ball except the one given in the parameters, and check their collision.
         for (Ball b2 : balls)
-            ballOnBall(b, b2);
+            ballOnBall(b, b2, epsilon);
+
+        for (Wall w : walls)
+            ballOnWall(w, b);
     }
 
-    private static void ballOnBall(Ball b1, Ball b2) {
+    private static void  ballOnWall(Wall w, Ball b){
+        //-Ball-and-Wall-Collide----------------------------------------------------------------------------------------
+
+        // position vector of the wall
+        // pos vector gives the center of the wall
+        MyVector pos_w = w.getPosVec();
+
+        // position vector of the ball
+        // pos vector gives the center of the ball
+        MyVector pos_b = b.getPosVec();
+
+        // Radius of the ball.
+        double r_b = b.getRadius();
+
+        // Rotation of the Wall
+        double alpha = w.getSpin();
+
+        //-If-they-collide----------------------------------------------------------------------------------------------
+
+        MyVector.distance(pos_b, pos_w);
+    }
+
+    private static void ballOnBall(Ball b1, Ball b2, double epsilon) {
         //-Do-two-balls-collide-----------------------------------------------------------------------------------------
 
         // finds the radii of b1, and b2
@@ -28,13 +58,16 @@ public class Collision {
                 r_b2 = b2.getRadius();
 
         // finds the center-points of b1, and b2
+        // pos vector gives the center of the ball
         MyVector pos_b1 = b1.getPosVec(),
                   pos_b2 = b2.getPosVec();
 
-        if(MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2)
-            angledShock(b1, b2);
+        boolean collision = MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2+epsilon;
 
         //-If-they-collide----------------------------------------------------------------------------------------------
+
+        if(collision)
+            angledShock(b1, b2);
     }
 
     private static void centerShock(Ball b1, Ball b2){
