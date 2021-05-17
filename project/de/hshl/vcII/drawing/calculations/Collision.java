@@ -46,16 +46,31 @@ public class Collision {
 
         // IDK
         double lambda = 0;
-
+/*
         // location vector of the wall
         MyVector location = new MyVector(Math.sin(Math.toRadians(alpha)), Math.cos(Math.toRadians(alpha)));
 
         // line of wall that is solid
         MyVector line = MyVector.add(pos_w, MyVector.multiply(MyVector.multiply(location, w.getCollision().getWidth()), lambda));
 
+        double rX = w.getCollision().getX();
+        double bX = b.getPosVec().x;
+        double rW = w.getCollision().getWidth();
+
+        double rY = w.getCollision().getY();
+        double bY = b.getPosVec().y;
+
+        double x = rX + ((rX - bX) * Math.pow((rW*Math.sin(alpha)), 2) + (rY - bY) * (rW*Math.cos(alpha))*(rW*Math.sin(alpha))) / -(Math.pow((rW*Math.cos(alpha)), 2) - Math.pow((rW*Math.sin(alpha)), 2));
+        double y = rY + ((rX - bX) * (rW*Math.sin(alpha))*(rW*Math.cos(alpha)) + (rY - bY) * Math.pow((rW*Math.cos(alpha)), 2)) / -(Math.pow((rW*Math.cos(alpha)), 2) - Math.pow((rW*Math.sin(alpha)), 2));
+*/
+        double distBallWall = MyVector.distance(pos_b, new MyVector(b.getPosVec().x, w.getCollision().getY()));
+
+        boolean collision = distBallWall <= r_b + 5;
+
         //-If-they-collide----------------------------------------------------------------------------------------------
 
-        MyVector.distance(pos_b, pos_w);
+        if(collision)
+            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
     }
 
     private static void ballOnBall(Ball b1, Ball b2, double epsilon) {
