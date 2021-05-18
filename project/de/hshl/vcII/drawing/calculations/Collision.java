@@ -30,42 +30,37 @@ public class Collision {
     private static void  ballOnWall(Wall w, Ball b){
         //-Ball-and-Wall-Collide----------------------------------------------------------------------------------------
 
-        // position vector of the wall
-        // pos vector gives the center of the wall
-        MyVector pos_w = new MyVector(w.getCollision().getX(), w.getCollision().getY());
-
-        // position vector of the ball
-        // pos vector gives the center of the ball
-        MyVector pos_b = b.getPosVec();
-
         // Radius of the ball.
         double r_b = b.getRadius();
 
         // Rotation of the Wall
         double alpha = w.getSpin();
 
-        // IDK
-        double lambda = 0;
-/*
-        // location vector of the wall
-        MyVector location = new MyVector(Math.sin(Math.toRadians(alpha)), Math.cos(Math.toRadians(alpha)));
-
-        // line of wall that is solid
-        MyVector line = MyVector.add(pos_w, MyVector.multiply(MyVector.multiply(location, w.getCollision().getWidth()), lambda));
-
         double rX = w.getCollision().getX();
         double bX = b.getPosVec().x;
-        double rW = w.getCollision().getWidth();
 
         double rY = w.getCollision().getY();
         double bY = b.getPosVec().y;
 
-        double x = rX + ((rX - bX) * Math.pow((rW*Math.sin(alpha)), 2) + (rY - bY) * (rW*Math.cos(alpha))*(rW*Math.sin(alpha))) / -(Math.pow((rW*Math.cos(alpha)), 2) - Math.pow((rW*Math.sin(alpha)), 2));
-        double y = rY + ((rX - bX) * (rW*Math.sin(alpha))*(rW*Math.cos(alpha)) + (rY - bY) * Math.pow((rW*Math.cos(alpha)), 2)) / -(Math.pow((rW*Math.cos(alpha)), 2) - Math.pow((rW*Math.sin(alpha)), 2));
-*/
-        double distBallWall = MyVector.distance(pos_b, new MyVector(b.getPosVec().x, w.getCollision().getY()));
+        double v1 = (rX - bX) * Math.cos(Math.toRadians(alpha));
+        double v2 = (rY - bY) * Math.sin(Math.toRadians(alpha));
+        double v = v1 + v2;
 
-        boolean collision = distBallWall <= r_b + 5;
+
+        double x = rX + v * (-1) * Math.cos(Math.toRadians(alpha));
+        double y = rY + v * (-1) * Math.sin(Math.toRadians(alpha));
+
+        double distBallWall = MyVector.distance(b.getPosVec(), new MyVector(x,y));
+
+        boolean collision = false;
+        boolean onWall = false;
+        double lambda = (v)/(-1*w.getCollision().getWidth());
+
+        if(0 <= lambda & lambda <= 1)
+            onWall = true;
+
+        if(distBallWall <= r_b + 5 & onWall)
+            collision = true;
 
         //-If-they-collide----------------------------------------------------------------------------------------------
 
