@@ -68,4 +68,9 @@
     public static MyVector subtract(MyVector v1, MyVector v2){
         return new MyVector(v1.x - v2.x, v1.y - v2.y);
     }
- }
+
+    @Override
+    public String toString() {
+        return "(" + Math.round(this.x) +"/"+ Math.round(this.y) + ")";
+    }
+}

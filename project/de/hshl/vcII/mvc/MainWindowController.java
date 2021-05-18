@@ -1,5 +1,7 @@
 package project.de.hshl.vcII.mvc;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -73,6 +75,8 @@ public class MainWindowController implements Initializable {
     private double sceneOnWindowPosX, sceneOnWindowPosY;
     private boolean mousePressedInHeader = false;
     private boolean lightMode = true;
+    private boolean v0_changed = false;
+    private boolean wind_changed = false;
     private boolean currentParamsOpen = false;
 
     private Ball b;
@@ -92,6 +96,11 @@ public class MainWindowController implements Initializable {
         }
 
         btn_start_stop.setDisable(true);
+
+        initTextField(tf_v0_X);
+        initTextField(tf_v0_Y);
+        initTextField(tf_Wind_X);
+        initTextField(tf_Wind_Y);
 
         // Initialise the original MainWindowModel
         mainWindowModel = MainWindowModel.get();
@@ -118,6 +127,16 @@ public class MainWindowController implements Initializable {
         });
     }
 
+    private void initTextField(TextField tf) {
+        tf.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                wind_changed = true;
+                Utils.setWind(new MyVector(isInt(tf_Wind_X), isInt(tf_Wind_Y)));
+                Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
+            }
+        });
+    }
 
     //-Menu-Controls----------------------------------------------------------------------------------------------------
     // Is called whenever 'Clear Screen' is clicked in the 'File' menu
@@ -181,6 +200,8 @@ public class MainWindowController implements Initializable {
     @FXML
     private void run() throws IOException {
         mainWindowModel.getSimulator().run();
+        // check all TextFields for values
+        fillVariables(); // TODO call only first time or manage ignorace of v0
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
@@ -191,30 +212,36 @@ public class MainWindowController implements Initializable {
             b = mainWindowModel.getBallManager().getB();
             showCurrentParams();
         }
-        // check all TextFields for values
-        fillVariables();
     }
     private void fillVariables() {
         Utils.setWind(new MyVector( isInt(tf_Wind_X), isInt(tf_Wind_Y)));
+        Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
+            b.setAccVec(Utils.getA_com());
             b.setVelVec(new MyVector( isInt(tf_v0_X), isInt(tf_v0_Y)));
-            b.setAccVec(new MyVector(0,0));
+//            b.setAccVec(new MyVector(0,0));
         }
     }
 
 
     //-Parameter-Setting------------------------------------------------------------------------------------------------
-    public void tf_v0_X_OnAction(ActionEvent actionEvent) {
+    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
     }
-    public void tf_v0_Y_OnAction(ActionEvent actionEvent) {
+    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
     }
-    public void tf_Wind_X_OnAction(ActionEvent actionEvent) {
+    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
     }
-    public void tf_Wind_Y_OnAction(ActionEvent actionEvent) {
+    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
     }
 
     public void chb_Wind_OnAction(ActionEvent actionEvent) {
         gp_Wind.setDisable(!chb_Wind.isSelected());
+
+        if(!chb_Wind.isSelected())
+        {
+            Utils.setWind(new MyVector(0,0));
+            Utils.setA_com(MyVector.add(Utils.GRAVITY, Utils.getWind()));
+        }
     }
     public void sl_SimSpd_OnDragDetected(MouseEvent mouseEvent) {
         Utils.setSim_Spd(sl_SimSpd.getValue());
@@ -223,6 +250,7 @@ public class MainWindowController implements Initializable {
 
     private double isInt(TextField tf) {
         try {
+            tf.setStyle("-fx-border-color: none;");
             return Double.parseDouble(tf.getText());
         }
         catch (NumberFormatException e) {
@@ -234,13 +262,6 @@ public class MainWindowController implements Initializable {
             tf.requestFocus();
             return 0.0;
         }
-    }
-
-    //TODO evaluate need
-    public void tf_v0_X_OnKeyPressed(KeyEvent keyEvent) {
-    }
-    public void tf_v0_X_OnMouseExited(MouseEvent mouseEvent) {
-//        isInt(tf_v0_X.getText()); //TODO clicked elsewhere
     }
 
     //-Parameter-Display------------------------------------------------------------------------------------------------
@@ -264,6 +285,11 @@ public class MainWindowController implements Initializable {
 
             vb_displayCurrentParams.getChildren().add(cRootPane);
             currentParamsOpen = true;
+
+
+            // check all TextFields for values
+            fillVariables();
+            showCurrentParams();
         }
     }
 
