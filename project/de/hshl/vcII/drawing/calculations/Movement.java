@@ -26,7 +26,8 @@ public class Movement {
 
     public static void calcAcceleration(Ball b) {
         // add every single ACCELERATION to get accVec
-        b.setAccVec(MyVector.add(Utils.getWind(), Utils.GRAVITY));
+        //b.setAccVec(MyVector.add(Utils.getWind(), Utils.GRAVITY));
+        b.setAccVec(Utils.getA_com());
     }
     public static void calcVelocity(Ball b) {
         // VELOCITY dependent on acceleration: v = v_0 + a * t

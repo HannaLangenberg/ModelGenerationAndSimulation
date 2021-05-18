@@ -51,6 +51,9 @@ public class Ball extends Circle {
     public void setNumber(int number) {
         this.number = number;
     }
+    public int getNumber() {
+        return number;
+    }
 
     public void setPosVec(MyVector posVec) {
         this.posVec = posVec;
