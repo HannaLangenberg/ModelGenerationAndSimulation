@@ -24,13 +24,13 @@ public class Collision {
             ballOnBall(b, b2, epsilon);
 
         for (Wall w : walls)
-            ballOnWall(w, b);
+            ballOnWall(w, b, epsilon);
     }
 
-    private static void  ballOnWall(Wall w, Ball b){
+    private static void  ballOnWall(Wall w, Ball b, double epsilon){
         //-Ball-and-Wall-Collide----------------------------------------------------------------------------------------
 
-        // Radius of the ball.
+        /*// Radius of the ball.
         double r_b = b.getRadius();
 
         // Rotation of the Wall
@@ -57,7 +57,8 @@ public class Collision {
 
         boolean collision = false;
         boolean onWall = false;
-        double lambda = (v)/(-1*w.getCollision().getWidth());
+
+        double lambda = calculateLambda(w, b, 0);
 
         if(0 <= lambda && lambda <= 1)
             onWall = true;
@@ -67,7 +68,7 @@ public class Collision {
 
         // bottom
 
-        /*
+        *//*
         // coordinates of the projected point
         // x = (vec1 * vec2)/|vec1|^2
 
@@ -77,12 +78,46 @@ public class Collision {
         // Vector with Length w.getCollision().getHeight();
         // and starting at pos_w
         MyVector vec2 = new MyVector(y, x);
-*/
+*//*
 
         //-If-they-collide----------------------------------------------------------------------------------------------
 
         if(collision)
-            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
+            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));*/
+
+
+        for(int i = 0; i < 2; i++) {
+            calculateLambda(w, b, i, epsilon);
+        }
+    }
+
+    private static void calculateDroppedPerpendicular(Ball b, MyVector r, double x_y_stretch, double alpha, double epsilon) {
+        // Positions for the wall
+        double rX = r.x;
+        double rY = r.y;
+
+        // (X/Y) coordinates of the dropped perpendicular
+        double x = rX + x_y_stretch * (-1) * Math.cos(Math.toRadians(alpha));
+        double y = rY + x_y_stretch * (-1) * Math.sin(Math.toRadians(alpha));
+
+        MyVector dp = new MyVector(x,y);
+        
+        if(MyVector.distance(b.getPosVec(), dp) <= b.getRadius() + epsilon)
+            correctVelocity(b, dp);
+
+    }
+
+    private static void correctVelocity(Ball b, MyVector dp) {
+        // Calculate values
+        // Norm the line between the two centers of b1 and b2.
+        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), dp));
+
+        // Find the orthogonal and the parallel velocity vectors of b
+
+        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+
+        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
     }
 
     private static void ballOnBall(Ball b1, Ball b2, double epsilon) {
@@ -113,8 +148,8 @@ public class Collision {
         MyVector step2 = MyVector.divide(step1, b1.getMass() + b2.getMass());
         MyVector step3 = MyVector.multiply(step2, 2);
 
-        MyVector step4_b1 = MyVector.subtract(step3, b1.getVelVec());
-        MyVector step4_b2 = MyVector.subtract(step3, b2.getVelVec());
+        MyVector step4_b1 = MyVector.subtract(b1.getVelVec(), step3);
+        MyVector step4_b2 = MyVector.subtract(b2.getVelVec(), step3);
 
         //-------Set-values---------------------------------------------------------------------------------------------
 
@@ -126,15 +161,15 @@ public class Collision {
         //-------Calculate-values---------------------------------------------------------------------------------------
 
         // Norm the line between the two centers of b1 and b2.
-        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b2.getPosVec(), b1.getPosVec()));
+        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b1.getPosVec(), b2.getPosVec()));
         // Find the orthogonal velocity vector of b1 and the parallel velocity vector of b2
-        MyVector v1Orthogonal = MyVector.subtract(b1.getVelVec(), MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine));
+        MyVector v1Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine), b1.getVelVec());
         MyVector v2Parallel = MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine);
 
         // Switch normedCenterLine's orientation
         normedCenterLine = MyVector.multiply(normedCenterLine, -1);
         // Find the orthogonal velocity vector of b2 and the parallel velocity vector of b1
-        MyVector v2Orthogonal = MyVector.subtract(b2.getVelVec(), MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine));
+        MyVector v2Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine), b2.getVelVec());
         MyVector v1Parallel = MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine);
 
         //-------Set-values---------------------------------------------------------------------------------------------
@@ -143,27 +178,37 @@ public class Collision {
         b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
     }
 
-    private static MyVector calculateXAndY(Wall w, Ball b, double offH){
+    private static void calculateLambda(Wall w, Ball b, int decision, double epsilon){
+        /* decision variable:
+        * case 0 = top of wall
+        * case 1 = bottom of wall
+        */
         double alpha = w.getSpin();
 
         // Positions for the wall
+        double rW = w.getCollision().getWidth();
         double rX = w.getCollision().getX();
-        double rY = w.getCollision().getY();
+        double rY = 0;
+        switch (decision) {
+            case 0: rY = w.getCollision().getY();
+                break;
+            case 1: rY = w.getCollision().getY() + w.getCollision().getHeight();
+                break;
+            default:
+                assert false: "Unknown Case";
+        }
 
         // Positions for the ball
         double bX = b.getPosVec().x;
         double bY = b.getPosVec().y;
 
         // Parts of the calc so it doesn't get too long
-        double v1 = (rX - bX) * Math.cos(Math.toRadians(alpha));
-        double v2 = (rY - bY) * Math.sin(Math.toRadians(alpha));
-        double v = v1 + v2;
+        double x_stretch = (rX - bX) * Math.cos(Math.toRadians(alpha));
+        double y_stretch = (rY - bY) * Math.sin(Math.toRadians(alpha));
+        double x_y_stretch = x_stretch + y_stretch;
 
-        // Top left of the wall
-        double x = rX + v * (-1) * Math.cos(Math.toRadians(alpha));
-        double y = rY + v * (-1) * Math.sin(Math.toRadians(alpha));
-
-        return new MyVector(x, y);
+        if(0 <= x_y_stretch / rW * -1 && x_y_stretch / rW * -1 <= 1)
+            calculateDroppedPerpendicular(b, new MyVector(rX, rY),  x_y_stretch, alpha, epsilon);
     }
 }
 

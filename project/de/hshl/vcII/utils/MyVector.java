@@ -66,7 +66,7 @@
 
     // Method for subtracting two 2D vectors from each other.
     public static MyVector subtract(MyVector v1, MyVector v2){
-        return new MyVector(v1.x - v2.x, v1.y - v2.y);
+        return new MyVector(v2.x - v1.x, v2.y - v1.y);
     }
 
     @Override
