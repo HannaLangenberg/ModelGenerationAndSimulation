@@ -142,5 +142,28 @@ public class Collision {
         b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
         b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
     }
+
+    private static MyVector calculateXAndY(Wall w, Ball b, double offH){
+        double alpha = w.getSpin();
+
+        // Positions for the wall
+        double rX = w.getCollision().getX();
+        double rY = w.getCollision().getY();
+
+        // Positions for the ball
+        double bX = b.getPosVec().x;
+        double bY = b.getPosVec().y;
+
+        // Parts of the calc so it doesn't get too long
+        double v1 = (rX - bX) * Math.cos(Math.toRadians(alpha));
+        double v2 = (rY - bY) * Math.sin(Math.toRadians(alpha));
+        double v = v1 + v2;
+
+        // Top left of the wall
+        double x = rX + v * (-1) * Math.cos(Math.toRadians(alpha));
+        double y = rY + v * (-1) * Math.sin(Math.toRadians(alpha));
+
+        return new MyVector(x, y);
+    }
 }
 
