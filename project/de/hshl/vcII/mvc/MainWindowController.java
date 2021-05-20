@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.entities.stationary.WallManager;
 
 import project.de.hshl.vcII.mvc.view.ResizePane;
 import javafx.event.EventHandler;
@@ -97,10 +96,8 @@ public class MainWindowController implements Initializable {
 
         btn_start_stop.setDisable(true);
 
-        initTextField(tf_v0_X);
-        initTextField(tf_v0_Y);
-        initTextField(tf_Wind_X);
-        initTextField(tf_Wind_Y);
+        initWindFields(tf_Wind_X);
+        initWindFields(tf_Wind_Y);
 
         // Initialise the original MainWindowModel
         mainWindowModel = MainWindowModel.get();
@@ -127,12 +124,12 @@ public class MainWindowController implements Initializable {
         });
     }
 
-    private void initTextField(TextField tf) {
+    private void initWindFields(TextField tf) {
         tf.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 wind_changed = true;
-                Utils.setWind(new MyVector(isInt(tf_Wind_X), isInt(tf_Wind_Y)));
+                Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
                 Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
             }
         });
@@ -214,11 +211,11 @@ public class MainWindowController implements Initializable {
         }
     }
     private void fillVariables() {
-        Utils.setWind(new MyVector( isInt(tf_Wind_X), isInt(tf_Wind_Y)));
+        Utils.setWind(new MyVector( isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
         Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
             b.setAccVec(Utils.getA_com());
-            b.setVelVec(new MyVector( isInt(tf_v0_X), isInt(tf_v0_Y)));
+            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
 //            b.setAccVec(new MyVector(0,0));
         }
     }
@@ -248,17 +245,17 @@ public class MainWindowController implements Initializable {
         System.out.println("-----"+sl_SimSpd.getValue()+"-----");
     } //TODO implement simSpd
 
-    private double isInt(TextField tf) {
+    private double isDouble(TextField tf) {
         try {
             tf.setStyle("-fx-border-color: none;");
             return Double.parseDouble(tf.getText());
         }
         catch (NumberFormatException e) {
             tf.setStyle("-fx-border-color: red;");
-            /*Alert err = new Alert(Alert.AlertType.ERROR);
-            err.setTitle("Keine Zahl!");
-            err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
-            err.show();*/
+                /*Alert err = new Alert(Alert.AlertType.ERROR);
+                err.setTitle("Keine Zahl!");
+                err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
+                err.show();*/
             tf.requestFocus();
             return 0.0;
         }
