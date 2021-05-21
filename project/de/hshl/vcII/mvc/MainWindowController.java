@@ -153,11 +153,13 @@ public class MainWindowController implements Initializable {
     @FXML
     private void choiceBall() {
         mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
+        mainWindowModel.getWallManager().setW(null);
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBlock(){
         mainWindowModel.getWallManager().setW(new Wall());
+        mainWindowModel.getBallManager().setB(null);
     }
 
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
@@ -299,14 +301,13 @@ public class MainWindowController implements Initializable {
             case PRIMARY:
                 // Left MouseButton.
                 if(mainWindowModel.isChoiceEnabled())
-                    // Was 'G' previously pressed
+                    // Was 'W' previously pressed
                     mainWindowModel.getKeyManager().manageMouse(e);
                 else {
                     mainWindowModel.getPlacer().place(e);
                     btn_start_stop.setDisable(false);
                     aSettingsPane.setDisable(false);
                 }
-
                 break;
             case SECONDARY:
                 mainWindowModel.getKeyManager().manageMouse(e);

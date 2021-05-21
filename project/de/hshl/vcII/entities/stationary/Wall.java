@@ -28,7 +28,7 @@ public class Wall {
         number = 0;
     }
 
-    // Getters and setters
+    //----Getter-&-Setter-----------------------------------------------------------------------------------------------
     public Rectangle getCollision(){
         return collision;
     }
@@ -55,7 +55,19 @@ public class Wall {
         this.spin = spin;
     }
 
+    public int getNumber() {
+        return number;
+    }
     public void setNumber(int number) {
         this.number = number;
+    }
+
+
+    @Override
+    public String toString() {
+        return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
+                + ") -- image: (" + Math.round(Float.parseFloat(this.texture.toString()))
+                + ") -- image view: (" + Math.round(Float.parseFloat(this.viewTexture.toString()))
+                + ") -- rotation: " + this.spin + " -- bounding box: " + this.collision.toString();
     }
 }

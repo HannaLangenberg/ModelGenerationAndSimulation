@@ -44,7 +44,7 @@ public class Placer {
                 ball.setPosVec(new MyVector(x, y));
             }
         } else if (wall != null){
-            if (!mainWindowModel.getADrawingPane().getChildren().contains(wall)) {
+            if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, y));
                 wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
                 mainWindowModel.getWallManager().addWall(wall);
@@ -53,17 +53,10 @@ public class Placer {
                 wall.setPosVec(new MyVector(x, y));
             }
         }
-
-        mainWindowModel.getBallManager().setB(null);
-        mainWindowModel.getWallManager().setW(null);
     }
 
     public Ball getBall() {
         return ball;
-    }
-
-    public Wall getWall() {
-        return wall;
     }
 
     public double getX() {
