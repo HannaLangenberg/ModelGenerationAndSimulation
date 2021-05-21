@@ -17,6 +17,7 @@ public class Wall {
     private ImageView viewTexture;
     private Rectangle collision;
     private MyVector posVec;
+    private double e_alpha;
     private double spin;
     private int number;
 
@@ -60,6 +61,13 @@ public class Wall {
     }
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public double getE_alpha() {
+        return e_alpha;
+    }
+    public void setE_alpha(double e_alpha) {
+        this.e_alpha = e_alpha;
     }
 
 
