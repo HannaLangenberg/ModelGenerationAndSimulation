@@ -1,12 +1,14 @@
 package project.de.hshl.vcII;
 
 import javafx.scene.shape.StrokeType;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import project.de.hshl.vcII.utils.MyVector;
 
 /**
  * Manages Key inputs.
@@ -14,7 +16,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class KeyManager {
     private MainWindowModel mainWindowModel;
-    private Wall wall;
+    private Object wallOrBall;
 
     public KeyManager(){
         mainWindowModel = MainWindowModel.get();
@@ -27,20 +29,31 @@ public class KeyManager {
      */
     public void manageMouse(MouseEvent e){
         mainWindowModel.setChoiceMade(false);
-        this.wall = null;
+        this.wallOrBall = null;
+        Rectangle clickingHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
-            if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
+            if(clickingHitBox.intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
                 w.getCollision().setStrokeType(StrokeType.OUTSIDE);
                 w.getCollision().setStrokeWidth(2);
                 w.getCollision().setStroke(new Color(0, 0.8, 0, 1));
                 w.getCollision().setFill(Color.TRANSPARENT);
                 mainWindowModel.setChoiceMade(true);
-                this.wall = w;
+                this.wallOrBall = w;
                 mainWindowModel.getWallManager().setW(w);
                 if(!mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision())) {
                     mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
                     return;
                 }
+            }
+        }
+        MyVector clickHitBox = new MyVector(e.getX(), e.getY());
+        for(Ball b : mainWindowModel.getBallManager().getBalls()){
+            if(MyVector.distance(clickHitBox, b.getPosVec()) < b.getRadius()){
+                b.setStrokeType(StrokeType.OUTSIDE);
+                b.setStrokeWidth(2);
+                b.setStroke(new Color(0, 0.8, 0, 1));
+                mainWindowModel.setChoiceMade(true);
+                this.wallOrBall = b;
             }
         }
     }
@@ -55,14 +68,15 @@ public class KeyManager {
                 // The block can be picked
                 mainWindowModel.setChoiceEnabled(!mainWindowModel.isChoiceEnabled());
                 // Remove stroke
-                if(mainWindowModel.isChoiceMade()) unMark();break;
+                if(mainWindowModel.isChoiceMade()) unMark();
+                break;
             case E:
                 // The chosen block is rotated left
-                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateRight(wall);
+                if(mainWindowModel.isChoiceMade() & wallOrBall instanceof Wall) MainWindowModel.get().getSpin().rotateRight((Wall) wallOrBall);
                 break;
             case Q:
                 // The chosen block is rotated right
-                if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateLeft(wall);
+                if(mainWindowModel.isChoiceMade() & wallOrBall instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) wallOrBall);
                 break;
             case DELETE:
                 // The chosen block is deleted
@@ -75,14 +89,23 @@ public class KeyManager {
 
     // Helper
     private void unMark(){
-        wall.getCollision().setStrokeWidth(0);
+        if(wallOrBall instanceof Wall)
+            ((Wall) wallOrBall).getCollision().setStrokeWidth(0);
+        else if(wallOrBall instanceof Ball){
+            ((Ball) wallOrBall).setStrokeWidth(0);
+        }
         mainWindowModel.setChoiceMade(false);
     }
 
     private void deleteBlock() {
-        mainWindowModel.getADrawingPane().getChildren().remove(wall.getCollision());
-        mainWindowModel.getADrawingPane().getChildren().remove(wall.getTexture());
-        mainWindowModel.getWallManager().getWalls().remove(wall);
-        mainWindowModel.setChoiceMade(false);
+        if (wallOrBall instanceof Wall){
+            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getCollision());
+            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getTexture());
+            mainWindowModel.getWallManager().getWalls().remove(wallOrBall);
+        }else if(wallOrBall instanceof Ball){
+            mainWindowModel.getADrawingPane().getChildren().remove(wallOrBall);
+            mainWindowModel.getBallManager().getBalls().remove(wallOrBall);
+        }
+            mainWindowModel.setChoiceMade(false);
     } 
 }
