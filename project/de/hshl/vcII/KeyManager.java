@@ -1,5 +1,6 @@
 package project.de.hshl.vcII;
 
+import javafx.scene.shape.StrokeType;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import javafx.scene.input.KeyCode;
@@ -29,16 +30,17 @@ public class KeyManager {
         this.wall = null;
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
             if(new Rectangle((int) e.getX(), (int) e.getY(),1,1).intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
-                w.getCollision().setStyle("-fx-stroke-type: outside; " +
-                        "-fx-stroke: #008000;" +
-                        "-fx-stroke-width: 2;");
+                w.getCollision().setStrokeType(StrokeType.OUTSIDE);
+                w.getCollision().setStrokeWidth(2);
+                w.getCollision().setStroke(new Color(0, 0.8, 0, 1));
                 w.getCollision().setFill(Color.TRANSPARENT);
                 mainWindowModel.setChoiceMade(true);
                 this.wall = w;
                 mainWindowModel.getWallManager().setW(w);
-                if(mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision()))
-                    continue;
-                mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
+                if(!mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision())) {
+                    mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
+                    return;
+                }
             }
         }
     }
@@ -52,10 +54,8 @@ public class KeyManager {
             case W:
                 // The block can be picked
                 mainWindowModel.setChoiceEnabled(!mainWindowModel.isChoiceEnabled());
-                mainWindowModel.setChoiceMade(false);
-                // Remove all borders
-                //mainWindowModel.getADrawingPane().getChildren().removeAll(mainWindowModel.getWallManager().getWallCollisionBounds());
-                break;
+                // Remove stroke
+                if(mainWindowModel.isChoiceMade()) unMark();break;
             case E:
                 // The chosen block is rotated left
                 if(mainWindowModel.isChoiceMade()) MainWindowModel.get().getSpin().rotateRight(wall);
@@ -74,6 +74,11 @@ public class KeyManager {
     }
 
     // Helper
+    private void unMark(){
+        wall.getCollision().setStrokeWidth(0);
+        mainWindowModel.setChoiceMade(false);
+    }
+
     private void deleteBlock() {
         mainWindowModel.getADrawingPane().getChildren().remove(wall.getCollision());
         mainWindowModel.getADrawingPane().getChildren().remove(wall.getTexture());
