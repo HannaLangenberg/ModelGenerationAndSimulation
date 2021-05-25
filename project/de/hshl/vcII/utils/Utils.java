@@ -1,5 +1,7 @@
 package project.de.hshl.vcII.utils;
 
+import javafx.scene.control.TextField;
+
 /**
  *  Utilities class.
  */
@@ -19,6 +21,23 @@ public class Utils {
     // File paths to the light-/dark mode CSS-Data
     public static final String darkMode = "modes/MainWindowStyleDark.css";
     public static final String lightMode = "modes/MainWindowStyleLight.css";
+
+    //----Check---------------------------------------------------------------------------------------------------------
+    public static double isDouble(TextField tf) {
+        try {
+            tf.setStyle("-fx-border-color: none;");
+            return Double.parseDouble(tf.getText());
+        }
+        catch (NumberFormatException e) {
+            tf.setStyle("-fx-border-color: red;");
+                /*Alert err = new Alert(Alert.AlertType.ERROR);
+                err.setTitle("Keine Zahl!");
+                err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
+                err.show();*/
+            tf.requestFocus();
+            return 0.0;
+        }
+    }
 
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
     public static void setA_com(MyVector a_ges) {
