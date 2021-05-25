@@ -12,7 +12,7 @@ import project.de.hshl.vcII.utils.MyVector;
 
 /**
  * Manages Key inputs.
- * If 'G' key is pressed it also handles mouse input
+ * If 'W' key is pressed it also handles mouse input
  */
 public class KeyManager {
     private MainWindowModel mainWindowModel;
@@ -80,7 +80,7 @@ public class KeyManager {
                 break;
             case DELETE:
                 // The chosen block is deleted
-                if(mainWindowModel.isChoiceMade()) deleteBlock();
+                if(mainWindowModel.isChoiceMade()) deleteBlockOrWall();
             case SPACE:
                 mainWindowModel.getSimulator().run();
 
@@ -97,7 +97,7 @@ public class KeyManager {
         mainWindowModel.setChoiceMade(false);
     }
 
-    private void deleteBlock() {
+    private void deleteBlockOrWall() {
         if (wallOrBall instanceof Wall){
             mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getCollision());
             mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getTexture());
