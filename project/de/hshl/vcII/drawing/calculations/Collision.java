@@ -93,9 +93,16 @@ public class Collision {
         if (collision_onEdge || collision_onCorner)
         {
             Calculator.bounceVelocity(b);
-            collision_onEdge = false;
-            collision_onCorner = false;
+            reset();
         }
+    }
+    private static void reset() {
+        collision_onCorner = false;
+        collision_onEdge = false;
+        s_t_Parameters = new MyVector(0,0);
+        possibleCorner = new MyVector(0,0);
+        s = -5;
+        t = -5;
     }
 
     private static void checkCorners(Wall w, Ball b, double e) {
@@ -159,7 +166,7 @@ public class Collision {
         if (t_onEdge) {
             Calculator.calcSideCollisions(w, s_t_Parameters, 1);
         }
-        collision_onEdge = Calculator.checkDistance(b, e);
+        collision_onEdge = Calculator.checkDistance(b, e, s_onEdge||t_onEdge);
     }
 
     public static void checkPosition(Ball b, double e) {

@@ -8,8 +8,8 @@ import project.de.hshl.vcII.utils.Utils;
 public class Calculator {
     private static MyVector droppedPerpendicular;
     private static MyVector a_H;
-    private static double f_H;
     private static MyVector a_N;
+    private static double f_H;
     private static double f_N;
     private static double rk_H;
     private static double rk_G;
@@ -121,10 +121,14 @@ public class Calculator {
     }
 
     //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
-    public static boolean checkDistance(Ball b, double epsilon) {
-        double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
+    public static boolean checkDistance(Ball b, double epsilon, boolean sidesHit) {
+        if (sidesHit) {
+            double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
 
-        return distance < b.getRadius() + epsilon;
+            return distance < b.getRadius() + epsilon;
+        } else {
+            return false;
+        }
     }
     public static boolean checkDistance(Ball b, MyVector wCoord, double epsilon) {
         return MyVector.distance(b.getPosVec(), wCoord) <= b.getRadius() + epsilon;
@@ -132,18 +136,17 @@ public class Calculator {
 
     //_Split_and_rearrange_velocity_vector_using_orthogonal_projection__________________________________________________
     public static void bounceVelocity(Ball b) {
-        {
-            // Calculate values
-            // The directional vector between the ball's position and its dropped perpendicular.
-            // It has to be normed:
-            MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), droppedPerpendicular));
+        // Calculate values
+        // The directional vector between the ball's position and its dropped perpendicular.
+        // It has to be normed:
+        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), droppedPerpendicular));
 
-            // Find the orthogonal and the parallel velocity vectors of b
-            MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-            MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+        // Find the orthogonal and the parallel velocity vectors of b
+        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-        }
+        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+        droppedPerpendicular = new MyVector(0,0);
     }
 
 
@@ -263,11 +266,11 @@ public class Calculator {
         double y;
 
         //Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
-        x = Math.cos(Math.toRadians(a) * f_H);
+        x =  Math.cos(Math.toRadians(a) * f_H);
         y = -Math.sin(Math.toRadians(a) * f_H);
         a_H = new MyVector(x,y);
 
-        x = Math.sin(Math.toRadians(a) * f_N);      //  cos(a+90) =  sin(a)
+        x =  Math.sin(Math.toRadians(a) * f_N);      //  cos(a+90) =  sin(a)
         y = -Math.cos(Math.toRadians(a) * f_N);     // -sin(a+90) = -cos(a)
         a_N = new MyVector(x,y);
 
@@ -277,7 +280,9 @@ public class Calculator {
         f_R_H = rk_H * f_N;
         f_R_G = rk_G * f_N;
 
-        
+
+
+
     }
 
 
