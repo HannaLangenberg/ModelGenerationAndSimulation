@@ -2,12 +2,10 @@ package project.de.hshl.vcII.mvc;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -33,7 +31,9 @@ public class SettingsController {
     private boolean wind_changed = false;
     private boolean currentParamsOpen = false;
 
-    public void initialize(Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight, TextField tf_Wind_X, TextField tf_Wind_Y, TextField tf_v0_X, TextField tf_v0_Y, VBox vb_displayCurrentParams, AnchorPane cRootPane){
+    public void initialize(Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
+                           TextField tf_Wind_X, TextField tf_Wind_Y, TextField tf_v0_X, TextField tf_v0_Y,
+                           VBox vb_displayCurrentParams, AnchorPane cRootPane){
         this.sl_Radius = sl_Radius;
         this.lCurrentRadius = lCurrentRadius;
         this.sl_Weight = sl_Weight;
@@ -50,7 +50,7 @@ public class SettingsController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
             currentParamsController = loader.getController();
-            cRootPane = loader.load();
+            this.cRootPane = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,7 +58,7 @@ public class SettingsController {
 
 
     //-Parameter-Display------------------------------------------------------------------------------------------------
-    public void showCurrentParams() throws IOException {
+    public void showCurrentParams() {
         currentParamsController.update();
     }
 
@@ -115,12 +115,9 @@ public class SettingsController {
     }
 
     private void initWindFields(TextField tf) {
-        tf.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                wind_changed = true;
-                Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-            }
+        tf.textProperty().addListener((observableValue, s, t1) -> {
+            wind_changed = true;
+            Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
         });
     }
 

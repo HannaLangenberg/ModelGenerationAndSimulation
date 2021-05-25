@@ -188,8 +188,7 @@ public class MainWindowController implements Initializable {
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
-        }
-        else {
+        } else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
             b = mainWindowModel.getBallManager().getB();
