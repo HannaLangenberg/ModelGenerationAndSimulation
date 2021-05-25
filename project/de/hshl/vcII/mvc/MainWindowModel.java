@@ -32,6 +32,7 @@ public class MainWindowModel {
     private Placer placer;
     private Grid grid;
     private Simulator simulator;
+    private Object currentlySelected;
     // Objects used in JFX
     private Stage stage;
     private AnchorPane aDrawingPane;
@@ -137,6 +138,14 @@ public class MainWindowModel {
 
     public Rotation getSpin() {
         return spin;
+    }
+
+    public Object getCurrentlySelected() {
+        return currentlySelected;
+    }
+
+    public void setCurrentlySelected(Object currentlySelected) {
+        this.currentlySelected = currentlySelected;
     }
 
     public boolean isFullscreen() {

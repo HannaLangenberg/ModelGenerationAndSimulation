@@ -57,15 +57,13 @@ public class MainWindowController implements Initializable {
     @FXML
     public BorderPane bp_borderPane;
     @FXML
-    public AnchorPane aSettingsPane;
-    @FXML
     public GridPane gp_Wind;
     @FXML
     public FlowPane fpActiveControls;
     @FXML
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
-    private AnchorPane aRootPane, aDrawingPane, cRootPane;
+    private AnchorPane aRootPane, aDrawingPane, aSettingsPane, cRootPane;
     // Declaration of original model.
     private MainWindowModel mainWindowModel;
 
@@ -151,13 +149,17 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
-        mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
+        Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20);
+        mainWindowModel.setCurrentlySelected(b);
+        mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBlock(){
-        mainWindowModel.getWallManager().setW(new Wall());
+        Wall w = new Wall();
+        mainWindowModel.setCurrentlySelected(w);
+        mainWindowModel.getWallManager().setW(w);
         mainWindowModel.getBallManager().setB(null);
     }
 
@@ -301,8 +303,10 @@ public class MainWindowController implements Initializable {
                     mainWindowModel.getKeyManager().manageMouse(e);
                 else {
                     mainWindowModel.getPlacer().place(e);
-                    btn_start_stop.setDisable(false);
-                    aSettingsPane.setDisable(false);
+                    if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
+                        btn_start_stop.setDisable(false);
+                        aSettingsPane.setDisable(false);
+                    }
                 }
                 break;
             case SECONDARY:
