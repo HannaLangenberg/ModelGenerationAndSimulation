@@ -130,7 +130,6 @@ public class MainWindowController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 wind_changed = true;
                 Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-                Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
             }
         });
     }
@@ -152,7 +151,7 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
-        mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
+        mainWindowModel.getBallManager().setB(new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20));
         mainWindowModel.getWallManager().setW(null);
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
@@ -214,9 +213,7 @@ public class MainWindowController implements Initializable {
     }
     private void fillVariables() {
         Utils.setWind(new MyVector( isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-        Utils.setA_com(MyVector.add(Utils.getWind(), Utils.GRAVITY));
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setAccVec(Utils.getA_com());
             b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
 //            b.setAccVec(new MyVector(0,0));
         }
@@ -239,7 +236,6 @@ public class MainWindowController implements Initializable {
         if(!chb_Wind.isSelected())
         {
             Utils.setWind(new MyVector(0,0));
-            Utils.setA_com(MyVector.add(Utils.GRAVITY, Utils.getWind()));
         }
     }
     public void sl_SimSpd_OnDragDetected(MouseEvent mouseEvent) {

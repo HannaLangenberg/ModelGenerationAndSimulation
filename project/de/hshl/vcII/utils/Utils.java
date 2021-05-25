@@ -6,6 +6,7 @@ package project.de.hshl.vcII.utils;
 public class Utils {
     // Constant gravity (9.81 m/s^2 on Earth)
     public static final MyVector GRAVITY = new MyVector(0,9.81);
+    public static final double FG = 9.81;
 
     public static MyVector a_com = new MyVector(0,0);
 

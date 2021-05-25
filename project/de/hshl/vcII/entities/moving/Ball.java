@@ -15,6 +15,7 @@ public class Ball extends Circle {
     private MyVector posVec;
     private MyVector velVec;
     private MyVector accVec;
+    private MyVector frcVec;
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private double randomSeed = Math.random();
     private int number;
@@ -27,11 +28,13 @@ public class Ball extends Circle {
         this.setStrokeWidth(5);
     }
 
-    public Ball(int number, MyVector posVec, MyVector velVec, MyVector accVec, double radius, double mass) {
+    public Ball(int number, MyVector posVec, MyVector velVec, MyVector accVec, MyVector frcVec, double radius, double mass) {
         this.number = number;
         this.posVec = posVec;
         this.velVec = velVec;
         this.accVec = accVec;
+        this.frcVec = frcVec;
+        setFrcVec(new MyVector(0.9, 0.7)); // Haft- und Gleitreibung für Stein auf Holz (trocken) i.d.R.
         setRadius(radius);
         this.mass = mass;
 
@@ -47,7 +50,9 @@ public class Ball extends Circle {
         });
     }
 
-    //----Getter-&-Setter-----------------------------------------------------------------------------------------------
+
+
+    //_GETTERS_&_SETTERS________________________________________________________________________________________________
     public void setNumber(int number) {
         this.number = number;
     }
@@ -78,14 +83,22 @@ public class Ball extends Circle {
         return accVec;
     }
 
-    public double getMass() {
-        return mass;
+    public void setFrcVec(MyVector frcVec) {
+        this.frcVec = frcVec;
     }
+    public MyVector getFrcVec() {
+        return frcVec;
+    }
+
     public void setMass(double mass) {
         this.mass = mass;
     }
+    public double getMass() {
+        return mass;
+    }
 
-    
+
+    //_toString()_______________________________________________________________________________________________________
     @Override
     public String toString() {
         return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)

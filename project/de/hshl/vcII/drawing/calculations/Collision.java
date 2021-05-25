@@ -9,26 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Collision {
-    public static MyVector dp;
+    private static double s, t;
+    private static boolean collision_onEdge;
+    private static boolean collision_onCorner;
+    private static MyVector s_t_Parameters;
+    private static MyVector possibleCorner;
 
-    public static void collide(Ball b, double epsilon){
+
+    //_Balls_Collision__________________________________________________________________________________________________
+    public static void checkBalls(Ball b, double epsilon){
         //-Collision-test-----------------------------------------------------------------------------------------------
         // Make a deep copy of the balls list
         List<Ball> balls = new ArrayList<>(MainWindowModel.get().getBallManager().getBalls());
         // Don't copy the Ball given as a parameter
         balls.remove(b);
 
-        // Get all walls.
-        List<Wall> walls = MainWindowModel.get().getWallManager().getWalls();
-
         // Iterate though every ball except the one given in the parameters, and check their collision.
         for (Ball b2 : balls)
             ballOnBall(b, b2, epsilon);
-
-        for (Wall w : walls)
-            ballOnWall(w, b, epsilon);
     }
-
     private static void ballOnBall(Ball b1, Ball b2, double epsilon) {
         //-Do-two-balls-collide-----------------------------------------------------------------------------------------
 
@@ -49,27 +48,6 @@ public class Collision {
             angledShock(b1, b2);
     }
 
-    private static void  ballOnWall(Wall w, Ball b, double epsilon){
-        //-Ball-and-Wall-Collide----------------------------------------------------------------------------------------
-
-        boolean collisionWithCorner = false;
-        boolean collisionWithSides = false;
-        boolean collisionWithCenter = false;
-
-        collisionWithCorner = checkCorners(b, w.getPosVec(), epsilon)
-                                    || checkCorners(b, new MyVector(w.getPosVec().x + w.getCollision().getWidth(), w.getPosVec().y), epsilon)
-                                    || checkCorners(b, new MyVector(w.getPosVec().x, w.getPosVec().y + w.getCollision().getHeight()), epsilon)
-                                    || checkCorners(b, new MyVector(w.getPosVec().x + w.getCollision().getWidth(), w.getPosVec().y + w.getCollision().getHeight()), epsilon);
-
-
-        for(int i = 0; i < 4; i++) {
-            collisionWithSides = calculateLambda(w, b, i, epsilon);
-        }
-
-        if (collisionWithCorner || collisionWithSides)
-            correctVelocity(b, dp);
-    }
-
     private static void centerShock(Ball b1, Ball b2){
         //-------Calculate-values---------------------------------------------------------------------------------------
 
@@ -86,7 +64,6 @@ public class Collision {
         b1.setVelVec(step4_b1);
         b2.setVelVec(step4_b2);
     }
-
     private static void angledShock(Ball b1, Ball b2){
         //-------Calculate-values---------------------------------------------------------------------------------------
 
@@ -108,94 +85,91 @@ public class Collision {
         b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
     }
 
-    private static boolean calculateLambda(Wall w, Ball b, int decision, double epsilon){
-        /* decision variable:
-        * case 0 = top of wall
-        * case 1 = bottom of wall
-        * case 2 = left of wall
-        * case 3 = right of wall
-        */
-        double alpha = 0;
+    //_Ball_And_Wall_Collision__________________________________________________________________________________________
+    public static void checkWalls(Wall w, Ball b, double e) {
+        s_t_Parameters = Calculator.calc_s_t_Parameters(w,b);
+        checkSides(w, b, e);
+        checkCorners(w, b, e);
+        if (collision_onEdge || collision_onCorner)
+        {
+            Calculator.bounceVelocity(b);
+            collision_onEdge = false;
+            collision_onCorner = false;
+        }
+    }
 
-        // Positions for the wall
-        double rOff = 0;
-        double rX = 0;
-        double rY = 0;
-        switch (decision) {
-            case 0:
-                rX = w.getCollision().getX();
-                rY = w.getCollision().getY();
-                alpha = w.getSpin();
-                rOff = w.getCollision().getWidth();
-                break;
-            case 1:
-                rX = w.getCollision().getX();
-                rY = w.getCollision().getY() + w.getCollision().getHeight();
-                alpha = w.getSpin();
-                rOff = w.getCollision().getWidth();
-                break;
-            case 2:
-                rX = w.getCollision().getX();
-                rY = w.getCollision().getY();
-                alpha = 90 - w.getSpin();
-                rOff = w.getCollision().getHeight();
-                break;
-            case 3:
-                rX = w.getCollision().getX() + w.getCollision().getWidth();
-                rY = w.getCollision().getY();
-                alpha = 90 - w.getSpin();
-                rOff = w.getCollision().getHeight();
-            default:
-                assert false: "Unknown Case";
+    private static void checkCorners(Wall w, Ball b, double e) {
+        boolean s_onPosCorner = s >= -1-b.getRadius()-e  &&  s <= -1+e;
+        boolean s_onNegCorner = s >= 1-e                 &&  s <= 1+b.getRadius()+e;
+        boolean t_onPosCorner = t >= 1-e                 &&  t <= 1+b.getRadius()+e;
+        boolean t_onNegCorner = t >= -1-b.getRadius()-e  &&  t <= -1+e;
+
+        if(s_onNegCorner && t_onNegCorner) {
+            possibleCorner = w.getPosVec();
+        }
+        else if(s_onPosCorner && t_onNegCorner) {
+            possibleCorner = new MyVector(w.getPosVec().x + w.getCollision().getWidth(),    w.getPosVec().y);
+        }
+        else if(s_onNegCorner && t_onPosCorner) {
+            possibleCorner = new MyVector(w.getPosVec().x,                                  w.getPosVec().y + w.getCollision().getHeight());
+        }
+        else if(s_onPosCorner && t_onPosCorner) {
+            possibleCorner = new MyVector(w.getPosVec().x + w.getCollision().getWidth(), w.getPosVec().y + w.getCollision().getHeight());
+        }
+        collision_onCorner = Calculator.checkDistance(b, possibleCorner,e);
+
+    }
+    private static void checkSides(Wall w, Ball b, double e) {
+        /*
+         * Es gibt verschiedene Bereiche, die unser s und t kombiniert abdecken.
+         * Je nach vorhandener Kombination müssen wir auf Kollision prüfen oder eine weitere Methode, die gesondert
+         * die Ecken überprüft aufrufen. Bereiche:
+         *
+         *        ----------------------------------------------------- → x
+         *      |
+         *      |                            0
+         *      |            4 ----------------------------- 5
+         *      |             |                            |
+         *      |           2 |             X              | 3
+         *      |             |                            |
+         *      |           6 ----------------------------- 7
+         *      ↓ y                         1
+         *   e = epsilon
+         * SEITEN: ggf e durch Eckprüfung abfangen
+         *   0) Oberseite:       -1 <= s <= 1      &          t = -1
+         *   1) Unterseite:      -1 <= s <= 1      &          t =  1
+         *   2) Links:                 s = -1      &    -1 <= t <= 1
+         *   3) Rechts:                s =  1      &    -1 <= t <= 1
+         *
+         * ECKEN:
+         *   4) OL:              -1-r-e <= s <= -1      &    -1-r-e <= t <= -1
+         *   5) OR:                   1 <= s <= 1+r+e   &    -1-r-e <= t <= -1
+         *   6) UL:              -1-r-e <= s <= -1      &         1 <= t <= 1+r+e
+         *   7) UR:                   1 <= s <= 1+r+e   &         1 <= t <= 1+r+e
+         *
+         * */
+        s = s_t_Parameters.x;
+        t = s_t_Parameters.y;
+        boolean s_onEdge = s >= -1 && s <= 1;
+        boolean t_onEdge = t >= -1 && t <= 1;
+
+        if (s_onEdge) {
+            Calculator.calcSideCollisions(w, s_t_Parameters, 0);
+        }
+        if (t_onEdge) {
+            Calculator.calcSideCollisions(w, s_t_Parameters, 1);
+        }
+        collision_onEdge = Calculator.checkDistance(b, e);
+    }
+
+    public static void checkPosition(Ball b, double e) {
+        if(b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e || b.getPosVec().x < b.getRadius() + e) {
+            b.setVelVec(new MyVector(-b.getVelVec().x, b.getVelVec().y));
         }
 
-        // Positions for the ball
-        double bX = b.getPosVec().x;
-        double bY = b.getPosVec().y;
-
-        // Parts of the calc so it doesn't get too long
-        double x_stretch = (rX - bX) * Math.cos(Math.toRadians(alpha));
-        double y_stretch = (rY - bY) * Math.sin(Math.toRadians(alpha));
-        double x_y_stretch = x_stretch + y_stretch;
-
-        if(-epsilon/50 <= x_y_stretch / rOff * -1 & x_y_stretch / rOff * -1 <= 1+epsilon/50)
-            return calculateDroppedPerpendicular(b, new MyVector(rX, rY), x_y_stretch, alpha, epsilon);
-
-        return false;
-
-    }
-    private static boolean calculateDroppedPerpendicular(Ball b, MyVector r, double x_y_stretch, double alpha, double epsilon) {
-        // Positions for the wall
-        double rX = r.x;
-        double rY = r.y;
-
-        // (X/Y) coordinates of the dropped perpendicular
-        double x = rX + x_y_stretch * (-1) * Math.cos(Math.toRadians(alpha));
-        double y = rY + x_y_stretch * (-1) * Math.sin(Math.toRadians(alpha));
-
-        dp = new MyVector(x,y);
-
-        if(MyVector.distance(b.getPosVec(), dp) <= b.getRadius() + epsilon)
-            return true;
-//            correctVelocity(b, dp);
-        return false;
-    }
-    private static void correctVelocity(Ball b, MyVector dp) {
-        // Calculate values
-        // Norm the line between the two centers of b1 and b2.
-        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), dp));
-
-        // Find the orthogonal and the parallel velocity vectors of b
-
-        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
-
-        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-    }
-
-    // Returns true if wall's corner is inside ball
-    private static boolean checkCorners(Ball b, MyVector wCoord, double epsilon) {
-        return MyVector.distance(b.getPosVec(), wCoord) <= b.getRadius() + epsilon;
+        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e || b.getPosVec().y < b.getRadius() + e) {
+            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
+        }
     }
 }
 
