@@ -87,6 +87,8 @@ public class SettingsController {
         }
     }
 
+
+    //-Parameter-Setting------------------------------------------------------------------------------------------------
     public void sl_Radius_OnDragDetected(){
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
             ((Ball) mainWindowModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
@@ -103,6 +105,7 @@ public class SettingsController {
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
     }
 
+    //------Helpers,-Getter-&-Setter------------------------------------------------------------------------------------
     public void fillVariables() {
         Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
         for(Ball b: mainWindowModel.getBallManager().getBalls()){

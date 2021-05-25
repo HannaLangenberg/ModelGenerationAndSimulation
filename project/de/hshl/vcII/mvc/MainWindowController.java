@@ -178,6 +178,7 @@ public class MainWindowController implements Initializable {
         System.out.println(lightMode);
     }
 
+    // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
     private void run() throws IOException {
