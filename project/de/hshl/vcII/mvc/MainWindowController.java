@@ -37,23 +37,23 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
     @FXML
-    private HBox hHeader, hb_pause;
-    @FXML
-    public VBox vb_displayCurrentParams;
-    @FXML
     public CheckBox chb_Wind;
     @FXML
-    public Slider sl_SimSpd;
+    public Slider sl_Weight;
     @FXML
     public TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
-    public Label lMode, lGridSnapActive;
+    public Label lMode, lGridSnapActive, lCurrentWeight;
     @FXML
     public Button btn_start_stop, btn_showCurrentParams;
     @FXML
     public Polygon d_play;
     @FXML
     public MenuItem miSnap;
+    @FXML
+    private HBox hHeader, hb_pause;
+    @FXML
+    public VBox vb_displayCurrentParams;
     @FXML
     public BorderPane bp_borderPane;
     @FXML
@@ -240,10 +240,13 @@ public class MainWindowController implements Initializable {
             Utils.setWind(new MyVector(0,0));
         }
     }
-    public void sl_SimSpd_OnDragDetected(MouseEvent mouseEvent) {
-        Utils.setSim_Spd(sl_SimSpd.getValue());
-        System.out.println("-----"+sl_SimSpd.getValue()+"-----");
-    } //TODO implement simSpd
+    public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
+        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
+            lCurrentWeight.setText("Aktuelles Gewiicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+        }
+        System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+    }
 
     private double isDouble(TextField tf) {
         try {

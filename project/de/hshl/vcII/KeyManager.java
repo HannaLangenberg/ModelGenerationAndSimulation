@@ -16,7 +16,6 @@ import project.de.hshl.vcII.utils.MyVector;
  */
 public class KeyManager {
     private MainWindowModel mainWindowModel;
-    private Object wallOrBall;
 
     public KeyManager(){
         mainWindowModel = MainWindowModel.get();
@@ -29,7 +28,7 @@ public class KeyManager {
      */
     public void manageMouse(MouseEvent e){
         mainWindowModel.setChoiceMade(false);
-        this.wallOrBall = null;
+        mainWindowModel.setCurrentlySelected(null);
         Rectangle clickingHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
             if(clickingHitBox.intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
@@ -38,7 +37,7 @@ public class KeyManager {
                 w.getCollision().setStroke(new Color(0, 0.8, 0, 1));
                 w.getCollision().setFill(Color.TRANSPARENT);
                 mainWindowModel.setChoiceMade(true);
-                this.wallOrBall = w;
+                mainWindowModel.setCurrentlySelected(w);
                 mainWindowModel.getWallManager().setW(w);
                 if(!mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision())) {
                     mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
@@ -53,7 +52,7 @@ public class KeyManager {
                 b.setStrokeWidth(2);
                 b.setStroke(new Color(0, 0.8, 0, 1));
                 mainWindowModel.setChoiceMade(true);
-                this.wallOrBall = b;
+                mainWindowModel.setCurrentlySelected(b);
             }
         }
     }
@@ -72,11 +71,11 @@ public class KeyManager {
                 break;
             case E:
                 // The chosen block is rotated left
-                if(mainWindowModel.isChoiceMade() & wallOrBall instanceof Wall) MainWindowModel.get().getSpin().rotateRight((Wall) wallOrBall);
+                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateRight((Wall) mainWindowModel.getCurrentlySelected());
                 break;
             case Q:
                 // The chosen block is rotated right
-                if(mainWindowModel.isChoiceMade() & wallOrBall instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) wallOrBall);
+                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) mainWindowModel.getCurrentlySelected());
                 break;
             case DELETE:
                 // The chosen block is deleted
@@ -89,22 +88,22 @@ public class KeyManager {
 
     // Helper
     private void unMark(){
-        if(wallOrBall instanceof Wall)
-            ((Wall) wallOrBall).getCollision().setStrokeWidth(0);
-        else if(wallOrBall instanceof Ball){
-            ((Ball) wallOrBall).setStrokeWidth(0);
+        if(mainWindowModel.getCurrentlySelected() instanceof Wall)
+            ((Wall) mainWindowModel.getCurrentlySelected()).getCollision().setStrokeWidth(0);
+        else if(mainWindowModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeWidth(0);
         }
         mainWindowModel.setChoiceMade(false);
     }
 
     private void deleteBlockOrWall() {
-        if (wallOrBall instanceof Wall){
-            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getCollision());
-            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) wallOrBall).getTexture());
-            mainWindowModel.getWallManager().getWalls().remove(wallOrBall);
-        }else if(wallOrBall instanceof Ball){
-            mainWindowModel.getADrawingPane().getChildren().remove(wallOrBall);
-            mainWindowModel.getBallManager().getBalls().remove(wallOrBall);
+        if (mainWindowModel.getCurrentlySelected() instanceof Wall){
+            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) mainWindowModel.getCurrentlySelected()).getCollision());
+            mainWindowModel.getADrawingPane().getChildren().remove(((Wall) mainWindowModel.getCurrentlySelected()).getTexture());
+            mainWindowModel.getWallManager().getWalls().remove(((Wall) mainWindowModel.getCurrentlySelected()));
+        }else if(mainWindowModel.getCurrentlySelected() instanceof Ball){
+            mainWindowModel.getADrawingPane().getChildren().remove((Ball) mainWindowModel.getCurrentlySelected());
+            mainWindowModel.getBallManager().getBalls().remove((Ball) mainWindowModel.getCurrentlySelected());
         }
             mainWindowModel.setChoiceMade(false);
     } 

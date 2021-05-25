@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
 <AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
    <children>
@@ -191,12 +173,14 @@
                                           <Insets bottom="10.0" left="15.0" right="10.0" />
                                        </VBox.margin>
                                     </GridPane>
-                                    <Label layoutX="10.0" layoutY="10.0" text="Simulationsgeschwindigkeit">
-                                       <VBox.margin>
-                                          <Insets top="15.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <Slider fx:id="sl_SimSpd" blockIncrement="0.25" majorTickUnit="0.5" max="1.75" min="0.25" minorTickCount="1" onMouseReleased="#sl_SimSpd_OnDragDetected" prefWidth="215.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0">
+                                    <HBox prefHeight="20.0" prefWidth="239.0">
+                                       <children>
+                                          <Label text="Gewicht" />
+                                          <Region HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="lCurrentWeight" text="Aktuelles Gewicht [g]" />
+                                       </children>
+                                    </HBox>
+                                    <Slider fx:id="sl_Weight" blockIncrement="0.0" majorTickUnit="5000.0" max="5000.0" min="500.0" minorTickCount="50" onMouseReleased="#sl_Weight_OnDragDetected" prefWidth="215.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2750.0">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                                        </VBox.margin>
