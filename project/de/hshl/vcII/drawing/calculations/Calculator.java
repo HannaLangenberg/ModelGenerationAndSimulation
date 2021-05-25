@@ -9,6 +9,8 @@ public class Calculator {
     private static MyVector droppedPerpendicular;
     private static MyVector a_H;
     private static MyVector a_N;
+    private static MyVector a_HR;
+    private static MyVector a_GR;
     private static double f_H;
     private static double f_N;
     private static double rk_H;
@@ -149,12 +151,16 @@ public class Calculator {
         droppedPerpendicular = new MyVector(0,0);
     }
 
+    private static void calcForces(double a) {
+        f_H = Math.sin(Math.toRadians(a) * Utils.FG);
+        f_N = Math.cos(Math.toRadians(a) * Utils.FG);
+    }
 
     public static void parameters(Wall w, Ball b, double e) {
 
     }
     public static void initializeForces(Wall w, Ball b) {
-        double a;//alpha
+        double a; //alpha
         double x;
         double y;
         /*
@@ -205,65 +211,46 @@ public class Calculator {
         {
             case 0:
                 break;
-            case 1:
-                a = w.getE_alpha(); // values: +1++
-                //Hangabtriebskraft und Normalkraft berechnen
-                f_H = Math.sin(Math.toRadians(a) * Utils.FG);
-                f_N = Math.cos(Math.toRadians(a) * Utils.FG);
-
-                //Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
-                a += 180; // values: +180++
-                zersaegenSpaltenUndAufstapeln(w, b, a);
-
-                break;
-            case 2:
-                a = w.getSpin(); // values: +1++
-                //Hangabtriebskraft und Normalkraft berechnen
-                f_H = Math.sin(Math.toRadians(a) * Utils.FG);
-                f_N = Math.cos(Math.toRadians(a) * Utils.FG);
-
-                //Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
-                a = w.getE_alpha(); // values: +360--
-                zersaegenSpaltenUndAufstapeln(w, b, a);
+            case 1: //LINKS
                 /*
-                * Für übersichtlicheren Code wurde die Methode, die die Vektoren spaltet, ausgelagert. Durch die
-                 gegenläufige Rotation muss die y Komponente bei Rotation nach rechts allerdinsg nochmal angepasst
-                 * und neu gesetzt werden:
+                * Hangabtriebskraft und Normalkraft berechnen.
+                * Winkel: +1++
                 * */
-                y = Math.cos(Math.toRadians(a) * f_N);     // -sin(a-90) = cos(a)
-                a_N = new MyVector(a_N.x,y);
+                calcForces(w.getE_alpha());
+                /*
+                 * Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4, daher +180
+                 * Danach Kräfte in ihre Teilvektoren zerlegen
+                 * Winkel: +180++
+                 * */
+                zersaegenSpaltenUndAufstapeln(b, w.getE_alpha()+180);
+
+                break;
+            case 2: //Rechts
+                /*
+                 * Hangabtriebskraft und Normalkraft berechnen.
+                 * Winkel: +1++
+                 * */
+                calcForces(w.getSpin());
+                /*
+                 * Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4, daher +180
+                 * Danach Kräfte in ihre Teilvektoren zerlegen
+                 * Winkel: +360--
+                 * */
+                beeteUmstechen(b, w.getE_alpha());
 
                 break;
         }
-
-
-        /*if (a >= 180 && a <= 360) {
-            f_H = Math.sin(Math.toRadians(a - 180)) * Utils.GRAVITY.y;
-            double x = -Math.cos(Math.toRadians(a - 180)) * f_H;
-            double y =  Math.sin(Math.toRadians(a - 180)) * f_H;
-            a_H = new MyVector(x,y);
-        }
-        else{
-            f_H = Math.sin(Math.toRadians(a)) * Utils.GRAVITY.y;
-            double x = -Math.cos(Math.toRadians(a)) * f_H;
-            double y =  Math.sin(Math.toRadians(a)) * f_H;
-            a_H = new MyVector(x,y);
-        }
-
-        f_N = Math.cos(Math.toRadians(a)) * Utils.GRAVITY.y;
-        double x =  Math.sin(Math.toRadians(a)) * f_N;
-        double y =  Math.cos(Math.toRadians(a)) * f_N;
-        a_N = new MyVector(x,y);*/
 
 
 
 //        angle_max_H = Math.atan(Math.toRadians(a)); // TODO Ausrichtung des JavaFX Koordinatensystems schauen
     }
 
-
-    public static void zersaegenSpaltenUndAufstapeln(Wall w, Ball b, double a) {
-        double x;
-        double y;
+    /*
+    * Kräfte in Vektoren zerlegen bei Rotation nach links
+    * */
+    private static void beeteUmstechen(Ball b, double a) {
+        double x, y;
 
         //Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
         x =  Math.cos(Math.toRadians(a) * f_H);
@@ -271,7 +258,29 @@ public class Calculator {
         a_H = new MyVector(x,y);
 
         x =  Math.sin(Math.toRadians(a) * f_N);      //  cos(a+90) =  sin(a)
-        y = -Math.cos(Math.toRadians(a) * f_N);     // -sin(a+90) = -cos(a)
+        y = Math.cos(Math.toRadians(a) * f_N);     // -sin(a-90) = cos(a)
+        a_N = new MyVector(x,y);
+
+        rk_H = b.getFrcVec().x;
+        rk_G = b.getFrcVec().y;
+
+        f_R_H = rk_H * f_N;
+        f_R_G = rk_G * f_N;
+    }
+
+    /*
+    * Kräfte in Vektoren zerlegen bei Rotation nach rechts
+    * */
+    public static void zersaegenSpaltenUndAufstapeln(Ball b, double a) {
+        double x,y;
+
+        //Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
+        x =  Math.cos(Math.toRadians(a) * f_H);
+        y = -Math.sin(Math.toRadians(a) * f_H);
+        a_H = new MyVector(x,y);
+
+        x =  Math.sin(Math.toRadians(a) * f_N);      //  cos(a+90) =  sin(a)
+        y = -Math.cos(Math.toRadians(a) * f_N);      // -sin(a+90) = -cos(a)
         a_N = new MyVector(x,y);
 
         rk_H = b.getFrcVec().x;
