@@ -91,7 +91,9 @@ public class KeyManager {
         if(mainWindowModel.getCurrentlySelected() instanceof Wall)
             ((Wall) mainWindowModel.getCurrentlySelected()).getCollision().setStrokeWidth(0);
         else if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeWidth(0);
+            ((Ball) mainWindowModel.getCurrentlySelected()).setStroke(((Ball) mainWindowModel.getCurrentlySelected()).getStrokeColor());
+            ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeWidth(5);
+            ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeType(StrokeType.CENTERED);
         }
         mainWindowModel.setChoiceMade(false);
     }

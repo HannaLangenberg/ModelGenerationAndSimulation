@@ -17,9 +17,10 @@ public class Ball extends Circle {
     private MyVector accVec;
     private MyVector frcVec;
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
-    private double randomSeed = Math.random();
     private int number;
 
+    private double randomSeed = Math.random();
+    private Color strokeColor = randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker();
     public Ball() {
         this.mass = MASS;
         this.setRadius(RADIUS);
@@ -39,7 +40,7 @@ public class Ball extends Circle {
         this.mass = mass;
 
         this.setFill(randomCol);
-        this.setStroke(randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker());
+        this.setStroke(strokeColor);
         this.setStrokeWidth(5);
     }
 
@@ -97,6 +98,9 @@ public class Ball extends Circle {
         return mass;
     }
 
+    public Color getStrokeColor() {
+        return strokeColor;
+    }
 
     //_toString()_______________________________________________________________________________________________________
     @Override
