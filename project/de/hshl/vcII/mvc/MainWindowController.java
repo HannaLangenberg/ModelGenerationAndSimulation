@@ -39,11 +39,11 @@ public class MainWindowController implements Initializable {
     @FXML
     public CheckBox chb_Wind;
     @FXML
-    public Slider sl_Weight;
+    public Slider sl_Weight, sl_Radius;
     @FXML
     public TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
-    public Label lMode, lGridSnapActive, lCurrentWeight;
+    public Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius;
     @FXML
     public Button btn_start_stop, btn_showCurrentParams;
     @FXML
@@ -221,6 +221,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    public void d_play_changeSimSpd(){
+
+    }
 
     //-Parameter-Setting------------------------------------------------------------------------------------------------
     public void tf_v0_X_OnChange(ActionEvent actionEvent) {
@@ -240,10 +243,19 @@ public class MainWindowController implements Initializable {
             Utils.setWind(new MyVector(0,0));
         }
     }
+
     public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
             ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
-            lCurrentWeight.setText("Aktuelles Gewiicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+        }
+        System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+    }
+
+    public void sl_Radius_OnDragDetected(){
+        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainWindowModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
+            lCurrentRadius.setText("Aktueller Radius [px]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getRadius()));
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
     }
