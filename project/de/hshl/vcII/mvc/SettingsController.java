@@ -49,8 +49,8 @@ public class SettingsController {
         initWindFields(tf_Wind_Y);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
-            currentParamsController = loader.getController();
             this.cRootPane = loader.load();
+            currentParamsController = loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
         }

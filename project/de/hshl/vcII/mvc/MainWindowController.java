@@ -181,7 +181,7 @@ public class MainWindowController implements Initializable {
     // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
-    private void run() throws IOException {
+    private void run(){
         mainWindowModel.getSimulator().run();
         // check all TextFields for values
         settingsController.fillVariables(); // TODO call only first time or manage ignorace of v0
@@ -258,6 +258,7 @@ public class MainWindowController implements Initializable {
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
+        System.out.println(mainWindowModel.getKeyManager());
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
 
