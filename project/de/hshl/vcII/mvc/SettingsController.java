@@ -33,7 +33,7 @@ public class SettingsController {
 
     public void initialize(Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
                            TextField tf_Wind_X, TextField tf_Wind_Y, TextField tf_v0_X, TextField tf_v0_Y,
-                           VBox vb_displayCurrentParams, AnchorPane cRootPane){
+                           VBox vb_displayCurrentParams){
         this.sl_Radius = sl_Radius;
         this.lCurrentRadius = lCurrentRadius;
         this.sl_Weight = sl_Weight;
@@ -43,7 +43,7 @@ public class SettingsController {
         this.tf_v0_X = tf_v0_X;
         this.tf_v0_Y = tf_v0_Y;
         this.vb_displayCurrentParams = vb_displayCurrentParams;
-        this.cRootPane = cRootPane;
+        this.cRootPane = new AnchorPane();
 
         initWindFields(tf_Wind_X);
         initWindFields(tf_Wind_Y);
@@ -123,5 +123,11 @@ public class SettingsController {
 
     public CurrentParamsController getCurrentParamsController() {
         return currentParamsController;
+    }
+
+    public void setV0() {
+        for(Ball b: mainWindowModel.getBallManager().getBalls()){
+            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
+        }
     }
 }

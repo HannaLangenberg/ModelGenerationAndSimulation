@@ -53,7 +53,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private HBox hHeader, hb_pause;
     @FXML
-    public VBox vb_displayCurrentParams;
+    public VBox vb_displayCurrentParams, vSettingspane;
     @FXML
     public BorderPane bp_borderPane;
     @FXML
@@ -63,7 +63,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
-    private AnchorPane aRootPane, aDrawingPane, aSettingsPane, cRootPane;
+    private AnchorPane aRootPane, aDrawingPane, aSettingsPane;
     // A second controller for better overview
     private SettingsController settingsController = new SettingsController();
 
@@ -75,9 +75,7 @@ public class MainWindowController implements Initializable {
     private double sceneOnWindowPosX, sceneOnWindowPosY;
     private boolean mousePressedInHeader = false;
     private boolean lightMode = true;
-    private boolean currentParamsOpen = false;
-
-    private Ball b;
+    private boolean firstTime = true;
 
     // Used for resizing.
     private ResizePane resizePane;
@@ -85,11 +83,12 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
+        aSettingsPane.setDisable(true);
 
-        settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
-                tf_v0_X, tf_v0_Y, vb_displayCurrentParams, cRootPane);
+               settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
+                tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
-        // Initialise the original MainWindowModel
+        // Get the original MainWindowModel
         mainWindowModel = MainWindowModel.get();
 
         aDrawingPane.getStyleClass().add("anchor-drawing-pane");
@@ -120,6 +119,7 @@ public class MainWindowController implements Initializable {
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().clear();
         mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
+        mainWindowModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
         d_play.setVisible(false);
@@ -185,13 +185,16 @@ public class MainWindowController implements Initializable {
         mainWindowModel.getSimulator().run();
         // check all TextFields for values
         settingsController.fillVariables(); // TODO call only first time or manage ignorace of v0
+        if (firstTime) {
+            settingsController.setV0();
+            firstTime = false;
+        }
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
         } else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
-            b = mainWindowModel.getBallManager().getB();
             settingsController.showCurrentParams();
         }
     }
@@ -252,16 +255,18 @@ public class MainWindowController implements Initializable {
                 }
                 break;
             case SECONDARY:
-                mainWindowModel.getKeyManager().manageMouse(e);
+                if(mainWindowModel.isChoiceEnabled())
+                    // Was 'W' previously pressed
+                    mainWindowModel.getKeyManager().manageMouse(e);
         }
     }
+
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
-        System.out.println(mainWindowModel.getKeyManager());
+        System.out.println("TEST");
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
-
 
     // - Custom header -------------------------------------------------------------------------------------------------
     // - No need for comments as it is of no interest for mod. sim. but if the authors are asked they explain it. ------

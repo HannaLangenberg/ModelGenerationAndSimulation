@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" onMouseClicked="#onMouse" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
+<AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
    <children>
       <VBox fx:id="vb_displayCurrentParams" minHeight="400.0" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -114,11 +114,11 @@
                   </HBox>
                </top>
                <left>
-                  <AnchorPane fx:id="aDrawingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="650.0" BorderPane.alignment="TOP_LEFT">
+                  <AnchorPane fx:id="aDrawingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMouse" prefHeight="364.0" prefWidth="650.0" BorderPane.alignment="TOP_LEFT">
                   </AnchorPane>
                </left>
                <right>
-                  <AnchorPane fx:id="aSettingsPane" disable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0" BorderPane.alignment="CENTER">
+                  <AnchorPane fx:id="aSettingsPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                      <children>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0">
                            <children>

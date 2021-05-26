@@ -74,6 +74,7 @@ public class Grid {
         placer.setX(closestTo(gridSpacingX, placer.getX()));
         placer.setY(closestTo(gridSpacingY, placer.getY()));
     }
+
     //Ich persönlich finde dieses einfacher zu nutzen!
     private double closestTo(double spacing, double mousePos){
 

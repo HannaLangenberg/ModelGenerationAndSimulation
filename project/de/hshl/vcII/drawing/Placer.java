@@ -21,8 +21,6 @@ public class Placer {
     }
 
     public void place(MouseEvent e){
-        ball = mainWindowModel.getBallManager().getB();
-        wall = mainWindowModel.getWallManager().getW();
         x = e.getX();
         y = e.getY();
 
@@ -30,7 +28,8 @@ public class Placer {
             mainWindowModel.getGrid().snapToGrid(this);
         }
 
-        if(ball != null) {
+        if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
+            ball = (Ball) mainWindowModel.getCurrentlySelected();
             if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
@@ -38,17 +37,20 @@ public class Placer {
                 ball.setNumber(mainWindowModel.getBallManager().getBalls().size() + 1);
                 mainWindowModel.getBallManager().addBall(ball);
                 mainWindowModel.getADrawingPane().getChildren().add(ball);
+                mainWindowModel.setCurrentlySelected(ball);
             } else {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, y));
             }
-        } else if (wall != null){
+        } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
+            wall = (Wall) mainWindowModel.getCurrentlySelected();
             if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, y));
                 wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
                 mainWindowModel.getWallManager().addWall(wall);
                 mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
+                mainWindowModel.setCurrentlySelected(wall);
             } else {
                 wall.setPosVec(new MyVector(x, y));
             }
