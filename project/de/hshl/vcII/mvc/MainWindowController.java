@@ -188,6 +188,7 @@ public class MainWindowController implements Initializable {
             settingsController.setV0();
             firstTime = false;
         }
+        if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
@@ -195,7 +196,6 @@ public class MainWindowController implements Initializable {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
             settingsController.showCurrentParams();
-            if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
         }
     }
 
