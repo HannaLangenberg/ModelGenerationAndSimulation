@@ -3,6 +3,8 @@ package project.de.hshl.vcII.drawing;
 import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.mvc.CurrentParamsController;
+import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,6 +17,7 @@ public class Simulator {
 
     // MWM for getting the model (and all it's saves).
     private MainWindowModel mainWindowModel = MainWindowModel.get();
+    private CurrentParamsController currentParamsController = CurrentParamsController.get();
 
     // Variable to maintain the simulation.
     private boolean running = false;
@@ -49,7 +52,6 @@ public class Simulator {
                         + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
         }
     }
-
     /**
      * Calls all the necessary methods to run the simulation.
      */

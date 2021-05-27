@@ -13,6 +13,7 @@ import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.Utils;
 
 public class CurrentParamsController {
+    private static CurrentParamsController currentParamsController;
     @FXML
     public AnchorPane cRootPane;
     @FXML
@@ -45,6 +46,11 @@ public class CurrentParamsController {
     private ObservableList<Ball> ballObservableList;
 
     MainWindowModel mainWindowModel = MainWindowModel.get();
+
+    public static CurrentParamsController get(){
+        if(CurrentParamsController.currentParamsController == null) currentParamsController = new CurrentParamsController();
+        return CurrentParamsController.currentParamsController;
+    }
 
     @FXML
     void initialize() {

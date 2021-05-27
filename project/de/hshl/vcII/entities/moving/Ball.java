@@ -49,7 +49,6 @@ public class Ball extends Circle {
         setFrcVec(new MyVector(0.1, 0.078)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 9, Bewegung bei ca 5°
         setRadius(radius);
         this.mass = new SimpleDoubleProperty(mass);
-
         this.setStrokeWidth(5);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
