@@ -39,7 +39,6 @@ public class Utils {
         }
     }
 
-
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
     public static void setA_com(MyVector a_ges) {
         Utils.a_com = a_ges;

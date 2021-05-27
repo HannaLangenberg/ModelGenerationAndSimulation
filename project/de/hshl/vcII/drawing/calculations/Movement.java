@@ -45,12 +45,9 @@ public class Movement {
 
     }
 
-
-
     public static void applyForce(Wall w, Ball b, double decision) {
 
     }
-
     public static void calcFriction(Ball b) {
         // Get all walls.
         List<Wall> walls = MainWindowModel.get().getWallManager().getWalls();
@@ -110,14 +107,6 @@ public class Movement {
 
 
 
-
-
-
-
-
-
-
-
     // Debugging Methode 'ungestörte' Bewegung auf Achsen
     public static void doSmth(Ball b, double epsilon) {
         // That shit's working. Don't you dare touching it! Admins only! Aka Moi!!
@@ -137,8 +126,6 @@ public class Movement {
         }*/
 
     }
-
-
 
     public static void drawArrows() {
         Arrow arrow;
@@ -163,6 +150,5 @@ public class Movement {
         MainWindowModel.get().getADrawingPane().getChildren().removeAll(arrows);
         arrows.clear();
     }
-
 
 }

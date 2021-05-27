@@ -74,8 +74,6 @@ public class Placer {
     }
 
     public void place(MouseEvent e){
-        ball = mainWindowModel.getBallManager().getB();
-        wall = mainWindowModel.getWallManager().getW();
         x = e.getX();
         y = e.getY();
 

@@ -64,7 +64,7 @@ public class MainWindowController implements Initializable {
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
     private AnchorPane aRootPane, aDrawingPane, aSettingsPane;
-    //A second Controller for better overview
+    // A second controller for better overview
     private SettingsController settingsController = new SettingsController();
     // Declaration of original model.
     private MainWindowModel mainWindowModel;
@@ -83,8 +83,7 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-
-        settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
+               settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
                 tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
         // Get the original MainWindowModel
@@ -111,7 +110,6 @@ public class MainWindowController implements Initializable {
             mainWindowModel.getMode().toggleMode(lightMode);
         });
     }
-
 
     //-Menu-Controls----------------------------------------------------------------------------------------------------
     // Is called whenever 'Clear Screen' is clicked in the 'File' menu
@@ -182,7 +180,7 @@ public class MainWindowController implements Initializable {
     // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
-    private void run() {
+    private void run(){
         mainWindowModel.getSimulator().run();
         // check all TextFields for values
         settingsController.fillVariables(); // TODO call only first time or manage ignorace of v0
@@ -193,8 +191,7 @@ public class MainWindowController implements Initializable {
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
-        }
-        else {
+        } else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
             settingsController.showCurrentParams();
@@ -257,8 +254,10 @@ public class MainWindowController implements Initializable {
             case SECONDARY:
                 if(mainWindowModel.isChoiceEnabled())
                     // Was 'W' previously pressed
-                    mainWindowModel.getKeyManager().manageMouse(e);        }
+                    mainWindowModel.getKeyManager().manageMouse(e);
+        }
     }
+
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
