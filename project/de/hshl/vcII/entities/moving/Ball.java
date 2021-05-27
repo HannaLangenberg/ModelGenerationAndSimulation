@@ -61,9 +61,9 @@ public class Ball extends Circle {
         Platform.runLater(() -> {
             aDrawingPane.getChildren().remove(this);
             aDrawingPane.getChildren().add(this);
+            aDrawingPane.getChildren().remove(a);
             if (MainWindowModel.get().isArrowsActive())
             {
-                aDrawingPane.getChildren().remove(a);
                 a = this.drawArrow();
                 aDrawingPane.getChildren().add(a);
             }

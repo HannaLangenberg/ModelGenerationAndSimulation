@@ -47,11 +47,6 @@ public class CurrentParamsController {
 
     MainWindowModel mainWindowModel = MainWindowModel.get();
 
-    public static CurrentParamsController get(){
-        if(CurrentParamsController.currentParamsController == null) currentParamsController = new CurrentParamsController();
-        return CurrentParamsController.currentParamsController;
-    }
-
     @FXML
     void initialize() {
         l_current_Gravitation.setText("(" + Utils.GRAVITY.x + "/" + Utils.GRAVITY.y + ")");

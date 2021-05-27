@@ -17,7 +17,6 @@ public class Simulator {
 
     // MWM for getting the model (and all it's saves).
     private MainWindowModel mainWindowModel = MainWindowModel.get();
-    private CurrentParamsController currentParamsController = CurrentParamsController.get();
 
     // Variable to maintain the simulation.
     private boolean running = false;
