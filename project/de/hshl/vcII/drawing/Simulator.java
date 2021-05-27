@@ -72,7 +72,6 @@ public class Simulator {
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }
-        if(MainWindowModel.get().isArrowsActive()) MainWindowModel.get().getBallManager().drawArrows();
     }
 
     public boolean isRunning() {

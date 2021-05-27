@@ -43,7 +43,6 @@ public class CurrentParamsController {
     public TableColumn<Ball, Integer> tc_Mass;
 
     private ObservableList<Ball> ballObservableList;
-    private ObservableList<String> observableList;
 
     MainWindowModel mainWindowModel = MainWindowModel.get();
 
@@ -52,7 +51,6 @@ public class CurrentParamsController {
         l_current_Gravitation.setText("(" + Utils.GRAVITY.x + "/" + Utils.GRAVITY.y + ")");
         l_current_Delta_T.setText(String.valueOf(Utils.DELTA_T));
         l_current_FPS.setText("60" + " fps");
-        observableList = FXCollections.observableArrayList();
         ballObservableList = FXCollections.observableArrayList();
     }
 
@@ -67,7 +65,7 @@ public class CurrentParamsController {
 
         tc_No.setCellValueFactory(new PropertyValueFactory<>("number"));
         tc_Pos.setCellValueFactory(new PropertyValueFactory<>("posVec"));
-        tc_V.setCellValueFactory(new PropertyValueFactory<>("velVec"));
+        tc_V.setCellValueFactory(new PropertyValueFactory<>("vel0Vec"));
         tc_A.setCellValueFactory(new PropertyValueFactory<>("accVec"));
         tc_Radius.setCellValueFactory(new PropertyValueFactory<>("radius"));
         tc_Mass.setCellValueFactory(new PropertyValueFactory<>("mass"));
@@ -75,11 +73,7 @@ public class CurrentParamsController {
         tv_ball_params.setItems(ballObservableList);
     }
 
-    public void parameterChanged() {
-
-    }
-
     public void reset() {
-        observableList.clear();
+        ballObservableList.clear();
     }
 }

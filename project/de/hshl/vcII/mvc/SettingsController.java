@@ -1,7 +1,5 @@
 package project.de.hshl.vcII.mvc;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -27,7 +25,6 @@ public class SettingsController {
     private AnchorPane cRootPane;
     private CurrentParamsController currentParamsController;
 
-    private boolean v0_changed = false;
     private boolean wind_changed = false;
     private boolean currentParamsOpen = false;
 
@@ -80,7 +77,6 @@ public class SettingsController {
             vb_displayCurrentParams.getChildren().add(cRootPane);
             currentParamsOpen = true;
 
-
             // check all TextFields for values
             fillVariables();
             showCurrentParams();
@@ -108,10 +104,6 @@ public class SettingsController {
     //------Helpers,-Getter-&-Setter------------------------------------------------------------------------------------
     public void fillVariables() {
         Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-        for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setVelVec(new MyVector(isDouble(tf_v0_X), isDouble(tf_v0_Y)));
-//            b.setAccVec(new MyVector(0,0));
-        }
     }
 
     private void initWindFields(TextField tf) {

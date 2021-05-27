@@ -55,16 +55,23 @@ public class Ball extends Circle {
         this.toBack();
     }
 
+    Arrow a;
+
     public void draw(AnchorPane aDrawingPane) {
         Platform.runLater(() -> {
             aDrawingPane.getChildren().remove(this);
             aDrawingPane.getChildren().add(this);
+            if (MainWindowModel.get().isArrowsActive()) {
+                aDrawingPane.getChildren().remove(a);
+                a = this.drawArrow();
+                aDrawingPane.getChildren().add(a);
+            }
         });
     }
 
     public Arrow drawArrow() {
         arrow = new Arrow();
-        MyVector direction = MyVector.add(posVec,MyVector.multiply(velVec, 100));
+        MyVector direction = MyVector.add(posVec, velVec);
         //Stop[] stops = new Stop[]{new Stop(0, Color.RED), new Stop(1, Color.BLUE)};
         arrow.getLine().setStroke(Color.RED);
         arrow.setStartX(posVec.x);
