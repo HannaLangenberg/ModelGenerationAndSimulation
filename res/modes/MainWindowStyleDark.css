@@ -31,6 +31,40 @@
     -fx-background-color: #8080B0;
 }
 
+.titled-pane:hover{
+    -fx-text-fill: #FEFEFE;
+ }
+
+.titled-pane > .title{
+    -fx-background-color: #808080;
+}
+
+.titled-pane > .title:hover{
+    -fx-background-color: #8080B0;
+}
+
+.titled-pane:hover > .title{
+    -fx-background-color: #505050;
+}
+
+.titled-pane > .content{
+    -fx-background-color: #808080;
+    -fx-border-width: 0px;
+}
+
+.check-box .box {
+    -fx-background-color: #DCDCDC;
+    -fx-border-width: 0px;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #FEFEFE;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #505050;
+}
+
 .button{
     -fx-text-fill: #FEFEFE;
     -fx-background-color: #808080;

@@ -11,6 +11,39 @@
     -fx-background-color: #FEFEFE;
 }
 
+.titled-pane:hover{
+    -fx-text-fill: #FEFEFE;
+ }
+
+.titled-pane > .title{
+    -fx-background-color: #FEFEFE;
+}
+
+.titled-pane > .title:hover{
+    -fx-background-color: #1999C9;
+}
+
+.titled-pane:hover > .title{
+    -fx-background-color: #1999C9;
+}
+
+.titled-pane > .content{
+    -fx-background-color: #FEFEFE;
+    -fx-border-width: 0px;
+}
+
+.check-box .box {
+    -fx-background-color: #DCDCDC;
+    -fx-border-width: 0px;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #FEFEFE;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #1999C9;
+}
 
 .button{
     -fx-background-color: #FEFEFE;
