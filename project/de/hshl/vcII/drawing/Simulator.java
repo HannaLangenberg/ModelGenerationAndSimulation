@@ -1,5 +1,6 @@
 package project.de.hshl.vcII.drawing;
 
+import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
@@ -68,7 +69,7 @@ public class Simulator {
 //            Movement.checkPosition(b, epsilon);
             Movement.checkCollisions(b, epsilon);
             Movement.calcVelocity(b);
-//            Collision.checkBalls(b, epsilon);
+            Collision.checkBalls(b, epsilon);
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }

@@ -1,6 +1,8 @@
 package project.de.hshl.vcII.entities.moving;
 
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -11,7 +13,7 @@ import project.de.hshl.vcII.utils.MyVector;
 public class Ball extends Circle {
     private static final double RADIUS = 25, MASS = 2.75;
 
-    private double mass;
+    private DoubleProperty mass;
     private MyVector posVec;
     private MyVector velVec;
     private MyVector vel0Vec;
@@ -19,7 +21,7 @@ public class Ball extends Circle {
     private MyVector frcVec;
     private Arrow arrow;
     private boolean isColliding;
-
+    private Arrow a;
 
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private int number;
@@ -28,7 +30,7 @@ public class Ball extends Circle {
     private Color strokeColor = randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker();
 
     public Ball() {
-        this.mass = MASS;
+        this.mass = new SimpleDoubleProperty(MASS);
         this.setRadius(RADIUS);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
@@ -46,7 +48,7 @@ public class Ball extends Circle {
         this.frcVec = frcVec;
         setFrcVec(new MyVector(0.1, 0.078)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 9, Bewegung bei ca 5°
         setRadius(radius);
-        this.mass = mass;
+        this.mass = new SimpleDoubleProperty(mass);
 
         this.setStrokeWidth(5);
         this.setFill(randomCol);
@@ -55,13 +57,13 @@ public class Ball extends Circle {
         this.toBack();
     }
 
-    Arrow a;
 
     public void draw(AnchorPane aDrawingPane) {
         Platform.runLater(() -> {
             aDrawingPane.getChildren().remove(this);
             aDrawingPane.getChildren().add(this);
-            if (MainWindowModel.get().isArrowsActive()) {
+            if (MainWindowModel.get().isArrowsActive())
+            {
                 aDrawingPane.getChildren().remove(a);
                 a = this.drawArrow();
                 aDrawingPane.getChildren().add(a);
@@ -127,9 +129,12 @@ public class Ball extends Circle {
     }
 
     public void setMass(double mass) {
-        this.mass = mass;
+        this.mass.set(mass);
     }
     public double getMass() {
+        return mass.get();
+    }
+    public DoubleProperty massProperty() {
         return mass;
     }
 

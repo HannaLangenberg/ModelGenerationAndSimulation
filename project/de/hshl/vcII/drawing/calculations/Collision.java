@@ -74,13 +74,17 @@ public class Collision {
         MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b1.getPosVec(), b2.getPosVec()));
         // Find the orthogonal velocity vector of b1 and the parallel velocity vector of b2
         MyVector v1Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine), b1.getVelVec());
+        MyVector v1Orthogonal_0 = MyVector.subtract(MyVector.orthogonalProjection(b1.getVel0Vec(), normedCenterLine), b1.getVel0Vec());
         MyVector v2Parallel = MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine);
+        MyVector v2Parallel_0 = MyVector.orthogonalProjection(b2.getVel0Vec(), normedCenterLine);
 
         // Switch normedCenterLine's orientation
         normedCenterLine = MyVector.multiply(normedCenterLine, -1);
         // Find the orthogonal velocity vector of b2 and the parallel velocity vector of b1
         MyVector v2Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine), b2.getVelVec());
+        MyVector v2Orthogonal_0 = MyVector.subtract(MyVector.orthogonalProjection(b2.getVel0Vec(), normedCenterLine), b2.getVel0Vec());
         MyVector v1Parallel = MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine);
+        MyVector v1Parallel_0 = MyVector.orthogonalProjection(b1.getVel0Vec(), normedCenterLine);
 
         //Für Masse:
         // Parallelen Komponenten als Center Shock betrachten, danach verrechnen
@@ -88,7 +92,9 @@ public class Collision {
         //-------Set-values---------------------------------------------------------------------------------------------
 
         b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
+        b1.setVel0Vec(MyVector.add(v1Orthogonal_0, v2Parallel_0));
         b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
+        b2.setVel0Vec(MyVector.add(v2Orthogonal_0, v1Parallel_0));
     }
 
     //_Ball_And_Wall_Collision__________________________________________________________________________________________

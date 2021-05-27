@@ -183,7 +183,7 @@ public class MainWindowController implements Initializable {
     private void run(){
         mainWindowModel.getSimulator().run();
         // check all TextFields for values
-        settingsController.fillVariables(); // TODO call only first time or manage ignorace of v0
+        settingsController.fillVariables();
         if (firstTime) {
             settingsController.setV0();
             firstTime = false;
