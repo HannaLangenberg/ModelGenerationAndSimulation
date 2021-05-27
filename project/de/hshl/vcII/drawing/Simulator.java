@@ -38,7 +38,6 @@ public class Simulator {
             timer = new ScheduledThreadPoolExecutor(3);
             timer.scheduleAtFixedRate(this::runSimulation, 0, 1000/60, TimeUnit.MILLISECONDS);
             running = true;
-            Movement.removeArrows();
         }
         else
         {
@@ -47,7 +46,6 @@ public class Simulator {
             for(Ball b : mainWindowModel.getBallManager().getBalls())
                 System.out.println("PosX: " + b.getCenterX() + " PosY: " + b.getCenterY()
                         + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
-            Movement.drawArrows();
         }
     }
 
@@ -74,6 +72,7 @@ public class Simulator {
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }
+        if(MainWindowModel.get().isArrowsActive()) MainWindowModel.get().getBallManager().drawArrows();
     }
 
     public boolean isRunning() {

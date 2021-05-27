@@ -225,6 +225,7 @@
                                         </TitledPane>
                                       </panes>
                                     </Accordion>
+                                    <CheckBox mnemonicParsing="false" onAction="#arrows" text="Pfeile anzeigen" />
                                  </children>
                               </VBox>
                               <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" onAction="#btn_showCurrentParams_OnAction" text="Zeige aktuelle Parameter" />

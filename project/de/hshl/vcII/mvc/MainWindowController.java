@@ -195,6 +195,7 @@ public class MainWindowController implements Initializable {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
             settingsController.showCurrentParams();
+            if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
         }
     }
 
@@ -263,6 +264,10 @@ public class MainWindowController implements Initializable {
     private void onKey(KeyEvent e) {
         System.out.println("TEST");
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
+    }
+
+    public void arrows() {
+        mainWindowModel.setArrowsActive(!mainWindowModel.isArrowsActive());
     }
 
     // - Custom header -------------------------------------------------------------------------------------------------

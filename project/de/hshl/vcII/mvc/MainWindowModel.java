@@ -39,7 +39,7 @@ public class MainWindowModel {
     private AnchorPane aSettingsPane;
 
     // Variables to maintain the window
-    private boolean fullscreen = false, choiceEnabled = false, choiceMade = false;
+    private boolean fullscreen = false, choiceEnabled = false, choiceMade = false, arrowsActive = false;
     private int[] minWindowSize = new int[] {900, 400};
     private double screenWidth, screenHeight;
     private double savedSceneX, savedSceneY, savedSceneWidth, savedSceneHeight;
@@ -66,7 +66,6 @@ public class MainWindowModel {
         mode = new Mode();
         spin = new Rotation();
         this.aDrawingPane = aDrawingPane;
-        placer.init();
     }
     public void initSettings(AnchorPane aSettingsPane){
         this.aSettingsPane = aSettingsPane;
@@ -138,6 +137,14 @@ public class MainWindowModel {
 
     public Rotation getSpin() {
         return spin;
+    }
+
+    public boolean isArrowsActive() {
+        return arrowsActive;
+    }
+
+    public void setArrowsActive(boolean arrowsActive) {
+        this.arrowsActive = arrowsActive;
     }
 
     public Object getCurrentlySelected() {

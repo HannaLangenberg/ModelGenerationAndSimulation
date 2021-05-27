@@ -1,9 +1,6 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -126,29 +123,4 @@ public class Movement {
         }*/
 
     }
-
-    public static void drawArrows() {
-        Arrow arrow;
-        for (Ball b : balls) {
-            arrow = new Arrow();
-            arrow.toFront();
-            MyVector direction = MyVector.add(b.getPosVec(), b.getVelVec());
-            Stop[] stops = new Stop[]{new Stop(0, javafx.scene.paint.Color.RED), new Stop(1, Color.BLUE)};
-            arrow.getLine().setStroke(new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops));
-            arrow.setStartX(b.getPosVec().x);
-            arrow.setStartY(b.getPosVec().y);
-            arrow.setEndX(direction.x);
-            arrow.setEndY(direction.y);
-            arrow.toFront();
-            arrows.add(arrow);
-        }
-        MainWindowModel.get().getADrawingPane().getChildren().addAll(arrows);
-
-    }
-
-    public static void removeArrows() {
-        MainWindowModel.get().getADrawingPane().getChildren().removeAll(arrows);
-        arrows.clear();
-    }
-
 }

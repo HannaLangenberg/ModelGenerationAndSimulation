@@ -16,15 +16,11 @@ import java.util.List;
 public class Placer {
     private Wall wall;
     private Ball ball;
-    private MainWindowModel mainWindowModel;
+    private MainWindowModel mainWindowModel = MainWindowModel.get();
     private double epsilon = 5;
     private MyVector s_t_parameters;
 
     private double x, y;
-
-    public void init() {
-        this.mainWindowModel = MainWindowModel.get();
-    }
 
     private double snapBallOnWall(Wall w, Ball b, MyVector mouse){
         //-Snap Ball to wall's surface if close enough

@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import project.de.hshl.vcII.drawing.visuals.Arrow;
+import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Ball extends Circle {
@@ -15,6 +17,7 @@ public class Ball extends Circle {
     private MyVector vel0Vec;
     private MyVector accVec;
     private MyVector frcVec;
+    private Arrow arrow;
     private boolean isColliding;
 
 
@@ -59,7 +62,17 @@ public class Ball extends Circle {
         });
     }
 
-
+    public Arrow drawArrow() {
+        arrow = new Arrow();
+        MyVector direction = MyVector.add(posVec,MyVector.multiply(velVec, 100));
+        //Stop[] stops = new Stop[]{new Stop(0, Color.RED), new Stop(1, Color.BLUE)};
+        arrow.getLine().setStroke(Color.RED);
+        arrow.setStartX(posVec.x);
+        arrow.setStartY(posVec.y);
+        arrow.setEndX(direction.x);
+        arrow.setEndY(direction.y);
+        return arrow;
+    }
 
     //_GETTERS_&_SETTERS________________________________________________________________________________________________
     public void setNumber(int number) {
