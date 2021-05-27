@@ -56,11 +56,16 @@ public class Collision {
 
         // The first three steps are the same for both balls
         MyVector step1 = MyVector.add(MyVector.multiply(b1.getVelVec(), b1.getMass()), MyVector.multiply(b2.getVelVec(), b2.getMass()));
+        MyVector step1_0 = MyVector.add(MyVector.multiply(b1.getVel0Vec(), b1.getMass()), MyVector.multiply(b2.getVel0Vec(), b2.getMass()));
         MyVector step2 = MyVector.divide(step1, b1.getMass() + b2.getMass());
+        MyVector step2_0 = MyVector.divide(step1_0, b1.getMass() + b2.getMass());
         MyVector step3 = MyVector.multiply(step2, 2);
+        MyVector step3_0 = MyVector.multiply(step2_0, 2);
 
         MyVector step4_b1 = MyVector.subtract(b1.getVelVec(), step3);
+        MyVector step4_b1_0 = MyVector.subtract(b1.getVel0Vec(), step3_0);
         MyVector step4_b2 = MyVector.subtract(b2.getVelVec(), step3);
+        MyVector step4_b2_0 = MyVector.subtract(b2.getVel0Vec(), step3_0);
 
         //-------Set-values---------------------------------------------------------------------------------------------
 
