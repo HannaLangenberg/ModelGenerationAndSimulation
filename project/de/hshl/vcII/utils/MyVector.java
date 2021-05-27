@@ -59,10 +59,21 @@
         return new MyVector(vec.x / lambda, vec.y / lambda);
     }
 
-    // Method for adding two 2D vectors from each other.
+    // Method for adding two 2D vectors to each other.
     public static MyVector add(MyVector v1, MyVector v2){
             return new MyVector(v1.x + v2.x, v1.y + v2.y);
             }
+    // Method for adding multiple 2D vectors to each other.
+    public static MyVector addMultiple(MyVector ... vecs){
+        double x = 0, y = 0;
+
+        for(MyVector v : vecs) {
+            x += v.x;
+            y += v.y;
+        }
+
+        return new MyVector(x,y);
+    }
 
     // Method for subtracting two 2D vectors from each other.
     public static MyVector subtract(MyVector v1, MyVector v2){

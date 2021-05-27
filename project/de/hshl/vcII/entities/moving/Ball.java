@@ -6,42 +6,50 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import project.de.hshl.vcII.utils.MyVector;
 
-import java.util.Arrays;
-
 public class Ball extends Circle {
-    private static final double RADIUS = 25, MASS = 20;
+    private static final double RADIUS = 25, MASS = 2.75;
 
     private double mass;
     private MyVector posVec;
     private MyVector velVec;
+    private MyVector vel0Vec;
     private MyVector accVec;
     private MyVector frcVec;
+    private boolean isColliding;
+
+
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private int number;
 
     private double randomSeed = Math.random();
     private Color strokeColor = randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker();
+
     public Ball() {
         this.mass = MASS;
         this.setRadius(RADIUS);
         this.setFill(randomCol);
-        this.setStroke(randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker());
+        this.setStroke(strokeColor);
         this.setStrokeWidth(5);
+        this.isColliding = false;
+        this.toBack();
     }
 
-    public Ball(int number, MyVector posVec, MyVector velVec, MyVector accVec, MyVector frcVec, double radius, double mass) {
+    public Ball(int number, MyVector posVec, MyVector velVec, MyVector vel0Vec, MyVector accVec, MyVector frcVec, double radius, double mass) {
         this.number = number;
         this.posVec = posVec;
         this.velVec = velVec;
+        this.vel0Vec = vel0Vec;
         this.accVec = accVec;
         this.frcVec = frcVec;
-        setFrcVec(new MyVector(0.9, 0.7)); // Haft- und Gleitreibung für Stein auf Holz (trocken) i.d.R.
+        setFrcVec(new MyVector(0.1, 0.078)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 9, Bewegung bei ca 5°
         setRadius(radius);
         this.mass = mass;
 
+        this.setStrokeWidth(5);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
-        this.setStrokeWidth(5);
+        this.isColliding = false;
+        this.toBack();
     }
 
     public void draw(AnchorPane aDrawingPane) {
@@ -77,6 +85,13 @@ public class Ball extends Circle {
         return velVec;
     }
 
+    public void setVel0Vec(MyVector vel0Vec) {
+        this.vel0Vec = vel0Vec;
+    }
+    public MyVector getVel0Vec() {
+        return vel0Vec;
+    }
+
     public void setAccVec(MyVector accVec) {
         this.accVec = accVec;
     }
@@ -96,6 +111,13 @@ public class Ball extends Circle {
     }
     public double getMass() {
         return mass;
+    }
+
+    public void setColliding(boolean colliding) {
+        isColliding = colliding;
+    }
+    public boolean isColliding() {
+        return isColliding;
     }
 
     public Color getStrokeColor() {

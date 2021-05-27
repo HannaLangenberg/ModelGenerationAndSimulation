@@ -33,12 +33,14 @@ public class Collision {
 
         // finds the radii of b1, and b2
         double r_b1 = b1.getRadius(),
-                r_b2 = b2.getRadius();
+               r_b2 = b2.getRadius();
 
         // finds the center-points of b1, and b2
         // pos vector gives the center of the ball
         MyVector pos_b1 = b1.getPosVec(),
-                pos_b2 = b2.getPosVec();
+                 pos_b2 = b2.getPosVec();
+
+//        epsilon = Math.max(MyVector.length(b1.getVelVec())*epsilon, MyVector.length(b2.getVelVec())*epsilon);
 
         boolean collision = MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2+epsilon;
 
@@ -46,6 +48,7 @@ public class Collision {
 
         if(collision)
             angledShock(b1, b2);
+//            centerShock(b1, b2);
     }
 
     private static void centerShock(Ball b1, Ball b2){
@@ -79,6 +82,9 @@ public class Collision {
         MyVector v2Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine), b2.getVelVec());
         MyVector v1Parallel = MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine);
 
+        //Für Masse:
+        // Parallelen Komponenten als Center Shock betrachten, danach verrechnen
+
         //-------Set-values---------------------------------------------------------------------------------------------
 
         b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
@@ -87,12 +93,20 @@ public class Collision {
 
     //_Ball_And_Wall_Collision__________________________________________________________________________________________
     public static void checkWalls(Wall w, Ball b, double e) {
-        s_t_Parameters = Calculator.calc_s_t_Parameters(w,b);
+        s_t_Parameters = Calculator.calc_s_t_Parameters(w, b);
         checkSides(w, b, e);
         checkCorners(w, b, e);
         if (collision_onEdge || collision_onCorner)
         {
             Calculator.bounceVelocity(b);
+
+            if (w.getSpin() < 0) {                                      // Rotation nach LINKS
+                Calculator.initializeForces(w, b, 0);
+            }
+            else if (w.getSpin() > 0) {                                 // Rotation nach RECHTS
+                Calculator.initializeForces(w,b,1);
+            }
+
             reset();
         }
     }
@@ -168,14 +182,38 @@ public class Collision {
         }
         collision_onEdge = Calculator.checkDistance(b, e, s_onEdge||t_onEdge);
     }
+    public static boolean checkBallPlacement(Wall w, Ball b, MyVector s_t_Parameters, double e) {
+        s = s_t_Parameters.x;
+        t = s_t_Parameters.y;
+        boolean s_onEdge = s >= -1 && s <= 1;
+        boolean t_onEdge = t >= -1 && t <= 1;
 
-    public static void checkPosition(Ball b, double e) {
-        if(b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e || b.getPosVec().x < b.getRadius() + e) {
-            b.setVelVec(new MyVector(-b.getVelVec().x, b.getVelVec().y));
+        if (s_onEdge) {
+            Calculator.setDroppedPerpendicular(Calculator.calcCoord_onEdge(w, new MyVector(s, -1)));
+        }
+        return Calculator.checkDistance(b, e+15, s_onEdge||t_onEdge);
+    }
+    public static boolean setBallPlacement(Wall w, Ball b, MyVector s_t_Parameters, double e) {
+        s = s_t_Parameters.x;
+        t = s_t_Parameters.y;
+        boolean s_onEdge = s >= -1 && s <= 1;
+        boolean t_onEdge = t >= -1 && t <= 1;
+
+        if (s_onEdge) {
+            Calculator.calcSideCollisions(w, s_t_Parameters, 0);
+        }
+        return Calculator.checkDistance(b, e, s_onEdge||t_onEdge);
+    }
+
+    public static void checkScreen(Ball b, double e) {
+        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e || b.getPosVec().y < b.getRadius() + e) {
+            b.setVel0Vec(new MyVector(b.getVel0Vec().x, -b.getVel0Vec().y));
+            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
         }
 
-        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e || b.getPosVec().y < b.getRadius() + e) {
-            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
+        if(b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e || b.getPosVec().x < b.getRadius() + e) {
+            b.setVel0Vec(new MyVector(-b.getVel0Vec().x, b.getVel0Vec().y));
+            b.setVelVec(new MyVector(-b.getVelVec().x, b.getVelVec().y));
         }
     }
 }

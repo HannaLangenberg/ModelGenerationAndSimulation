@@ -1,9 +1,9 @@
 package project.de.hshl.vcII.drawing;
 
-import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
+
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +38,7 @@ public class Simulator {
             timer = new ScheduledThreadPoolExecutor(3);
             timer.scheduleAtFixedRate(this::runSimulation, 0, 1000/60, TimeUnit.MILLISECONDS);
             running = true;
+            Movement.removeArrows();
         }
         else
         {
@@ -46,6 +47,7 @@ public class Simulator {
             for(Ball b : mainWindowModel.getBallManager().getBalls())
                 System.out.println("PosX: " + b.getCenterX() + " PosY: " + b.getCenterY()
                         + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
+            Movement.drawArrows();
         }
     }
 
@@ -59,13 +61,16 @@ public class Simulator {
             secondsPassed++;
             System.out.println(secondsPassed);
         }*/
+
         for (Ball b: mainWindowModel.getBallManager().getBalls()) {
-//            Movement.doSmth(b);
-            Movement.calcFriction(b);
+//            Movement.applyForce(b);
+//            Movement.doSmth(b, epsilon);
+//            Movement.calcFriction(b);
             Movement.calcAcceleration(b);
+//            Movement.checkPosition(b, epsilon);
+            Movement.checkCollisions(b, epsilon);
             Movement.calcVelocity(b);
-            Collision.checkBalls(b, epsilon);
-            Movement.correctVelocity(b, epsilon);
+//            Collision.checkBalls(b, epsilon);
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }

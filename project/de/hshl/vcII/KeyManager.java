@@ -107,6 +107,7 @@ public class KeyManager {
             mainWindowModel.getADrawingPane().getChildren().remove((Ball) mainWindowModel.getCurrentlySelected());
             mainWindowModel.getBallManager().getBalls().remove((Ball) mainWindowModel.getCurrentlySelected());
         }
+            mainWindowModel.setCurrentlySelected(null);
             mainWindowModel.setChoiceMade(false);
     } 
 }

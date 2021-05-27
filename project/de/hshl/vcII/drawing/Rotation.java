@@ -10,8 +10,8 @@ public class Rotation {
         w.setSpin(w.getSpin() - 1);
         w.setE_alpha(w.getSpin() * -1);
         determineOrientation(w);
-        System.out.println("RotateLeft: " + w.getSpin());
-//        System.out.println("RotateLeft: " + w.getE_alpha());
+        System.out.println("Left - Spin: " + w.getSpin());
+//        System.out.println("Left - E: " + w.getE_alpha());
 
     }
 
@@ -21,18 +21,18 @@ public class Rotation {
         w.setSpin(w.getSpin() + 1);
         w.setE_alpha(360 - w.getSpin());
         determineOrientation(w);
-//        System.out.println("RotateRight: " + w.getE_alpha());
-        System.out.println("RotateRight: " + w.getSpin());
+        System.out.println("Right - Spin: " + w.getSpin());
+//        System.out.println("Right - E: " +  w.getE_alpha());
     }
 
     private void determineOrientation(Wall w) {
         if (w.getSpin() != 0) {
             if(w.getSpin() <= -1)
-                w.setOrientation(1);
+                w.setOrientation(0);
             else if (w.getSpin() >= 1)
-                w.setOrientation(2);
+                w.setOrientation(1);
         }
-        else w.setOrientation(0);
+        else w.setOrientation(2);
         System.out.println("Orientation: " + w.getOrientation());
     }
 }

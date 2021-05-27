@@ -53,7 +53,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private HBox hHeader, hb_pause;
     @FXML
-    public VBox vb_displayCurrentParams;
+    public VBox vb_displayCurrentParams, vSettingspane;
     @FXML
     public BorderPane bp_borderPane;
     @FXML
@@ -63,7 +63,9 @@ public class MainWindowController implements Initializable {
     @FXML
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
-    private AnchorPane aRootPane, aDrawingPane, aSettingsPane, cRootPane;
+    private AnchorPane aRootPane, aDrawingPane, aSettingsPane;
+    //A second Controller for better overview
+    private SettingsController settingsController = new SettingsController();
     // Declaration of original model.
     private MainWindowModel mainWindowModel;
 
@@ -72,32 +74,20 @@ public class MainWindowController implements Initializable {
     private double sceneOnWindowPosX, sceneOnWindowPosY;
     private boolean mousePressedInHeader = false;
     private boolean lightMode = true;
-    private boolean v0_changed = false;
-    private boolean wind_changed = false;
-    private boolean currentParamsOpen = false;
-
-    private Ball b;
-    CurrentParamsController currentParamsController;
+    private boolean firstTime = true;
 
     // Used for resizing.
     private ResizePane resizePane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
-            cRootPane = loader.load();
-            currentParamsController = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         btn_start_stop.setDisable(true);
+        aSettingsPane.setDisable(true);
 
-        initWindFields(tf_Wind_X);
-        initWindFields(tf_Wind_Y);
+        settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
+                tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
-        // Initialise the original MainWindowModel
+        // Get the original MainWindowModel
         mainWindowModel = MainWindowModel.get();
 
         aDrawingPane.getStyleClass().add("anchor-drawing-pane");
@@ -122,15 +112,6 @@ public class MainWindowController implements Initializable {
         });
     }
 
-    private void initWindFields(TextField tf) {
-        tf.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                wind_changed = true;
-                Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-            }
-        });
-    }
 
     //-Menu-Controls----------------------------------------------------------------------------------------------------
     // Is called whenever 'Clear Screen' is clicked in the 'File' menu
@@ -138,18 +119,20 @@ public class MainWindowController implements Initializable {
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().clear();
         mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
+        mainWindowModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
         d_play.setVisible(false);
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-        currentParamsController.reset();
+        settingsController.getCurrentParamsController().reset();
+        firstTime = true;
     }
 
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
-        Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 20);
+        Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 2.75);
         mainWindowModel.setCurrentlySelected(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
@@ -196,12 +179,17 @@ public class MainWindowController implements Initializable {
         System.out.println(lightMode);
     }
 
+    // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
-    private void run() throws IOException {
+    private void run() {
         mainWindowModel.getSimulator().run();
         // check all TextFields for values
-        fillVariables(); // TODO call only first time or manage ignorace of v0
+        settingsController.fillVariables(); // TODO call only first time or manage ignorace of v0
+        if (firstTime) {
+            settingsController.setV0();
+            firstTime = false;
+        }
         if (mainWindowModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
@@ -209,15 +197,7 @@ public class MainWindowController implements Initializable {
         else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
-            b = mainWindowModel.getBallManager().getB();
-            showCurrentParams();
-        }
-    }
-    private void fillVariables() {
-        Utils.setWind(new MyVector( isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-        for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
-//            b.setAccVec(new MyVector(0,0));
+            settingsController.showCurrentParams();
         }
     }
 
@@ -245,64 +225,14 @@ public class MainWindowController implements Initializable {
     }
 
     public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
-            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
-        }
-        System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+        settingsController.sl_Weight_OnDragDetected();
     }
 
     public void sl_Radius_OnDragDetected(){
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
-            lCurrentRadius.setText("Aktueller Radius [px]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getRadius()));
-        }
-        System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+        settingsController.sl_Radius_OnDragDetected();
     }
-
-    private double isDouble(TextField tf) {
-        try {
-            tf.setStyle("-fx-border-color: none;");
-            return Double.parseDouble(tf.getText());
-        }
-        catch (NumberFormatException e) {
-            tf.setStyle("-fx-border-color: red;");
-                /*Alert err = new Alert(Alert.AlertType.ERROR);
-                err.setTitle("Keine Zahl!");
-                err.setContentText("Es dürfen nur Zahlen eingegeben werden!");
-                err.show();*/
-            tf.requestFocus();
-            return 0.0;
-        }
-    }
-
-    //-Parameter-Display------------------------------------------------------------------------------------------------
-    public void showCurrentParams() throws IOException {
-        currentParamsController.update();
-    }
-    public void btn_showCurrentParams_OnAction(ActionEvent actionEvent) throws IOException {
-        Stage stage = mainWindowModel.getStage();
-
-        if(currentParamsOpen)
-        {
-            stage.setHeight(mainWindowModel.getSavedSceneHeight());
-            vb_displayCurrentParams.getChildren().remove(cRootPane);
-            currentParamsOpen = false;
-        }
-        else
-        {
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-
-            stage.setHeight(600);
-
-            vb_displayCurrentParams.getChildren().add(cRootPane);
-            currentParamsOpen = true;
-
-
-            // check all TextFields for values
-            fillVariables();
-            showCurrentParams();
-        }
+    public void btn_showCurrentParams_OnAction() throws IOException {
+        settingsController.btn_showCurrentParams_OnAction();
     }
 
     //-Mouse-&-Key-Listener---------------------------------------------------------------------------------------------
@@ -325,15 +255,16 @@ public class MainWindowController implements Initializable {
                 }
                 break;
             case SECONDARY:
-                mainWindowModel.getKeyManager().manageMouse(e);
-        }
+                if(mainWindowModel.isChoiceEnabled())
+                    // Was 'W' previously pressed
+                    mainWindowModel.getKeyManager().manageMouse(e);        }
     }
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
+        System.out.println("TEST");
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
-
 
     // - Custom header -------------------------------------------------------------------------------------------------
     // - No need for comments as it is of no interest for mod. sim. but if the authors are asked they explain it. ------
