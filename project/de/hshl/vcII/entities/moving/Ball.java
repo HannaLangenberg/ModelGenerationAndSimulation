@@ -149,6 +149,7 @@ public class Ball extends Circle {
         return strokeColor;
     }
 
+    public Arrow getArrow() { return arrow; }
     //_toString()_______________________________________________________________________________________________________
     @Override
     public String toString() {
@@ -157,4 +158,5 @@ public class Ball extends Circle {
                 + ") -- a: (" + Math.round(this.accVec.x) +"/"+ accVec.y
                 + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius();
     }
+
 }
