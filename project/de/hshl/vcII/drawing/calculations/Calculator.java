@@ -254,8 +254,8 @@ public class Calculator {
                 }
                 break;
         }
-
     }
+
     private static void calcForces(double a) {
         f_H = Utils.CONSTANT_OF_GRAVITATION * Math.sin(Math.toRadians(a));
         f_N = Utils.CONSTANT_OF_GRAVITATION * Math.cos(Math.toRadians(a));
