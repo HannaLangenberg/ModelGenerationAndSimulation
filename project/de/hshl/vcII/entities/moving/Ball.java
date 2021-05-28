@@ -76,6 +76,7 @@ public class Ball extends Circle {
         MyVector direction = MyVector.add(posVec, velVec);
         //Stop[] stops = new Stop[]{new Stop(0, Color.RED), new Stop(1, Color.BLUE)};
         arrow.getLine().setStroke(Color.RED);
+        arrow.getLine().setStrokeWidth(2);
         arrow.setStartX(posVec.x);
         arrow.setStartY(posVec.y);
         arrow.setEndX(direction.x);
