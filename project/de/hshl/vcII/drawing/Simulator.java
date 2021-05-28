@@ -3,8 +3,6 @@ package project.de.hshl.vcII.drawing;
 import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.mvc.CurrentParamsController;
-import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,17 +18,8 @@ public class Simulator {
 
     // Variable to maintain the simulation.
     private boolean running = false;
-    private int secondsPassed = 0;
     private int runSim_called = 0;
-    private int fps = 60;
-    private double timePerTick = 1000000000.0 / fps;
-    private double delta = 0;
-    private long now, lastTime = System.nanoTime();
     private double epsilon = 5;
-
-    private long time_btw_frames = 0;
-    private int ticks = 0;
-
 
     /**
      * Starts and stops simulating.
@@ -56,21 +45,12 @@ public class Simulator {
      */
     private void runSimulation(){
         runSim_called++;
-        /*runSim_called++;
-        if(runSim_called%60 == 0){
-            secondsPassed++;
-            System.out.println(secondsPassed);
-        }*/
 
         for (Ball b: mainWindowModel.getBallManager().getBalls()) {
-//            Movement.applyForce(b);
-//            Movement.doSmth(b, epsilon);
-//            Movement.calcFriction(b);
             Movement.calcAcceleration(b);
-//            Movement.checkPosition(b, epsilon);
             Movement.checkCollisions(b, epsilon);
-            Movement.calcVelocity(b);
             Collision.checkBalls(b, epsilon);
+            Movement.calcVelocity(b);
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }

@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
+import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
@@ -46,7 +47,7 @@ public class Ball extends Circle {
         this.vel0Vec = vel0Vec;
         this.accVec = accVec;
         this.frcVec = frcVec;
-        setFrcVec(new MyVector(0.1, 0.078)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 9, Bewegung bei ca 5°
+        setFrcVec(new MyVector(0.24, 0.03)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 7, Bewegung bei ca 7.33°
         setRadius(radius);
         this.mass = new SimpleDoubleProperty(mass);
         this.setStrokeWidth(5);

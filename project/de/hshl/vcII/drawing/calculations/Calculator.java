@@ -21,6 +21,8 @@ public class Calculator {
     private static double f_R_max;
     private static double angle_max_H;
 
+
+    //_COLLISION________________________________________________________________________________________________________
     /*
     * Ebenengleichung für das Collisionsrechteck.
     * Diese ist so konstruiert, dass sie die Ebene aus dem Mittelpunkt heraus aufzieht. Wir benötigen das, da wir unseren
@@ -170,38 +172,34 @@ public class Calculator {
         droppedPerpendicular = new MyVector(0,0);
     }
 
+
+    //_REIBUNG__________________________________________________________________________________________________________
     //_Berechne_HAFT_und_GLEITreibung_basiert_auf_Rotation______________________________________________________________
     public static void initializeForces(Wall w, Ball b, int decision) {
         /*
-         * Beachten Sie weiter, dass das Koordinatensystem von JavaFX auf dem Kopf steht. Die Formeln sind:
+         * Beachten Sie weiter, dass das Koordinatensystem von JavaFX auf dem Kopf steht.
+         * Damit man nicht umdenken muss, sind die Quadrantenangaben, als hätte man das Karthesische darüber gelegt.
+         * So ist bezeichnet beispielsweise Q4 den Bereich wo x und y Achse positiv sind (" unten rechts ")
+         * Die Formeln sind:
          * Betrag der Hangabtriebskraft:
          *   F_H = sin(a) * F_G
          *
          * Betrag der Normalkraft:
          *   F_N = cos(a) * F_G
          *
-         * a_H:
-         *   a_H_x: -cos(a) * F_H
-         *   a_H_y:  sin(a) * F_H
-         *
-         * a_N:
-         *   a_N_x:  sin(a) * F_N
-         *   a_N_y:  cos(a) * F_N
-         *
-         *
          * Reibungskoeffizienten in Ball frcVec gespeichert
          *   rk_H = b.getFrcVec().x;
          *   rk_G = b.getFrcVec().y;
          *
-         * Reibungsbeschleunigungen:
-         * Haftreibung:
-         *   a_R_H   = rk_H * a_N;
+         * Reibungskräfte:
+         * Maximale Haftreibung:
+         *   f_R_H   = rk_H * F_N;
          *
          * Gleitreibung:
-         *   a_R_G   = rk_G * a_N;
+         *   f_R_G   = rk_G * F_N;
          *
-         * maximaler Winkel, der möglich ist, ohne, dass der Gegenstand losrutsch: (max Böschungswinkel)
-         *   angle_max_H = Math.atan(Math.toRadians(rk_H));
+         * maximaler Winkel, der möglich ist, ohne, dass der Gegenstand sich bewegt: (max Böschungswinkel)
+         *   angle_max_H = Math.atan(rk_H);
          *
          * */
 
@@ -210,12 +208,10 @@ public class Calculator {
          * Orientation von wall:
          * 0: Rotation nach links
          * 1: Rotation nach rechts
-         * 2: 0°
-         * 3: 90° //TODO needed?
          * */
 
-        angle_max_H = Math.atan(b.getFrcVec().x);     //Rückgabe in Rad
-        angle_max_H = Math.toDegrees(angle_max_H);    //Wir rechnen aber in Deg
+        angle_max_H = Math.atan(b.getFrcVec().x);     //Rückgabe in Radians
+        angle_max_H = Math.toDegrees(angle_max_H);    //Wir rechnen aber in Degree
 
         switch (decision)
         {
@@ -228,7 +224,7 @@ public class Calculator {
                  * */
                 calcForces(w.getE_alpha());
                 /*
-                 * Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4 (karthesisch)
+                 * Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
                  * Danach Kräfte in ihre Teilvektoren zerlegen
                  * Winkel: +1++
                  * */
@@ -257,32 +253,6 @@ public class Calculator {
                     b.setAccVec(MyVector.add(b.getAccVec(), a_R_G));
                 }
                 break;
-            /*case 2:
-                //Winkel: 0
-                if(b.getPosVec().y <= MainWindowModel.get().getADrawingPane().getHeight()/2) {
-                    calcForces(180);
-                    zersaegenSpaltenUndAufstapeln(b, 180);
-                }
-                else {
-                    calcForces(0);
-                    zersaegenSpaltenUndAufstapeln(b, 0);
-                }
-                calcHaftreibung(b);
-                b.setAccVec(MyVector.add(b.getAccVec(), a_R_H));
-                break;
-            case 3:
-                //Winkel: 90
-                if(b.getPosVec().x <= MainWindowModel.get().getADrawingPane().getWidth()/2) {
-                    calcForces(360-90);
-                    zersaegenSpaltenUndAufstapeln(b, 360-90);
-                }
-                else {
-                    calcForces(90);
-                    beeteUmstechen(b, 90);
-                }
-                calcGleitreibung(b);
-                b.setAccVec(MyVector.add(b.getAccVec(), a_R_G));
-                break;*/
         }
 
     }
@@ -290,16 +260,34 @@ public class Calculator {
         f_H = Utils.CONSTANT_OF_GRAVITATION * Math.sin(Math.toRadians(a));
         f_N = Utils.CONSTANT_OF_GRAVITATION * Math.cos(Math.toRadians(a));
     }
+
+    //LINKS
     /*
-     * Kräfte in Vektoren zerlegen bei Rotation nach LINKS
-     * */
-    private static void zersaegenSpaltenUndAufstapeln(Ball b, double a) //LINKS
+    * Kräfte in Vektoren zerlegen bei Rotation nach LINKS
+    * a_H:
+    * Hangabtriebskraft als Vektor zeigt in Q3
+    * Daher a + 180° rechnen, oder -cos(a) und sin(a) verwenden
+    *   a_H_x: -cos(a) * F_H
+    *   a_H_y:  sin(a) * F_H
+    *
+    * a_N:
+    * Normalkraft als Vektor zeigt in Q4
+    * Daher a nochmals +90, oder sin(a) und cos(a) verwenden
+    *   a_N_x:  sin(a) * F_N
+    *   a_N_y:  cos(a) * F_N
+    *
+    *a_R:
+    * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
+    * als Vektor zeigt in Q1
+    * Daher a += 90, oder cos(a) und -sin(a) verwenden
+    *   a_R_x:  cos(a)
+    *   a_R_y: -sin(a)
+    * */
+    private static void zersaegenSpaltenUndAufstapeln(Ball b, double a)
     {
         double x,y;
         /*
          * a_H
-         * Hangabtriebskraft als Vektor zeigt in Q3
-         * Daher a + 180° rechnen, oder -cos(a) und sin(a) verwenden
          * */
         x = -Math.cos(Math.toRadians(a)) * f_H;     //  cos(a+90+90) = -sin(a+90) = -cos(a)
         y =  Math.sin(Math.toRadians(a)) * f_H;     // -sin(a+90+90) = -cos(a+90) =  sin(a)
@@ -307,8 +295,6 @@ public class Calculator {
 
         /*
          * a_N
-         * Normalkraft als Vektor zeigt in Q4
-         * Daher a nochmals +90, oder sin(a) und cos(a) verwenden
          * */
         x =  Math.sin(Math.toRadians(a)) * f_N;     // -cos(a+90) = sin(a)
         y =  Math.cos(Math.toRadians(a)) * f_N;     //  sin(a+90) = cos(a)
@@ -316,26 +302,43 @@ public class Calculator {
 
         /*
          * a_R
-         * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
-         * als Vektor zeigt in Q1
-         * Daher a += 90, oder cos(a) und -sin(a) verwenden
          * */
         x =  Math.cos(Math.toRadians(a));      // sin(a+90) =  cos(a)
         y = -Math.sin(Math.toRadians(a));      // cos(a+90) = -sin(a)
         a_R = new MyVector(x,y);
     }
+
+    //RECHTS
     /*
     * Kräfte in Vektoren zerlegen bei Rotation nach RECHTS
+    *
+    * a_H:
+    * Hangabtriebskraft als Vektor zeigt in Q4
+    * Den erhaltenen Winkel können wir übernehmen, dieser beträgt +360--.
+    * Darauf wenden wir cos(a) und -sin(a) an.
+    *   a_H_x:  cos(a) * F_H
+    *   a_H_y: -sin(a) * F_H
+    *
+    * a_N:
+    * Normalkraft als Vektor zeigt in Q3
+    * Daher a -= 90, oder sin(a) und cos(a) verwenden
+    *   a_N_x:  sin(a) * F_N
+    *   a_N_y:  cos(a) * F_N
+    *
+    * a_R:
+    * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
+    * als Vektor zeigt in Q2
+    * Daher a -= 90, oder -cos(a) und sin(a) verwenden
+    *   a_R_x: -cos(a)
+    *   a_R_y:  sin(a)
+    *
     * */
-    private static void beeteUmstechen(Ball b, double a) //RECHTS
+    private static void beeteUmstechen(Ball b, double a)
     {
         double x, y;
 
         /*
          * a_H
-         * Hangabtriebskraft als Vektor zeigt in Q4
-         * Den erhaltenen Winkel können wir übernehmen, dieser beträgt +360--.
-         * Darauf wenden wir cos(a) und -sin(a) an.
          * */
         x =  Math.cos(Math.toRadians(a)) * f_H;
         y = -Math.sin(Math.toRadians(a)) * f_H;
@@ -343,27 +346,23 @@ public class Calculator {
 
         /*
          * a_N
-         * Normalkraft als Vektor zeigt in Q3
-         * Daher a -= 90, oder sin(a) und cos(a) verwenden
          * */
-        x =  Math.sin(Math.toRadians(a)) * f_N;      //  cos(a-90) = sin(a)
-        y =  Math.cos(Math.toRadians(a)) * f_N;      // -sin(a-90) = cos(a)
+        x =  Math.sin(Math.toRadians(a)) * f_N;    //  cos(a-90) = sin(a)
+        y =  Math.cos(Math.toRadians(a)) * f_N;    // -sin(a-90) = cos(a)
         a_N = new MyVector(x,y);
 
         /*
          * a_R
-         * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
-         * als Vektor zeigt in Q2
-         * Daher a -= 90, oder -cos(a) und sin(a) verwenden
          * */
-        x = -Math.cos(Math.toRadians(a));        // sin(a-90) = -cos(a)
-        y =  Math.sin(Math.toRadians(a));        // cos(a-90) =  sin(a)
+        x = -Math.cos(Math.toRadians(a));          // sin(a-90) = -cos(a)
+        y =  Math.sin(Math.toRadians(a));          // cos(a-90) =  sin(a)
         a_R = new MyVector(x,y);
     }
 
     //Berechne Haftreibung
     private static void calcHaftreibung(Ball b) {
         a_R_H = MyVector.multiply(b.getVelVec(), -1);   // HAFT_reibungs_BESCHLEUNIGUNG
+        b.setAccVec(MyVector.multiply(b.getAccVec(), 0));
 
         f_R_G = 0;
         a_R_G = new MyVector(0,0);
@@ -373,7 +372,7 @@ public class Calculator {
         rk_G = b.getFrcVec().y;                                 // GLEIT_reibungs_KOEFF_izient
         f_R_G = rk_G * f_N;                                     // GLEIT_reibungs_KRAFT
 
-        a_R_G = MyVector.multiply(a_R, rk_G);                   // GLEIT_reibungs_BESCHLEUNIGUNG
+        a_R_G = MyVector.multiply(a_R, f_R_G);                   // GLEIT_reibungs_BESCHLEUNIGUNG
 
         f_R_H = 0;
         a_R_H = new MyVector(0,0);
