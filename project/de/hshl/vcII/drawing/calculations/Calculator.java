@@ -77,8 +77,10 @@ public class Calculator {
     }
     public static MyVector calc_s_t_Parameters(Wall w, MyVector position) {
         MyVector deltas = new MyVector(
-                position.x - w.getCollision().getX() - w.getCollision().getWidth()/2,
-                position.y - w.getCollision().getY() - w.getCollision().getHeight()/2);
+                position.x - w.getPosVec().x,
+                //position.x - w.getCollision().getX() - w.getCollision().getWidth()/2,
+                position.y - w.getPosVec().y);
+                //position.y - w.getCollision().getY() - w.getCollision().getHeight()/2);
 
         double s = 2 * (
                 (deltas.x * ( 1 - Math.pow(Math.sin(Math.toRadians( w.getE_alpha() )), 2) ) )
@@ -96,13 +98,15 @@ public class Calculator {
     //_Calculate_deltas_used_in_both_(t_&_s)____________________________________________________________________________
     private static MyVector calcDeltas(Wall w, Ball b) {
         /*
-         * The delta fo X and Y are used in s and t, thus an extra method.
+         * The delta for X and Y are used in s and t, thus an extra method.
          *   xDelta = bX - rX - 1/2rW
          *   yDelta = bY - rY - 1/2rH
          * */
         return new MyVector(
-                b.getPosVec().x - w.getCollision().getX() - w.getCollision().getWidth()/2,
-                b.getPosVec().y - w.getCollision().getY() - w.getCollision().getHeight()/2
+                //b.getPosVec().x - w.getCollision().getX() - w.getCollision().getWidth()/2,
+                b.getPosVec().x - w.getPosVec().x,
+                //b.getPosVec().y - w.getCollision().getY() - w.getCollision().getHeight()/2
+                b.getPosVec().y - w.getPosVec().y
         );
     }
 
@@ -129,12 +133,14 @@ public class Calculator {
          *       e_x: (rX + 1/2*rW) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
          *       e_y: (rY + 1/2*rH) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
          * */
-        double x = (w.getCollision().getX() + w.getCollision().getWidth()/2)
+        //double x = (w.getCollision().getX() + w.getCollision().getWidth()/2)
+        double x = w.getPosVec().x
                 + (   s_t.x * w.getCollision().getWidth()  * Math.cos(Math.toRadians(w.getE_alpha()))
                 + s_t.y * w.getCollision().getHeight() * Math.sin(Math.toRadians(w.getE_alpha()))
         )
                 /2;
-        double y = (w.getCollision().getY() + w.getCollision().getHeight()/2)
+        //double y = (w.getCollision().getY() + w.getCollision().getHeight()/2)
+        double y = w.getPosVec().y
                 + (   s_t.x * w.getCollision().getWidth()  * Math.sin(Math.toRadians(w.getE_alpha())) *-1
                 + s_t.y * w.getCollision().getHeight() * Math.cos(Math.toRadians(w.getE_alpha()))
         )
@@ -230,7 +236,7 @@ public class Calculator {
                  * */
                 zersaegenSpaltenUndAufstapeln(b, w.getE_alpha());
 
-                if(w.getE_alpha() <= angle_max_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }
@@ -244,7 +250,7 @@ public class Calculator {
                 calcForces(w.getSpin());
                 //Winkel: +360--
                 beeteUmstechen(b, w.getE_alpha());
-                if(w.getSpin() <= angle_max_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }

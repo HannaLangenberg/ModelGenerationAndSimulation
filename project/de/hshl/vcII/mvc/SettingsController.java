@@ -95,8 +95,8 @@ public class SettingsController {
 
     public void sl_Weight_OnDragDetected() {
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
-            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue()/1000);
+            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass())*1000);
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
     }

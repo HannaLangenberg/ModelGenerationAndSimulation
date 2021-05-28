@@ -43,6 +43,7 @@ public class Collision {
 //        epsilon = Math.max(MyVector.length(b1.getVelVec())*epsilon, MyVector.length(b2.getVelVec())*epsilon);
 
         boolean collision = MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2+epsilon;
+        // + ( MyVector.length(b1.getVelVec()) + MyVector.length(b2.getVelVec()) )/2 * 0.05;
 
         //-If-they-collide----------------------------------------------------------------------------------------------
 
