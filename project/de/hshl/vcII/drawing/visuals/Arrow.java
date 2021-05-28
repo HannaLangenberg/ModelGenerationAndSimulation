@@ -3,6 +3,7 @@ package project.de.hshl.vcII.drawing.visuals;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Arrow extends Group {
@@ -12,8 +13,8 @@ public class Arrow extends Group {
         this(new Line(), new Line(), new Line());
     }
 
-    private static final double arrowLength = 7;
-    private static final double arrowWidth = 2;
+    private static final double arrowLength = 10;
+    private static final double arrowWidth = 5;
 
     private Arrow(Line line, Line arrow1, Line arrow2) {
         super(line, arrow1, arrow2);
@@ -35,6 +36,11 @@ public class Arrow extends Group {
                 arrow1.setStartY(ey);
                 arrow2.setStartX(ex);
                 arrow2.setStartY(ey);
+
+                arrow1.setStroke(Color.RED);
+                arrow2.setStroke(Color.RED);
+                arrow1.setStrokeWidth(2);
+                arrow2.setStrokeWidth(2);
             } else {
                 double factor = arrowLength / Math.hypot(sx-ex, sy-ey);
                 double factorO = arrowWidth / Math.hypot(sx-ex, sy-ey);
@@ -51,6 +57,10 @@ public class Arrow extends Group {
                 arrow1.setStartY(ey + dy + ox);
                 arrow2.setStartX(ex + dx + oy);
                 arrow2.setStartY(ey + dy - ox);
+                arrow1.setStroke(Color.RED);
+                arrow2.setStroke(Color.RED);
+                arrow1.setStrokeWidth(2);
+                arrow2.setStrokeWidth(2);
             }
         };
         // add updater to properties
