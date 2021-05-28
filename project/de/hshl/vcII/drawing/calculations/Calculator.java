@@ -99,8 +99,8 @@ public class Calculator {
     private static MyVector calcDeltas(Wall w, Ball b) {
         /*
          * The delta for X and Y are used in s and t, thus an extra method.
-         *   xDelta = bX - rX - 1/2rW
-         *   yDelta = bY - rY - 1/2rH
+         *   xDelta = bX - wPosX
+         *   yDelta = bY - wPosY
          * */
         return new MyVector(
                 //b.getPosVec().x - w.getCollision().getX() - w.getCollision().getWidth()/2,

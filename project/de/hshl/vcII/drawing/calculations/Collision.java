@@ -40,10 +40,7 @@ public class Collision {
         MyVector pos_b1 = b1.getPosVec(),
                  pos_b2 = b2.getPosVec();
 
-//        epsilon = Math.max(MyVector.length(b1.getVelVec())*epsilon, MyVector.length(b2.getVelVec())*epsilon);
-
         boolean collision = MyVector.distance(pos_b1, pos_b2) <= r_b1+r_b2+epsilon;
-        // + ( MyVector.length(b1.getVelVec()) + MyVector.length(b2.getVelVec()) )/2 * 0.05;
 
         //-If-they-collide----------------------------------------------------------------------------------------------
 
@@ -96,9 +93,6 @@ public class Collision {
         MyVector v2Orthogonal = MyVector.subtract(MyVector.orthogonalProjection(b2.getVelVec(), normedCenterLine), b2.getVelVec());
         MyVector v1Parallel = MyVector.orthogonalProjection(b1.getVelVec(), normedCenterLine);
 
-        //Für Masse:
-        // Parallelen Komponenten als Center Shock betrachten, danach verrechnen
-
         //-------Set-values---------------------------------------------------------------------------------------------
 
         b1.setVelVec(MyVector.add(v1Orthogonal, centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass())));
@@ -114,10 +108,10 @@ public class Collision {
         {
             Calculator.bounceVelocity(b);
 
-            if (w.getSpin() < 0) {                                      // Rotation nach LINKS
+            if (w.getOrientation() == 0) {                            // Rotation nach LINKS
                 Calculator.initializeForces(w, b, 0);
             }
-            else if (w.getSpin() > 0) {                                 // Rotation nach RECHTS
+            else if (w.getOrientation() == 1) {                       // Rotation nach RECHTS
                 Calculator.initializeForces(w,b,1);
             }
 

@@ -29,7 +29,7 @@ public class Wall {
         viewTexture = new ImageView(texture);
         posVec = new MyVector(0, 0);
         number = 0;
-        orientation = 0;
+        orientation = 2;
     }
 
     public void calcCenterPoint(Wall w) {
