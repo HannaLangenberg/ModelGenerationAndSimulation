@@ -21,13 +21,9 @@ public class CurrentParamsController {
     @FXML
     public Label l_current_Delta_T;
     @FXML
-    public Label l_current_SimSpd;
-    @FXML
     public Label l_current_FPS;
     @FXML
     public Label l_current_Gravitation;
-    @FXML
-    public ListView<String> lv_balls;
     @FXML
     public TableView<Ball> tv_ball_params;
     @FXML
@@ -36,8 +32,6 @@ public class CurrentParamsController {
     public TableColumn<Ball, String> tc_Pos;
     @FXML
     public TableColumn<Ball, String> tc_V;
-    @FXML
-    public TableColumn<Ball, String> tc_A;
     @FXML
     public TableColumn<Ball, Integer> tc_Radius;
     @FXML
@@ -57,7 +51,6 @@ public class CurrentParamsController {
 
     public void update() {
         l_current_Wind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
-        l_current_SimSpd.setText(String.valueOf(Utils.sim_Spd));
 
         if(ballObservableList.size() != 0) {
             ballObservableList.clear();
@@ -67,7 +60,6 @@ public class CurrentParamsController {
         tc_No.setCellValueFactory(new PropertyValueFactory<>("number"));
         tc_Pos.setCellValueFactory(new PropertyValueFactory<>("posVec"));
         tc_V.setCellValueFactory(new PropertyValueFactory<>("vel0Vec"));
-        tc_A.setCellValueFactory(new PropertyValueFactory<>("accVec"));
         tc_Radius.setCellValueFactory(new PropertyValueFactory<>("radius"));
         tc_Mass.setCellValueFactory(new PropertyValueFactory<>("mass"));
 

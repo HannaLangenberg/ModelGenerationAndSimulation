@@ -25,11 +25,10 @@
                         <TableView fx:id="tv_ball_params" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="550.0">
                             <columns>
                                 <TableColumn fx:id="tc_No" editable="false" prefWidth="50.0" text="No" />
-                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="100.0" text="Pos" />
-                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="100.0" text="v" />
-                                <TableColumn fx:id="tc_A" editable="false" minWidth="-Infinity" prefWidth="100.0" text="a" />
-                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="100.0" text="Radius" />
-                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="100.0" text="Mass" />
+                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="125.0" text="Pos" />
+                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="125.0" text="v" />
+                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="125.0" text="Radius" />
+                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="125.0" text="Mass" />
                             </columns>
                         </TableView>
                     </children>
@@ -54,18 +53,15 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label text="Wind:" />
                                 <Label layoutX="10.0" layoutY="107.0" text="Gravitation:" GridPane.rowIndex="1" />
                                 <Label text="delta_t" GridPane.rowIndex="2" />
-                                <Label text="SimSpd:" GridPane.rowIndex="3" />
-                                <Label text="fps:" GridPane.rowIndex="4" />
+                                <Label text="fps:" GridPane.rowIndex="3" />
                                 <Label fx:id="l_current_Wind" text="_placeholder_" GridPane.columnIndex="1" />
                                 <Label fx:id="l_current_Delta_T" text="_placeholder_" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                <Label fx:id="l_current_SimSpd" text="_placeholder_" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                <Label fx:id="l_current_FPS" text="_placeholder_" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <Label fx:id="l_current_FPS" text="_placeholder_" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                 <Label fx:id="l_current_Gravitation" text="_placeholder_" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>

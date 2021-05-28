@@ -67,6 +67,19 @@ public class Collision {
         b1.setVelVec(step4_b1);
         b2.setVelVec(step4_b2);
     }
+    private static MyVector centerShock(MyVector v1, double m1, MyVector v2, double m2){
+        //-------Calculate-values---------------------------------------------------------------------------------------
+
+        // The first three steps are the same for both balls
+        MyVector step1 = MyVector.add(MyVector.multiply(v1, m1), MyVector.multiply(v2, m2));
+        MyVector step2 = MyVector.divide(step1, m1 + m2);
+        MyVector step3 = MyVector.multiply(step2, 2);
+
+        MyVector step4_b1 = MyVector.subtract(v1, step3);
+
+        //-------Set-values---------------------------------------------------------------------------------------------
+        return  step4_b1;
+    }
     private static void angledShock(Ball b1, Ball b2){
         //-------Calculate-values---------------------------------------------------------------------------------------
 
@@ -87,8 +100,8 @@ public class Collision {
 
         //-------Set-values---------------------------------------------------------------------------------------------
 
-        b1.setVelVec(MyVector.add(v1Orthogonal, v2Parallel));
-        b2.setVelVec(MyVector.add(v2Orthogonal, v1Parallel));
+        b1.setVelVec(MyVector.add(v1Orthogonal, centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass())));
+        b2.setVelVec(MyVector.add(v2Orthogonal, centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass())));
     }
 
     //_Ball_And_Wall_Collision__________________________________________________________________________________________
