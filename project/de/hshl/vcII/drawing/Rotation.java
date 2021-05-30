@@ -26,17 +26,17 @@ public class Rotation {
     private void determineOrientation(Wall w) {
         if (w.getSpin() != 0)
         {
-            if(w.getSpin() <= -1) {
+            if(w.getSpin() <= -1) { // LINKS
                 w.setOrientation(0);
-                w.setE_alpha(w.getSpin() * -1);
+                w.setE_alpha(Math.abs(w.getSpin()) * -1); //Math.abs should be redundant
             }
-            else if (w.getSpin() >= 1) {
+            else if (w.getSpin() >= 1) { // RECHTS
                 w.setOrientation(1);
-                w.setE_alpha(360 - Math.abs(w.getSpin()));
+                w.setE_alpha(360 - Math.abs(w.getSpin())); //Math.abs should be redundant
             }
         }
         else {
-            w.setOrientation(2);
+            w.setOrientation(2); // LEVEL
             w.setE_alpha(0);
         }
         System.out.println("Orientation: " + w.getOrientation());

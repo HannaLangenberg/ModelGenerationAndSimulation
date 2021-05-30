@@ -28,17 +28,17 @@ public class Calculator {
     * Diese ist so konstruiert, dass sie die Ebene aus dem Mittelpunkt heraus aufzieht. Wir benötigen das, da wir unseren
     * Block samt ViewTexture um seinen Mittelpunkt rotieren.
     * Zur Veranschaulichung:
-    *       e_x: (rX + 1/2*rW) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
-    *       e_y: (rY + 1/2*rH) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
+    *       e_x: (posX) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
+    *       e_y: (posY) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
     * Umgestellt nach s (waagerechter Parameter:
-    *               (  (bX - rX - 1/2rW)*(1 - sin(a)^2)        (bY - rY - 1/2rH) * sin(a)   )
-    *       s = 2 * ( ---------------------------------   -   ----------------------------  )
-    *               (            rW*cos(a)                                rW                )
+    *               (  (bX - posX)*(1 - sin(a)^2)      (bY - posY) * sin(a)  )
+    *       s = 2 * ( ---------------------------   -   ------------------   )
+    *               (            rW*cos(a)                       rW          )
     *
     * Umgestellt nach t (senkrechter Parameter:
-     *               (  (bX - rX - 1/2rW) * sin(a) + (bY - rY - 1/2rH) * cos(a)  )
-     *       t = 2 * ( --------------------------------------------------------  )
-     *               (                          rH                               )
+     *               (  (bX - posX) * sin(a) + (bY - posY) * cos(a)  )
+     *       t = 2 * ( --------------------------------------------  )
+     *               (                          rH                   )
      *
      * Die Ebene ist so konstruiert, dass RV_1 (waagerecht) und RV_2 (senkrecht) orthogonal zueinander stehen und diesen
      * Winkel immer beibehalten. Seine Ausrichtung ist an die Achsen des JavaFX Koordinatensystems angepasst (→ +x, ↓ +y)
@@ -57,7 +57,6 @@ public class Calculator {
      *      |            1 -----------------------------
      *      ↓ y
      * */
-    //TODO check comments
     //_Calculate_Plane_Parameters_______________________________________________________________________________________
     // Currently overloaded, TODO combine
     public static MyVector calc_s_t_Parameters(Wall w, Ball b) {
@@ -78,9 +77,7 @@ public class Calculator {
     public static MyVector calc_s_t_Parameters(Wall w, MyVector position) {
         MyVector deltas = new MyVector(
                 position.x - w.getPosVec().x,
-                //position.x - w.getCollision().getX() - w.getCollision().getWidth()/2,
                 position.y - w.getPosVec().y);
-                //position.y - w.getCollision().getY() - w.getCollision().getHeight()/2);
 
         double s = 2 * (
                 (deltas.x * ( 1 - Math.pow(Math.sin(Math.toRadians( w.getE_alpha() )), 2) ) )
@@ -103,9 +100,7 @@ public class Calculator {
          *   yDelta = bY - wPosY
          * */
         return new MyVector(
-                //b.getPosVec().x - w.getCollision().getX() - w.getCollision().getWidth()/2,
                 b.getPosVec().x - w.getPosVec().x,
-                //b.getPosVec().y - w.getCollision().getY() - w.getCollision().getHeight()/2
                 b.getPosVec().y - w.getPosVec().y
         );
     }
@@ -130,16 +125,14 @@ public class Calculator {
     //_Calculate_"dropped_perpendicular"'s_missing_coordinate___________________________________________________________
     public static MyVector calcCoord_onEdge(Wall w, MyVector s_t) {
         /*
-         *       e_x: (rX + 1/2*rW) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
-         *       e_y: (rY + 1/2*rH) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
+         *       e_x: (posX) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
+         *       e_y: (posY) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
          * */
-        //double x = (w.getCollision().getX() + w.getCollision().getWidth()/2)
         double x = w.getPosVec().x
                 + (   s_t.x * w.getCollision().getWidth()  * Math.cos(Math.toRadians(w.getE_alpha()))
                 + s_t.y * w.getCollision().getHeight() * Math.sin(Math.toRadians(w.getE_alpha()))
         )
                 /2;
-        //double y = (w.getCollision().getY() + w.getCollision().getHeight()/2)
         double y = w.getPosVec().y
                 + (   s_t.x * w.getCollision().getWidth()  * Math.sin(Math.toRadians(w.getE_alpha())) *-1
                 + s_t.y * w.getCollision().getHeight() * Math.cos(Math.toRadians(w.getE_alpha()))

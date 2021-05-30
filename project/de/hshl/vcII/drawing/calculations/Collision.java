@@ -68,15 +68,14 @@ public class Collision {
     private static MyVector centerShock(MyVector v1, double m1, MyVector v2, double m2){
         //-------Calculate-values---------------------------------------------------------------------------------------
 
-        // The first three steps are the same for both balls
         MyVector step1 = MyVector.add(MyVector.multiply(v1, m1), MyVector.multiply(v2, m2));
         MyVector step2 = MyVector.divide(step1, m1 + m2);
         MyVector step3 = MyVector.multiply(step2, 2);
 
-        MyVector step4_b1 = MyVector.subtract(v1, step3);
+        MyVector step4 = MyVector.subtract(v1, step3);
 
         //-------Set-values---------------------------------------------------------------------------------------------
-        return  step4_b1;
+        return  step4;
     }
     private static void angledShock(Ball b1, Ball b2){
         //-------Calculate-values---------------------------------------------------------------------------------------

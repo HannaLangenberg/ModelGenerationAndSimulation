@@ -35,9 +35,10 @@ public class Simulator {
         {
             timer.shutdownNow();
             running = false;
-            for(Ball b : mainWindowModel.getBallManager().getBalls())
+            for(Ball b : mainWindowModel.getBallManager().getBalls()) {
                 System.out.println("PosX: " + b.getCenterX() + " PosY: " + b.getCenterY()
                         + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
+            }
         }
     }
     /**
