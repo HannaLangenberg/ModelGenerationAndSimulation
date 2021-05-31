@@ -169,6 +169,7 @@ public class Calculator {
 
         b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
         droppedPerpendicular = new MyVector(0,0);
+
     }
 
 
@@ -211,6 +212,7 @@ public class Calculator {
 
         angle_max_H = Math.atan(b.getFrcVec().x);     //Rückgabe in Radians
         angle_max_H = Math.toDegrees(angle_max_H);    //Wir rechnen aber in Degree
+        double vel = MyVector.length(b.getVelVec());
 
         switch (decision)
         {
@@ -221,7 +223,7 @@ public class Calculator {
                  * Normalkraft berechnen.
                  * Winkel: +1++
                  * */
-                calcForces(w.getE_alpha());
+                calcForces(w.getE_alpha(), b);
                 /*
                  * Hangabtrieb und Normalkraft als Vektoren zeigen beide in Q3 bzw Q4
                  * Danach Kräfte in ihre Teilvektoren zerlegen
@@ -229,7 +231,7 @@ public class Calculator {
                  * */
                 zersaegenSpaltenUndAufstapeln(b, w.getE_alpha());
 
-                if(Math.abs(w.getSpin()) <= angle_max_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }
@@ -240,10 +242,10 @@ public class Calculator {
                 break;
             case 1: //Rechts
                 //Winkel: +1++
-                calcForces(w.getSpin());
+                calcForces(w.getSpin(), b);
                 //Winkel: +360--
                 beeteUmstechen(b, w.getE_alpha());
-                if(Math.abs(w.getSpin()) <= angle_max_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }
@@ -255,9 +257,10 @@ public class Calculator {
         }
     }
 
-    private static void calcForces(double a) {
+    private static void calcForces(double a, Ball b) {
         f_H = Utils.CONSTANT_OF_GRAVITATION * Math.sin(Math.toRadians(a));
         f_N = Utils.CONSTANT_OF_GRAVITATION * Math.cos(Math.toRadians(a));
+        f_R_H = b.getFrcVec().x * f_N;
     }
 
     //LINKS
@@ -362,19 +365,13 @@ public class Calculator {
     private static void calcHaftreibung(Ball b) {
         a_R_H = MyVector.multiply(b.getVelVec(), -1);   // HAFT_reibungs_BESCHLEUNIGUNG
         b.setAccVec(MyVector.multiply(b.getAccVec(), 0));
-
-        f_R_G = 0;
-        a_R_G = new MyVector(0,0);
     }
     //Berechne Gleitreibung
     private static void calcGleitreibung(Ball b) {
         rk_G = b.getFrcVec().y;                                 // GLEIT_reibungs_KOEFF_izient
         f_R_G = rk_G * f_N;                                     // GLEIT_reibungs_KRAFT
 
-        a_R_G = MyVector.multiply(a_R, f_R_G);                   // GLEIT_reibungs_BESCHLEUNIGUNG
-
-        f_R_H = 0;
-        a_R_H = new MyVector(0,0);
+        a_R_G = MyVector.multiply(a_R, f_R_G);                  // GLEIT_reibungs_BESCHLEUNIGUNG
     }
 
 
