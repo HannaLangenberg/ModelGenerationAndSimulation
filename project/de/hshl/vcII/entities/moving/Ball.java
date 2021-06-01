@@ -27,7 +27,17 @@ public class Ball extends Circle {
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private int number;
 
-    private double randomSeed = Math.random();
+    private double randomSeed = pickColor();
+    private double pickColor() {
+        double r = Math.random();
+
+        while(r < 0.5 && MainWindowModel.get().getMode().isMode())
+            r = Math.random();
+        while(r > 0.5 && !MainWindowModel.get().getMode().isMode())
+            r = Math.random();
+
+        return r;
+    }
     private Color strokeColor = randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker();
 
     public Ball() {

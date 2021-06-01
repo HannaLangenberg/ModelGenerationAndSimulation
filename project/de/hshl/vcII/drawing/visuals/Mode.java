@@ -6,6 +6,8 @@ import project.de.hshl.vcII.mvc.MainWindowModel;
 
 public class Mode {
 
+    private boolean mode = false;
+
     public void toggleMode(boolean mode) {
         MainWindowModel mainWindowModel = MainWindowModel.get();
         //TODO geht bestimmt effizienter
@@ -17,5 +19,14 @@ public class Mode {
             mainWindowModel.getStage().getScene().getStylesheets().remove(Utils.lightMode);
             mainWindowModel.getStage().getScene().getStylesheets().add(Utils.darkMode);
         }
+        mode = !mode;
+    }
+
+    public boolean isMode() {
+        return mode;
+    }
+
+    public void setMode(boolean mode) {
+        this.mode = mode;
     }
 }
