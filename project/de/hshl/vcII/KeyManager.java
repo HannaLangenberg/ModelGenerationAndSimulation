@@ -27,15 +27,12 @@ public class KeyManager {
      * @param e to know where the cursor currently is
      */
     public void manageMouse(MouseEvent e){
-        mainWindowModel.setChoiceMade(false);
+       //3333 mainWindowModel.setChoiceMade(false);
         mainWindowModel.setCurrentlySelected(null);
         Rectangle clickingHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
-            if(clickingHitBox.intersects(w.getPosVec().x, w.getPosVec().y, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
-                w.getCollision().setStrokeType(StrokeType.OUTSIDE);
-                w.getCollision().setStrokeWidth(2);
-                w.getCollision().setStroke(new Color(0, 0.8, 0, 1));
-                w.getCollision().setFill(Color.TRANSPARENT);
+            if(clickingHitBox.intersects(w.getPosVec().x - Wall.DEFAULT_WIDTH/2, w.getPosVec().y - Wall.DEFAULT_HEIGHT/2, Wall.DEFAULT_WIDTH, Wall.DEFAULT_HEIGHT)){
+                mark(w);
                 mainWindowModel.setChoiceMade(true);
                 mainWindowModel.setCurrentlySelected(w);
                 mainWindowModel.getWallManager().setW(w);
@@ -48,9 +45,7 @@ public class KeyManager {
         MyVector clickHitBox = new MyVector(e.getX(), e.getY());
         for(Ball b : mainWindowModel.getBallManager().getBalls()){
             if(MyVector.distance(clickHitBox, b.getPosVec()) < b.getRadius()){
-                b.setStrokeType(StrokeType.OUTSIDE);
-                b.setStrokeWidth(2);
-                b.setStroke(new Color(0, 0.8, 0, 1));
+                mark(b);
                 mainWindowModel.setChoiceMade(true);
                 mainWindowModel.setCurrentlySelected(b);
             }
@@ -86,7 +81,43 @@ public class KeyManager {
         }
     }
 
+    public void choose(String s){
+        if (!mainWindowModel.isChoiceMade()) {
+            String[] strings = s.split(" ");
+            if (strings[0].equals("Ball")) {
+                for (Ball b : mainWindowModel.getBallManager().getBalls()) {
+                    if ((b.getNumber() + "").equals(strings[2])) {
+                        mainWindowModel.setCurrentlySelected(b);
+                    }
+                }
+            } else if (strings[0].equals("Wand")) {
+                for (Wall w : mainWindowModel.getWallManager().getWalls()) {
+                    if ((w.getNumber() + "").equals(strings[2])) {
+                        mainWindowModel.setCurrentlySelected(w);
+                    }
+                }
+            }
+            mainWindowModel.setChoiceMade(true);
+        }else{
+            unMark();
+            mainWindowModel.setChoiceMade(false);
+        }
+    }
+
     // Helper
+    private void mark(Object o){
+        if(o instanceof Ball) {
+            ((Ball) o).setStrokeType(StrokeType.OUTSIDE);
+            ((Ball) o).setStrokeWidth(2);
+            ((Ball) o).setStroke(new Color(0, 0.8, 0, 1));
+        } else{
+            ((Wall) o).getCollision().setStrokeType(StrokeType.OUTSIDE);
+            ((Wall) o).getCollision().setStrokeWidth(2);
+            ((Wall) o).getCollision().setStroke(new Color(0, 0.8, 0, 1));
+            ((Wall) o).getCollision().setFill(Color.TRANSPARENT);
+        }
+    }
+
     private void unMark(){
         if(mainWindowModel.getCurrentlySelected() instanceof Wall)
             ((Wall) mainWindowModel.getCurrentlySelected()).getCollision().setStrokeWidth(0);

@@ -1,9 +1,9 @@
 package project.de.hshl.vcII.mvc;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,29 +37,31 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
     @FXML
-    public CheckBox chb_Wind;
+    private CheckBox chb_Wind;
     @FXML
-    public Slider sl_Weight, sl_Radius;
+    private Slider sl_Weight, sl_Radius;
     @FXML
-    public TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
+    private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
-    public Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius;
+    private Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius;
     @FXML
-    public Button btn_start_stop, btn_showCurrentParams;
+    private Button btn_start_stop, btn_showCurrentParams;
     @FXML
-    public Polygon d_play;
+    private Polygon d_play;
     @FXML
-    public MenuItem miSnap;
+    private MenuItem miSnap;
     @FXML
     private HBox hHeader, hb_pause;
     @FXML
-    public VBox vb_displayCurrentParams, vSettingspane;
+    private VBox vb_displayCurrentParams, vSettingspane;
     @FXML
-    public BorderPane bp_borderPane;
+    private BorderPane bp_borderPane;
     @FXML
-    public GridPane gp_Wind;
+    private GridPane gp_Wind;
     @FXML
-    public FlowPane fpActiveControls;
+    private FlowPane fpActiveControls;
+    @FXML
+    private ComboBox<String> cb_choose;
     @FXML
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
@@ -165,7 +167,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void switch_mode(MouseEvent actionEvent) {
+    public void switch_mode() {
         mainWindowModel.getMode().toggleMode(!lightMode);
         lightMode = !lightMode;
         if (!lightMode) {
@@ -256,13 +258,15 @@ public class MainWindowController implements Initializable {
                 if(mainWindowModel.isChoiceEnabled())
                     // Was 'W' previously pressed
                     mainWindowModel.getKeyManager().manageMouse(e);
+                break;
+            case MIDDLE:
+                activateLists();
         }
     }
 
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
-        System.out.println("TEST");
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
 
@@ -439,5 +443,29 @@ public class MainWindowController implements Initializable {
     @FXML
     private void exit() {
         System.exit(0);
+    }
+
+    private void activateLists(){
+        // Add change listener for cb_choose to always keep it updated
+        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+    }
+    public void cb_update() {
+        cb_choose.getItems().clear();
+         for (Wall w : mainWindowModel.getWallManager().getWalls())
+            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
+
+        for (Ball b : mainWindowModel.getBallManager().getBalls())
+            cb_choose.getItems().add("Ball Nummer " + b.getNumber());
+
+        cb_choose.setValue(cb_choose.getItems().get(0));
+    }
+
+    public void cb_choose() {
+        mainWindowModel.getKeyManager().choose(cb_choose.getValue());
     }
 }

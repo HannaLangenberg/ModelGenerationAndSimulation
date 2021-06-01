@@ -1,13 +1,11 @@
 package project.de.hshl.vcII.entities.stationary;
 
-import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class WallManager{
     private Wall w;
-    private List<Wall> walls = new ArrayList<>();
+    private ObservableList<Wall> walls = FXCollections.observableArrayList();
 
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
     public void setW(Wall w) {
@@ -20,15 +18,8 @@ public class WallManager{
     public void addWall(Wall w){
         walls.add(w);
     }
-    public List<Wall> getWalls() {
+    public ObservableList<Wall> getWalls() {
         return walls;
     }
 
-    public List<Rectangle> getWallCollisionBounds(){
-        List<Rectangle> wallBounds = new ArrayList<>();
-        for(Wall w : walls){
-            wallBounds.add(w.getCollision());
-        }
-        return wallBounds;
-    }
 }

@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
    <children>
@@ -141,7 +121,7 @@
                <right>
                   <AnchorPane fx:id="aSettingsPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0">
+                        <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="363.0" prefWidth="250.0">
                            <children>
                               <Label text="Einstellungen">
                                  <VBox.margin>
@@ -151,15 +131,47 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <VBox minHeight="-Infinity" prefHeight="295.0">
-                                 <children>
-                                    <Accordion>
-                                      <panes>
-                                        <TitledPane animated="false" text="Startgeschwindigkeit">
-                                          <content>
-                                            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="200.0">
+                              <Accordion>
+                                <panes>
+                                  <TitledPane animated="false" text="Startgeschwindigkeit">
+                                    <content>
+                                      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane alignment="CENTER" minHeight="-Infinity" prefHeight="85.0" prefWidth="238.0" vgap="10.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="80.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="140.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
                                                    <children>
-                                                      <GridPane alignment="CENTER" minHeight="-Infinity" prefHeight="85.0" prefWidth="238.0" vgap="10.0">
+                                                      <Label text="x-Richtung:" />
+                                                       <Label text="y-Richtung:" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="tf_v0_X" onInputMethodTextChanged="#tf_v0_X_OnChange" text="0" GridPane.columnIndex="1" />
+                                                      <TextField fx:id="tf_v0_Y" onInputMethodTextChanged="#tf_v0_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
+                                                   </padding>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Wind">
+                                    <content>
+                                      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="200.0">
+                                             <children>
+                                                <VBox prefHeight="105.0" prefWidth="238.0">
+                                                   <children>
+                                                      <CheckBox fx:id="chb_Wind" mnemonicParsing="false" onAction="#chb_Wind_OnAction" text="Wind">
+                                                         <VBox.margin>
+                                                            <Insets left="15.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </CheckBox>
+                                                      <GridPane fx:id="gp_Wind" disable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="95.0" prefWidth="238.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="80.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="140.0" />
@@ -171,124 +183,101 @@
                                                          <children>
                                                             <Label text="x-Richtung:" />
                                                             <Label text="y-Richtung:" GridPane.rowIndex="1" />
-                                                            <TextField fx:id="tf_v0_X" onInputMethodTextChanged="#tf_v0_X_OnChange" text="0" GridPane.columnIndex="1" />
-                                                            <TextField fx:id="tf_v0_Y" onInputMethodTextChanged="#tf_v0_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="tf_Wind_X" onAction="#tf_Wind_X_OnChange" text="0" GridPane.columnIndex="1" />
+                                                            <TextField fx:id="tf_Wind_Y" onInputMethodTextChanged="#tf_Wind_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                          </children>
                                                          <padding>
                                                             <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
                                                          </padding>
                                                       </GridPane>
-                                                   </children>
-                                                </AnchorPane>
-                                          </content>
-                                        </TitledPane>
-                                      </panes>
-                                    </Accordion>
-                                    <Accordion>
-                                      <panes>
-                                        <TitledPane animated="false" text="Wind">
-                                          <content>
-                                            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="200.0">
+                                                           </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Slider">
+                                    <content>
+                                      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="238.0">
+                                             <children>
+                                                <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="238.0">
                                                    <children>
-                                                      <VBox prefHeight="105.0" prefWidth="238.0">
+                                                      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="238.0">
                                                          <children>
-                                                            <CheckBox fx:id="chb_Wind" mnemonicParsing="false" onAction="#chb_Wind_OnAction" text="Wind">
-                                                               <VBox.margin>
-                                                                  <Insets left="15.0" top="10.0" />
-                                                               </VBox.margin>
-                                                            </CheckBox>
-                                                            <GridPane fx:id="gp_Wind" disable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="95.0" prefWidth="238.0">
-                                                               <columnConstraints>
-                                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="80.0" />
-                                                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="140.0" />
-                                                               </columnConstraints>
-                                                               <rowConstraints>
-                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                               </rowConstraints>
-                                                               <children>
-                                                                  <Label text="x-Richtung:" />
-                                                                  <Label text="y-Richtung:" GridPane.rowIndex="1" />
-                                                                  <TextField fx:id="tf_Wind_X" onAction="#tf_Wind_X_OnChange" text="0" GridPane.columnIndex="1" />
-                                                                  <TextField fx:id="tf_Wind_Y" onInputMethodTextChanged="#tf_Wind_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                               </children>
-                                                               <padding>
-                                                                  <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
-                                                               </padding>
-                                                            </GridPane>
+                                                            <Label text="Gewicht" />
+                                                            <Region HBox.hgrow="ALWAYS" />
+                                                            <Label fx:id="lCurrentWeight" text="Aktuelles Gewicht [g]:" />
                                                          </children>
-                                                      </VBox>
-                                                   </children></AnchorPane>
-                                          </content>
-                                        </TitledPane>
-                                      </panes>
-                                    </Accordion>
-                                    <Accordion>
-                                      <panes>
-                                        <TitledPane animated="false" text="Slider">
-                                          <content>
-                                            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="238.0">
-                                                   <children>
-                                                      <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="238.0">
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" top="15.0" />
+                                                         </VBox.margin>
+                                                         <padding>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                      <Slider fx:id="sl_Weight" blockIncrement="0.0" majorTickUnit="5000.0" max="5000.0" min="500.0" minWidth="-Infinity" minorTickCount="4" onMouseReleased="#sl_Weight_OnDragDetected" prefWidth="238.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2750.0">
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                         <padding>
+                                                            <Insets left="7.5" right="7.5" />
+                                                         </padding>
+                                                      </Slider>
+                                                      <HBox prefHeight="20.0" prefWidth="200.0">
                                                          <children>
-                                                            <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="238.0">
-                                                               <children>
-                                                                  <Label text="Gewicht" />
-                                                                  <Region HBox.hgrow="ALWAYS" />
-                                                                  <Label fx:id="lCurrentWeight" text="Aktuelles Gewicht [g]:" />
-                                                               </children>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" top="15.0" />
-                                                               </VBox.margin>
-                                                               <padding>
-                                                                  <Insets left="10.0" right="10.0" />
-                                                               </padding>
-                                                            </HBox>
-                                                            <Slider fx:id="sl_Weight" blockIncrement="0.0" majorTickUnit="5000.0" max="5000.0" min="500.0" minWidth="-Infinity" minorTickCount="4" onMouseReleased="#sl_Weight_OnDragDetected" prefWidth="238.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2750.0">
-                                                               <VBox.margin>
-                                                                  <Insets />
-                                                               </VBox.margin>
-                                                               <padding>
-                                                                  <Insets left="7.5" right="7.5" />
-                                                               </padding></Slider>
-                                                            <HBox prefHeight="20.0" prefWidth="200.0">
-                                                               <children>
-                                                                  <Label text="Radius" />
-                                                                  <Region HBox.hgrow="ALWAYS" />
-                                                                  <Label fx:id="lCurrentRadius" text="Aktueller Radius [px]:" />
-                                                               </children>
-                                                               <VBox.margin>
-                                                                  <Insets bottom="5.0" top="20.0" />
-                                                               </VBox.margin>
-                                                               <padding>
-                                                                  <Insets left="10.0" right="10.0" />
-                                                               </padding>
-                                                            </HBox>
-                                                            <Slider fx:id="sl_Radius" majorTickUnit="30.0" min="10.0" minWidth="-Infinity" minorTickCount="1" onMouseReleased="#sl_Radius_OnDragDetected" prefWidth="238.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="25.0">
-                                                               <VBox.margin>
-                                                                  <Insets />
-                                                               </VBox.margin>
-                                                               <padding>
-                                                                  <Insets left="7.5" right="7.5" />
-                                                               </padding></Slider>
+                                                            <Label text="Radius" />
+                                                            <Region HBox.hgrow="ALWAYS" />
+                                                            <Label fx:id="lCurrentRadius" text="Aktueller Radius [px]:" />
                                                          </children>
-                                                      </VBox>
+                                                         <VBox.margin>
+                                                            <Insets bottom="5.0" top="20.0" />
+                                                         </VBox.margin>
+                                                         <padding>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                      <Slider fx:id="sl_Radius" majorTickUnit="30.0" min="10.0" minWidth="-Infinity" minorTickCount="1" onMouseReleased="#sl_Radius_OnDragDetected" prefWidth="238.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="25.0">
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                         <padding>
+                                                            <Insets left="7.5" right="7.5" />
+                                                         </padding>
+                                                      </Slider>
                                                    </children>
-                                                </AnchorPane>
-                                          </content>
-                                        </TitledPane>
-                                      </panes>
-                                    </Accordion>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                    <TitledPane animated="false" text="Auswahl">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="27.0" prefWidth="238.0">
+                                             <children>
+                                                <ComboBox fx:id="cb_choose" layoutX="88.0" layoutY="1.0" prefWidth="150.0" />
+                                                <CheckBox layoutY="5.0" mnemonicParsing="false" onAction="#cb_choose" text="aktivieren" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
+                              <VBox VBox.vgrow="ALWAYS">
+                                 <children>
                                     <CheckBox mnemonicParsing="false" onAction="#arrows" text="Pfeile anzeigen">
                                        <VBox.margin>
                                           <Insets left="15.0" top="10.0" />
                                        </VBox.margin></CheckBox>
+                                    <Region VBox.vgrow="ALWAYS" />
+                                    <HBox prefHeight="28.0" prefWidth="239.0">
+                                       <children>
+                                          <Region HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" onAction="#btn_showCurrentParams_OnAction" text="Zeige aktuelle Parameter" />
+                                          <Region HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
-                              <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" onAction="#btn_showCurrentParams_OnAction" text="Zeige aktuelle Parameter">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Button>
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" />

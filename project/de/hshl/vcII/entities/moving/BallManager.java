@@ -1,17 +1,15 @@
 package project.de.hshl.vcII.entities.moving;
 
-import project.de.hshl.vcII.drawing.visuals.Arrow;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import project.de.hshl.vcII.mvc.MainWindowModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * BallManager class for saving all balls on screen.
  * uses an ArrayList to keep track of the balls present on screen
  */
 public class BallManager {
-    private final List<Ball> balls = new ArrayList<>();
+    private final ObservableList<Ball> balls = FXCollections.observableArrayList();
     private Ball b;
 
     public void removeArrows() {
@@ -33,7 +31,7 @@ public class BallManager {
         balls.add(ball);
     }
 
-    public List<Ball> getBalls() {
+    public ObservableList<Ball> getBalls() {
         return balls;
     }
 }
