@@ -13,6 +13,7 @@ public class Calculator {
     private static MyVector a_R = new MyVector(0,0);
     private static MyVector a_R_H = new MyVector(0,0);
     private static MyVector a_R_G = new MyVector(0,0);
+    private static  MyVector deltas = new MyVector(0,0);
     private static double f_H;
     private static double f_N;
     private static double rk_G;
@@ -60,7 +61,7 @@ public class Calculator {
     //_Calculate_Plane_Parameters_______________________________________________________________________________________
     // Currently overloaded, TODO combine
     public static MyVector calc_s_t_Parameters(Wall w, Ball b) {
-        MyVector deltas = calcDeltas(w, b);
+        deltas = calcDeltas(w, b);
         double s = 2 * (
                 (deltas.x * ( 1 - Math.pow(Math.sin(Math.toRadians( w.getE_alpha() )), 2) ) )
                         /( w.getCollision().getWidth() * Math.cos(Math.toRadians( w.getE_alpha() )) )
@@ -75,7 +76,7 @@ public class Calculator {
         return new MyVector(s,t);
     }
     public static MyVector calc_s_t_Parameters(Wall w, MyVector position) {
-        MyVector deltas = new MyVector(
+        deltas = new MyVector(
                 position.x - w.getPosVec().x,
                 position.y - w.getPosVec().y);
 
@@ -169,7 +170,7 @@ public class Calculator {
 
         b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
         droppedPerpendicular = new MyVector(0,0);
-
+        deltas = new MyVector(0,0);
     }
 
 

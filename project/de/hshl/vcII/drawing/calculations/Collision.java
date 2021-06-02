@@ -142,6 +142,7 @@ public class Collision {
         MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
         b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+
     }
 
     private static void checkCorners(Wall w, Ball b, double e) {

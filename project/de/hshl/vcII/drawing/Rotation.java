@@ -28,7 +28,7 @@ public class Rotation {
         {
             if(w.getSpin() <= -1) { // LINKS
                 w.setOrientation(0);
-                w.setE_alpha(Math.abs(w.getSpin()) * -1); //Math.abs should be redundant
+                w.setE_alpha(Math.abs(w.getSpin())); //Math.abs should be redundant
             }
             else if (w.getSpin() >= 1) { // RECHTS
                 w.setOrientation(1);
