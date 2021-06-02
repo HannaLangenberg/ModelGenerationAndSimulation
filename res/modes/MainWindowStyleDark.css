@@ -72,12 +72,60 @@
 
 
 .button{
-    -fx-text-fill: #505050;
+    -fx-text-fill: #303030;
     -fx-background-color: #808080;
 }
 
 .button:hover{
     -fx-text-fill: #FEFEFE;
+    -fx-background-color: #8080B0;
+}
+
+
+
+.text-field {
+     -fx-background-color: #505050;
+     -fx-text-fill: FEFEFE
+}
+
+
+
+.slider > .track {
+     -fx-background-color: #808080;
+}
+
+.slider > .thumb {
+     -fx-background-color: #FEFEFE;
+}
+
+.slider:hover > .thumb {
+     -fx-border-radius: 4;
+     -fx-border-color: #1999C9
+}
+
+.slider:selected > .thumb {
+     -fx-border-radius: 4;
+     -fx-border-color: #1999C9
+}
+
+
+
+.combo-box{
+    -fx-background-color: #808080;
+    -fx-text-fill: #303030;
+}
+
+.combo-box-popup .list-view{
+    -fx-background-color: #808080;
+    -fx-text-fill: #303030;
+}
+
+.combo-box-popup .list-cell{
+    -fx-background-color: #808080;
+    -fx-text-fill: #303030;
+}
+
+.combo-box-popup .list-cell:hover{
     -fx-background-color: #8080B0;
 }
 
@@ -109,7 +157,7 @@
 }
 
 .table-view .column-header-background .label {
-    -fx-text-fill: #FEFEFE;
+    -fx-text-fill: #303030;
 }
 
 .table-view .table-cell {

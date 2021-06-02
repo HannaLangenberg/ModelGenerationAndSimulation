@@ -1,8 +1,6 @@
 package project.de.hshl.vcII.mvc;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -45,7 +43,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius;
     @FXML
-    private Button btn_start_stop, btn_showCurrentParams;
+    private Button btn_start_stop;
     @FXML
     private Polygon d_play;
     @FXML
@@ -53,13 +51,9 @@ public class MainWindowController implements Initializable {
     @FXML
     private HBox hHeader, hb_pause;
     @FXML
-    private VBox vb_displayCurrentParams, vSettingspane;
-    @FXML
-    private BorderPane bp_borderPane;
+    private VBox vb_displayCurrentParams;
     @FXML
     private GridPane gp_Wind;
-    @FXML
-    private FlowPane fpActiveControls;
     @FXML
     private ComboBox<String> cb_choose;
     @FXML
@@ -136,6 +130,7 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
+        activateLists();
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
@@ -144,6 +139,7 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(w);
         mainWindowModel.getWallManager().setW(w);
         mainWindowModel.getBallManager().setB(null);
+        activateLists();
     }
 
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
@@ -259,8 +255,6 @@ public class MainWindowController implements Initializable {
                     // Was 'W' previously pressed
                     mainWindowModel.getKeyManager().manageMouse(e);
                 break;
-            case MIDDLE:
-                activateLists();
         }
     }
 
@@ -466,6 +460,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void cb_choose() {
+        if(cb_choose.getValue() == null) return;
         mainWindowModel.getKeyManager().choose(cb_choose.getValue());
     }
 }
