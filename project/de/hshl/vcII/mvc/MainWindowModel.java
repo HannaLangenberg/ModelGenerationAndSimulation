@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import project.de.hshl.vcII.drawing.Placer;
 import project.de.hshl.vcII.drawing.Rotation;
 import project.de.hshl.vcII.drawing.Simulator;
+import project.de.hshl.vcII.entities.stationary.ScissorsManager;
 import project.de.hshl.vcII.entities.stationary.WallManager;
 
 /**
@@ -28,6 +29,7 @@ public class MainWindowModel {
     private KeyManager keyManager;
     private WallManager wallManager;
     private BallManager ballManager;
+    private ScissorsManager scissorsManager;
     private Mode mode;
     private Placer placer;
     private Grid grid;
@@ -57,8 +59,9 @@ public class MainWindowModel {
 
     // To initialise all Objects
     public void init(AnchorPane aDrawingPane){
-        wallManager = new WallManager();
         ballManager = new BallManager();
+        wallManager = new WallManager();
+        scissorsManager = new ScissorsManager();
         keyManager = new KeyManager();
         simulator = new Simulator();
         placer = new Placer();
@@ -89,6 +92,10 @@ public class MainWindowModel {
 
     public BallManager getBallManager() {
         return ballManager;
+    }
+
+    public ScissorsManager getScissorsManager() {
+        return scissorsManager;
     }
 
     public Mode getMode() {

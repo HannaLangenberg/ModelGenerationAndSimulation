@@ -6,15 +6,17 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
 import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
-public class Ball extends Circle {
+public class Ball extends Ellipse {
     private static final double RADIUS = 25, MASS = 2.75;
 
     private DoubleProperty mass;
+    private DoubleProperty radius;
     private MyVector posVec;
     private MyVector velVec;
     private MyVector vel0Vec;
@@ -42,7 +44,7 @@ public class Ball extends Circle {
 
     public Ball() {
         this.mass = new SimpleDoubleProperty(MASS);
-        this.setRadius(RADIUS);
+        this.radius = new SimpleDoubleProperty(RADIUS);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
         this.setStrokeWidth(5);
@@ -58,8 +60,10 @@ public class Ball extends Circle {
         this.accVec = accVec;
         this.frcVec = frcVec;
         setFrcVec(new MyVector(0.24, 0.18)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
-        setRadius(radius);
+        //setRadius(radius);
         this.mass = new SimpleDoubleProperty(mass);
+        this.radius = new SimpleDoubleProperty(radius);
+        this.setRadius(radius);
         this.setStrokeWidth(5);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
@@ -147,6 +151,19 @@ public class Ball extends Circle {
     }
     public DoubleProperty massProperty() {
         return mass;
+    }
+
+    public void setRadius(double radius) {
+        this.radius.set(radius);
+        this.setRadiusX(radius);
+        this.setRadiusY(radius);
+    }
+
+    public double getRadius() {
+        return radius.get();
+    }
+    public DoubleProperty radiusProperty() {
+        return radius;
     }
 
     public void setColliding(boolean colliding) {

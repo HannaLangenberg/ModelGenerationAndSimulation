@@ -1,8 +1,11 @@
 package project.de.hshl.vcII.drawing;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import javafx.scene.input.MouseEvent;
@@ -14,13 +17,15 @@ import java.util.List;
  * Placer is for placing the bocks, the sphere, and all Entities added.
  */
 public class Placer {
-    private Wall wall;
     private Ball ball;
+    private Wall wall;
+    private Scissors scissors;
     private MainWindowModel mainWindowModel = MainWindowModel.get();
     private double epsilon = 5;
     private MyVector s_t_parameters;
 
-    private double x, y;
+
+    private double x, y, xStart, yStart, xEnd, yEnd;
 
     private double snapBallOnWall(Wall w, Ball b, MyVector mouse){
         //-Snap Ball to wall's surface if close enough
@@ -95,15 +100,64 @@ public class Placer {
         } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
             wall = (Wall) mainWindowModel.getCurrentlySelected();
             if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
-                wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x,y))));
+                wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x, y))));
                 wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
                 mainWindowModel.getWallManager().addWall(wall);
                 mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
                 mainWindowModel.setCurrentlySelected(wall);
             } else {
-                wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x,y))));
+                wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x, y))));
             }
         }
+    }
+
+    public void onMousePressed(MouseEvent e) {
+        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+            xStart =  xEnd = e.getX();
+            yStart =  yEnd = e.getY();
+            scissors = new Scissors();
+            redrawLines_s();
+        }
+    }
+
+    public void onMouseDragged(MouseEvent e) {
+        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+            xEnd = e.getX();
+            yEnd = e.getY();
+            redrawLines_s();
+        }
+    }
+
+    public void onMouseReleased(MouseEvent e) {
+        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+            xEnd = e.getX();
+            yEnd = e.getY();
+            drawLines_s();
+        }
+    }
+
+    public void redrawLines_s() {
+        mainWindowModel.getADrawingPane().getChildren().remove(scissors);
+        scissors.setWidth(xEnd - xStart);
+        scissors.setHeight(yEnd - yStart); // aufziehen nach links
+        scissors.setPosVec(new MyVector(xStart, yStart));
+        mainWindowModel.getADrawingPane().getChildren().add(scissors);
+    }
+
+    public void drawLines_s() {
+        mainWindowModel.getScissorsManager().setS(scissors);
+        mainWindowModel.getScissorsManager().getScissorsList().add(scissors);
+        mainWindowModel.setCurrentlySelected(scissors);
+        mainWindowModel.getADrawingPane().getChildren().remove(scissors);
+        mainWindowModel.getADrawingPane().getChildren().add(scissors);
+    }
+
+    public Scissors getScissors() {
+        return scissors;
+    }
+
+    public void setScissors(Scissors scissors) {
+        this.scissors = scissors;
     }
 
     public Ball getBall() {
@@ -125,4 +179,5 @@ public class Placer {
     public void setY(double y) {
         this.y = y;
     }
+
 }

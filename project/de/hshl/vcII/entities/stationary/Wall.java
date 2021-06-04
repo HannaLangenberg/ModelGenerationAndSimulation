@@ -17,7 +17,6 @@ public class Wall {
     private ImageView viewTexture;
     private Rectangle collision;
     private MyVector posVec;
-    private MyVector centerPoint;
     private double e_alpha;
     private double spin;
     private int number;
@@ -32,26 +31,9 @@ public class Wall {
         orientation = 2;
     }
 
-    public void calcCenterPoint(Wall w) {
-        if(w.getCollision().getRotate() != 0) {
-            double x = w.getCollision().getX() + ( w.getCollision().getWidth() * Math.cos(Math.toRadians(w.getCollision().getRotate()) + w.getCollision().getHeight() * Math.sin(Math.toRadians(w.getCollision().getRotate()))))/2;
-            double y = w.getCollision().getY() + ( w.getCollision().getWidth() * Math.sin(Math.toRadians(w.getCollision().getRotate()) *-1 + w.getCollision().getHeight() * Math.cos(Math.toRadians(w.getCollision().getRotate()))))/2;
-
-            setCenterPoint(new MyVector(x,y));
-        }
-        setCenterPoint(new MyVector(w.getCollision().getX() + w.getCollision().getWidth()/2, w.getCollision().getY() + w.getCollision().getHeight()/2));
-    }
-
 
 
     //----Getter-&-Setter-----------------------------------------------------------------------------------------------
-    public void setCenterPoint(MyVector centerPoint) {
-        this.centerPoint = centerPoint;
-    }
-    public MyVector getCenterPoint() {
-        return centerPoint;
-    }
-
     public Rectangle getCollision(){
         return collision;
     }
@@ -66,7 +48,6 @@ public class Wall {
         viewTexture.setY(posVec.y - collision.getHeight()/2);
         collision.setX(posVec.x - collision.getWidth()/2);
         collision.setY(posVec.y - collision.getHeight()/2);
-        calcCenterPoint(this);
     }
     public MyVector getPosVec() {
         return posVec;

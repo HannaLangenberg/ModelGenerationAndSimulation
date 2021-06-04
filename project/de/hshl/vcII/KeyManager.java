@@ -72,6 +72,10 @@ public class KeyManager {
                 // The chosen block is rotated right
                 if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) mainWindowModel.getCurrentlySelected());
                 break;
+            case S:
+                //close scissors
+
+                break;
             case DELETE:
                 // The chosen block is deleted
                 if(mainWindowModel.isChoiceMade()) deleteBlockOrWall();

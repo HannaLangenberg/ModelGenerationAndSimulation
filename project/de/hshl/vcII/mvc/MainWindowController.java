@@ -9,6 +9,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 
 import project.de.hshl.vcII.mvc.view.ResizePane;
@@ -113,6 +114,7 @@ public class MainWindowController implements Initializable {
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().clear();
         mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
+        mainWindowModel.getScissorsManager().getScissorsList().removeAll(mainWindowModel.getScissorsManager().getScissorsList());
         mainWindowModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
@@ -130,6 +132,7 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
+        mainWindowModel.getScissorsManager().setS(null);
         activateLists();
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
@@ -139,6 +142,17 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(w);
         mainWindowModel.getWallManager().setW(w);
         mainWindowModel.getBallManager().setB(null);
+        mainWindowModel.getScissorsManager().setS(null);
+        activateLists();
+    }
+    // Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
+    @FXML
+    private void choiceSchere(){
+        Scissors g = new Scissors();
+        mainWindowModel.setCurrentlySelected(g);
+        mainWindowModel.getScissorsManager().setS(g);
+        mainWindowModel.getBallManager().setB(null);
+        mainWindowModel.getWallManager().setW(null);
         activateLists();
     }
 
@@ -257,6 +271,22 @@ public class MainWindowController implements Initializable {
                 break;
         }
     }
+    @FXML
+    private void onMousePressed(MouseEvent e){
+        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+            mainWindowModel.getPlacer().onMousePressed(e);
+    }
+    @FXML
+    private void onMouseDragged(MouseEvent e) {
+        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+            mainWindowModel.getPlacer().onMouseDragged(e);
+    }
+    @FXML
+    private void onMouseReleased(MouseEvent e) {
+        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+            mainWindowModel.getPlacer().onMouseReleased(e);
+    }
+
 
     // Is called whenever a key is pressed.
     @FXML
@@ -447,14 +477,21 @@ public class MainWindowController implements Initializable {
         mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
             cb_update();
         });
+        mainWindowModel.getScissorsManager().getScissorsList().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
     }
     public void cb_update() {
         cb_choose.getItems().clear();
-         for (Wall w : mainWindowModel.getWallManager().getWalls())
-            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
-
         for (Ball b : mainWindowModel.getBallManager().getBalls())
             cb_choose.getItems().add("Ball Nummer " + b.getNumber());
+
+        for (Wall w : mainWindowModel.getWallManager().getWalls())
+            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
+
+        for (Scissors s : mainWindowModel.getScissorsManager().getScissorsList())
+            cb_choose.getItems().add("Schere");
+
 
         cb_choose.setValue(cb_choose.getItems().get(0));
     }
@@ -463,4 +500,5 @@ public class MainWindowController implements Initializable {
         if(cb_choose.getValue() == null) return;
         mainWindowModel.getKeyManager().choose(cb_choose.getValue());
     }
+
 }
