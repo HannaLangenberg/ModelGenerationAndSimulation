@@ -2,6 +2,7 @@ package project.de.hshl.vcII;
 
 import javafx.scene.shape.StrokeType;
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import javafx.scene.input.KeyCode;
@@ -42,6 +43,18 @@ public class KeyManager {
                 }
             }
         }
+        for(Scissors s : mainWindowModel.getScissorsManager().getScissorsList()){
+            if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getWidth(), s.getHeight())){
+                mark(s);
+                mainWindowModel.setChoiceMade(true);
+                mainWindowModel.setCurrentlySelected(s);
+                mainWindowModel.getScissorsManager().setS(s);
+                if(!mainWindowModel.getADrawingPane().getChildren().contains(s)) {
+                    mainWindowModel.getADrawingPane().getChildren().add(s);
+                    return;
+                }
+            }
+        }
         MyVector clickHitBox = new MyVector(e.getX(), e.getY());
         for(Ball b : mainWindowModel.getBallManager().getBalls()){
             if(MyVector.distance(clickHitBox, b.getPosVec()) < b.getRadius()){
@@ -67,10 +80,12 @@ public class KeyManager {
             case E:
                 // The chosen block is rotated left
                 if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateRight((Wall) mainWindowModel.getCurrentlySelected());
+                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainWindowModel.get().getSpin().rotateRight((Scissors) mainWindowModel.getCurrentlySelected());
                 break;
             case Q:
                 // The chosen block is rotated right
                 if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) mainWindowModel.getCurrentlySelected());
+                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainWindowModel.get().getSpin().rotateLeft((Scissors) mainWindowModel.getCurrentlySelected());
                 break;
             case S:
                 //close scissors
@@ -100,6 +115,9 @@ public class KeyManager {
                         mainWindowModel.setCurrentlySelected(w);
                     }
                 }
+            }else {
+                mainWindowModel.setCurrentlySelected(mainWindowModel.getScissorsManager().getS());
+
             }
             mainWindowModel.setChoiceMade(true);
         }else{
@@ -114,11 +132,16 @@ public class KeyManager {
             ((Ball) o).setStrokeType(StrokeType.OUTSIDE);
             ((Ball) o).setStrokeWidth(2);
             ((Ball) o).setStroke(new Color(0, 0.8, 0, 1));
-        } else{
+        } else if (o instanceof Wall){
             ((Wall) o).getCollision().setStrokeType(StrokeType.OUTSIDE);
             ((Wall) o).getCollision().setStrokeWidth(2);
             ((Wall) o).getCollision().setStroke(new Color(0, 0.8, 0, 1));
             ((Wall) o).getCollision().setFill(Color.TRANSPARENT);
+        } else if (o instanceof Scissors){
+            ((Scissors) o).setStrokeType(StrokeType.OUTSIDE);
+            ((Scissors) o).setStrokeWidth(2);
+            ((Scissors) o).setStroke(new Color(0, 0.8, 0, 1));
+            ((Scissors) o).setFill(Color.TRANSPARENT);
         }
     }
 
@@ -130,6 +153,8 @@ public class KeyManager {
             ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeWidth(5);
             ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeType(StrokeType.CENTERED);
         }
+        else if(mainWindowModel.getCurrentlySelected() instanceof Scissors)
+            ((Scissors) mainWindowModel.getCurrentlySelected()).setStrokeWidth(0);
         mainWindowModel.setChoiceMade(false);
     }
 

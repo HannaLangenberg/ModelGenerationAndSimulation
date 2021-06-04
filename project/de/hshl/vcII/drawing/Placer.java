@@ -137,19 +137,19 @@ public class Placer {
     }
 
     public void redrawLines_s() {
-        mainWindowModel.getADrawingPane().getChildren().remove(scissors);
+        mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
         scissors.setWidth(xEnd - xStart);
         scissors.setHeight(yEnd - yStart); // aufziehen nach links
         scissors.setPosVec(new MyVector(xStart, yStart));
-        mainWindowModel.getADrawingPane().getChildren().add(scissors);
+        mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
     }
 
     public void drawLines_s() {
         mainWindowModel.getScissorsManager().setS(scissors);
         mainWindowModel.getScissorsManager().getScissorsList().add(scissors);
         mainWindowModel.setCurrentlySelected(scissors);
-        mainWindowModel.getADrawingPane().getChildren().remove(scissors);
-        mainWindowModel.getADrawingPane().getChildren().add(scissors);
+        mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
+        mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
     }
 
     public Scissors getScissors() {

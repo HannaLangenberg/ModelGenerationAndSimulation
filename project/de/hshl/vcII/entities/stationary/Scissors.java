@@ -9,6 +9,16 @@ import project.de.hshl.vcII.utils.MyVector;
 public class Scissors extends Rectangle {
     private Line leftLine;
     private Line rightLine;
+    private Group g;
+
+    public Group getG() {
+        return g;
+    }
+
+    public void setG(Group g) {
+        this.g = g;
+    }
+
     private MyVector posVec; //upper left corner
     private MyVector centerPoint; //middle of rectangle
     private double e_alpha;
@@ -21,10 +31,14 @@ public class Scissors extends Rectangle {
         this.setFill(Color.TRANSPARENT);
         this.setStroke(Color.DARKGRAY);
         this.getStrokeDashArray().addAll(3d, 10d);
-        leftLine = new Line();
-        rightLine = new Line();
+        this.leftLine = new Line();
+        this.rightLine = new Line();
         initializeLines();
+        g = new Group();
+        g.getChildren().addAll(this, leftLine, rightLine);
     }
+
+
     private void initializeLines() {
         leftLine.setStroke(Color.GREEN);
         leftLine.setStrokeWidth(3);
@@ -56,7 +70,23 @@ public class Scissors extends Rectangle {
         calcCenterPoint();
     }
 
-    private void updateLines() {
+    public Line getLeftLine() {
+        return leftLine;
+    }
+
+    public void setLeftLine(Line leftLine) {
+        this.leftLine = leftLine;
+    }
+
+    public Line getRightLine() {
+        return rightLine;
+    }
+
+    public void setRightLine(Line rightLine) {
+        this.rightLine = rightLine;
+    }
+
+    public void updateLines() {
         leftLine.setStartX(getX());
         leftLine.setStartY(getY());
         leftLine.setEndX(getX() + 3.0/4 * getWidth());
