@@ -1,10 +1,13 @@
 package project.de.hshl.vcII.entities.stationary;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Scissors {
@@ -12,14 +15,12 @@ public class Scissors {
     private Line leftLine;
     private Line rightLine;
     private final Group g;
-
     public Group getG() {
         return g;
     }
-
     private MyVector posVec; //upper left corner
     private MyVector centerPoint; //middle of rectangle
-    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint;
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint, directionalVector;
 
     private double e_alpha;
     private double spin;
@@ -36,6 +37,27 @@ public class Scissors {
         g = new Group();
         g.getChildren().addAll(rectangle, leftLine, rightLine);
     }
+    private void initializeLines() {
+        leftLine.setStroke(Color.GREEN);
+        leftLine.setStrokeWidth(3);
+        rightLine.setStroke(Color.GREEN);
+        rightLine.setStrokeWidth(3);
+        updateLines();
+    }
+    public void updateLines() {
+        applyRotation();
+
+        leftLine.setStartX(upperLeft.x);
+        leftLine.setStartY(upperLeft.y);
+        leftLine.setEndX(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x));
+        leftLine.setEndY(lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y));
+
+        rightLine.setStartX(upperRight.x);
+        rightLine.setStartY(upperRight.y);
+        rightLine.setEndX(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x));
+        rightLine.setEndY(lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y));
+    }
+
     public void setUnmarkedStroke() {
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStroke(Color.DARKGRAY);
@@ -45,12 +67,6 @@ public class Scissors {
         rectangle.setStrokeType(StrokeType.OUTSIDE);
         rectangle.setStroke(new Color(0, 0.8, 0, 1));
         rectangle.setStrokeWidth(2);
-    }
-    public void calcCrossingPoint() {
-        updateLines();
-        double x = leftLine.getStartX() + 0.67 * (leftLine.getEndX() - leftLine.getStartX());
-        double y = leftLine.getStartY() + 0.67 * (leftLine.getEndY() - leftLine.getStartY());
-        crossingPoint = new MyVector(x,y);
     }
 
     public void applyRotation() {
@@ -68,18 +84,12 @@ public class Scissors {
                 rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
     }
 
-    private void initializeLines() {
-        leftLine.setStroke(Color.GREEN);
-        leftLine.setStrokeWidth(3);
-        rightLine.setStroke(Color.GREEN);
-        rightLine.setStrokeWidth(3);
+    public void calcCrossingPoint() {
         updateLines();
+        double x = leftLine.getStartX() + 0.67 * (leftLine.getEndX() - leftLine.getStartX());
+        double y = leftLine.getStartY() + 0.67 * (leftLine.getEndY() - leftLine.getStartY());
+        crossingPoint = new MyVector(x,y);
     }
-
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
-
     public void calcCenterPoint() {
         if(rectangle.getRotate() != 0) {
             double x = rectangle.getX() + (rectangle.getWidth() * Math.cos(Math.toRadians(rectangle.getRotate()) + rectangle.getHeight() * Math.sin(Math.toRadians(rectangle.getRotate()))))/2;
@@ -90,8 +100,48 @@ public class Scissors {
         setCenterPoint(new MyVector(rectangle.getX() + rectangle.getWidth()/2, rectangle.getY() + rectangle.getHeight()/2));
     }
 
-    public MyVector getPosVec() {
-        return posVec;
+    public void calcDirectionalVector() {
+        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, upperLeft));
+    }
+
+    public void draw(AnchorPane aDrawingPane) {
+        Platform.runLater(() -> {
+            aDrawingPane.getChildren().remove(g);
+            aDrawingPane.getChildren().add(g);
+        });
+    }
+
+    //_GETTER_&_SETTER__________________________________________________________________________________________________
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setCenterPoint(MyVector centerPoint) {
+        this.centerPoint = centerPoint;
+    }
+    public MyVector getCenterPoint() {
+        return centerPoint;
+    }
+
+    public void setE_alpha(double e_alpha) {
+        this.e_alpha = e_alpha;
+    }
+    public double getE_alpha() {
+        return e_alpha;
+    }
+
+    public void setSpin(double spin) {
+        this.spin = spin;
+    }
+    public double getSpin() {
+        return spin;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+    public int getOrientation() {
+        return orientation;
     }
 
     public void setPosVec(MyVector posVec) {
@@ -101,67 +151,21 @@ public class Scissors {
         updateLines();
         calcCenterPoint();
     }
-
-    public Line getLeftLine() {
-        return leftLine;
+    public MyVector getPosVec() {
+        return posVec;
     }
 
     public void setLeftLine(Line leftLine) {
         this.leftLine = leftLine;
     }
-
-    public Line getRightLine() {
-        return rightLine;
+    public Line getLeftLine() {
+        return leftLine;
     }
 
     public void setRightLine(Line rightLine) {
         this.rightLine = rightLine;
     }
-
-    public void updateLines() {
-        applyRotation();
-
-        leftLine.setStartX(upperLeft.x);
-        leftLine.setStartY(upperLeft.y);
-        leftLine.setEndX(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x));
-        leftLine.setEndY(lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y));
-
-        rightLine.setStartX(upperRight.x);
-        rightLine.setStartY(upperRight.y);
-        rightLine.setEndX(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x));
-        rightLine.setEndY(lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y));
+    public Line getRightLine() {
+        return rightLine;
     }
-
-    public MyVector getCenterPoint() {
-        return centerPoint;
-    }
-
-    public void setCenterPoint(MyVector centerPoint) {
-        this.centerPoint = centerPoint;
-    }
-
-    public double getE_alpha() {
-        return e_alpha;
-    }
-
-    public void setE_alpha(double e_alpha) {
-        this.e_alpha = e_alpha;
-    }
-
-    public double getSpin() {
-        return spin;
-    }
-
-    public void setSpin(double spin) {
-        this.spin = spin;
-    }
-
-    public int getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
-    }
-
 }
