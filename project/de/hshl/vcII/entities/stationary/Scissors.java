@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.transform.Rotate;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
@@ -20,22 +21,34 @@ public class Scissors {
     }
     private MyVector posVec; //upper left corner
     private MyVector centerPoint; //middle of rectangle
-    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint, directionalVector;
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint, directionalVector, llStart, rlStart, llVector, rlVector;
+    private static double angle;
 
     private double e_alpha;
     private double spin;
     private int orientation;
 
+    public boolean isClosing() {
+        return closing;
+    }
+
+    public void setClosing(boolean closing) {
+        this.closing = closing;
+    }
+
+    private boolean closing = false;
+
     public Scissors() {
-        posVec = new MyVector(0,0);
-        orientation = 2;
+        rectangle = new Rectangle();
         leftLine = new Line();
         rightLine = new Line();
-        rectangle = new Rectangle();
+        g = new Group();
+        posVec = new MyVector(0,0);
+        orientation = 2;
         setUnmarkedStroke();
         initializeLines();
-        g = new Group();
         g.getChildren().addAll(rectangle, leftLine, rightLine);
+        closing = false;
     }
     private void initializeLines() {
         leftLine.setStroke(Color.GREEN);
@@ -45,7 +58,7 @@ public class Scissors {
         updateLines();
     }
     public void updateLines() {
-        applyRotation();
+        applyRotation(0);
 
         leftLine.setStartX(upperLeft.x);
         leftLine.setStartY(upperLeft.y);
@@ -69,26 +82,36 @@ public class Scissors {
         rectangle.setStrokeWidth(2);
     }
 
-    public void applyRotation() {
-        upperLeft  = new MyVector(
-                rectangle.localToParent(rectangle.getX(), rectangle.getY()).getX(),
-                rectangle.localToParent(rectangle.getX(), rectangle.getY()).getY());
-        upperRight = new MyVector(
-                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
-                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
-        lowerLeft  = new MyVector(
-                rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getX(),
-                rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getY());
-        lowerRight = new MyVector(
-                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
-                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
+    public void applyRotation(int decision) {
+        switch (decision) {
+            case 0:
+                upperLeft  = new MyVector(
+                        rectangle.localToParent(rectangle.getX(), rectangle.getY()).getX(),
+                        rectangle.localToParent(rectangle.getX(), rectangle.getY()).getY());
+                upperRight = new MyVector(
+                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
+                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
+                lowerLeft  = new MyVector(
+                        rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getX(),
+                        rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getY());
+                lowerRight = new MyVector(
+                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
+                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
+                break;
+            case 1:
+                llStart = new MyVector(leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(), leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY());
+                rlStart = new MyVector(rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getX(), rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getY());
+                break;
+        }
     }
 
     public void calcCrossingPoint() {
         updateLines();
-        double x = leftLine.getStartX() + 0.67 * (leftLine.getEndX() - leftLine.getStartX());
-        double y = leftLine.getStartY() + 0.67 * (leftLine.getEndY() - leftLine.getStartY());
+        double x = leftLine.getStartX() + 2.0/3 * (leftLine.getEndX() - leftLine.getStartX());
+        double y = leftLine.getStartY() + 2.0/3 * (leftLine.getEndY() - leftLine.getStartY());
         crossingPoint = new MyVector(x,y);
+//        System.out.println(crossingPoint);
+//        System.out.println(leftLine.toString());
     }
     public void calcCenterPoint() {
         if(rectangle.getRotate() != 0) {
@@ -102,6 +125,23 @@ public class Scissors {
 
     public void calcDirectionalVector() {
         directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, upperLeft));
+    }
+
+    public void animate(AnchorPane aDrawingPane) {
+        applyRotation(1);
+        calcCrossingPoint();
+        llVector = MyVector.subtract(crossingPoint, llStart);
+        rlVector = MyVector.subtract(crossingPoint, rlStart);
+        angle = MyVector.angle(llVector, rlVector);
+        System.out.println(angle);
+        if(angle > 1) {
+            leftLine.getTransforms().add(new Rotate( 1, crossingPoint.x, crossingPoint.y));
+            rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
+        }
+        else
+            setClosing(false);
+
+        draw(aDrawingPane);
     }
 
     public void draw(AnchorPane aDrawingPane) {

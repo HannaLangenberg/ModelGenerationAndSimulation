@@ -16,7 +16,7 @@
      */
     // Calculates the length of a vector
     public static double length(MyVector vec){
-            return Math.sqrt(Math.pow(vec.x, 2) + Math.pow(vec.y, 2));
+            return Math.sqrt(Math.pow(Math.abs(vec.x), 2) + Math.pow(Math.abs(vec.y), 2));
             }
 
     // Calculates the distance between two vectors
@@ -24,7 +24,7 @@
        return Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
     }
 
-    // Calculates the dot product. (vector * vector) (Sklarprodukt)
+    // Calculates the dot product. (vector * vector) (Skalarprodukt)
     public static double dot(MyVector v1, MyVector v2){
         return (v1.x * v2.x) + (v1.y * v2.y);
     }
@@ -36,7 +36,8 @@
 
     // Method for calculating the angle between two 2D vectors.
     public static double angle(MyVector v1, MyVector v2){
-        return Math.acos(Math.abs( dot(v1, v2) ) / Math.abs( length(v1) * length(v2) ));
+//        MyVector dot = dot(v1, v2);
+        return Math.toDegrees(Math.acos( dot(v1, v2) / (length(v1) * length(v2)) ));
     }
 
     // Norm the MyVector vec (make its length 1)

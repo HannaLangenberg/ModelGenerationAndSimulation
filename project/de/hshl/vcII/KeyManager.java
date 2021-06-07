@@ -43,18 +43,18 @@ public class KeyManager {
                 }
             }
         }
-        for(Scissors s : mainWindowModel.getScissorsManager().getScissorsList()){
-            if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getRectangle().getWidth(), s.getRectangle().getHeight())){
-                mark(s);
-                mainWindowModel.setChoiceMade(true);
-                mainWindowModel.setCurrentlySelected(s);
-                mainWindowModel.getScissorsManager().setS(s);
-                if(!mainWindowModel.getADrawingPane().getChildren().contains(s.getRectangle())) {
-                    mainWindowModel.getADrawingPane().getChildren().add(s.getRectangle());
-                    return;
-                }
+        Scissors s = mainWindowModel.getScissorsManager().getS();
+        if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getRectangle().getWidth(), s.getRectangle().getHeight())){
+            mark(s);
+            mainWindowModel.setChoiceMade(true);
+            mainWindowModel.setCurrentlySelected(s);
+            mainWindowModel.getScissorsManager().setS(s);
+            if(!mainWindowModel.getADrawingPane().getChildren().contains(s.getG())) {
+                mainWindowModel.getADrawingPane().getChildren().add(s.getG());
+                return;
             }
         }
+
         MyVector clickHitBox = new MyVector(e.getX(), e.getY());
         for(Ball b : mainWindowModel.getBallManager().getBalls()){
             if(MyVector.distance(clickHitBox, b.getPosVec()) < b.getRadius()){
@@ -89,7 +89,9 @@ public class KeyManager {
                 break;
             case S:
                 //close scissors
-
+                if(!mainWindowModel.isChoiceMade())
+                    ((Scissors) mainWindowModel.getCurrentlySelected()).setClosing(true);
+                    ((Scissors) mainWindowModel.getCurrentlySelected()).getRectangle().setStrokeWidth(0);
                 break;
             case DELETE:
                 // The chosen block is deleted

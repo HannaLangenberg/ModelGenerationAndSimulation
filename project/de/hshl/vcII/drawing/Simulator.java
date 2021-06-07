@@ -3,6 +3,7 @@ package project.de.hshl.vcII.drawing;
 import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +21,7 @@ public class Simulator {
     private boolean running = false;
     private int runSim_called = 0;
     private double epsilon = 5;
+    private Scissors s;
 
     /**
      * Starts and stops simulating.
@@ -55,6 +57,12 @@ public class Simulator {
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }
+
+        s = mainWindowModel.getScissorsManager().getS();
+        if(s != null & s.isClosing()) {
+            s.animate(mainWindowModel.getADrawingPane());
+        }
+
     }
 
     public boolean isRunning() {

@@ -112,9 +112,10 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Clear Screen' is clicked in the 'File' menu
     @FXML
     private void clearScreen() {
-        mainWindowModel.getBallManager().getBalls().clear();
+        mainWindowModel.getBallManager().getBalls().removeAll(mainWindowModel.getBallManager().getBalls());
         mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
-        mainWindowModel.getScissorsManager().getScissorsList().removeAll(mainWindowModel.getScissorsManager().getScissorsList());
+//        mainWindowModel.getScissorsManager().getScissorsList().removeAll(mainWindowModel.getScissorsManager().getScissorsList());
+        mainWindowModel.getScissorsManager().setS(null);
         mainWindowModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
@@ -150,7 +151,7 @@ public class MainWindowController implements Initializable {
     private void choiceSchere(){
         Scissors s = new Scissors();
         mainWindowModel.setCurrentlySelected(s);
-        mainWindowModel.getScissorsManager().setS(s);
+//        mainWindowModel.getScissorsManager().setS(s);
         mainWindowModel.getBallManager().setB(null);
         mainWindowModel.getWallManager().setW(null);
         activateLists();
@@ -273,17 +274,17 @@ public class MainWindowController implements Initializable {
     }
     @FXML
     private void onMousePressed(MouseEvent e){
-        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+        if(mainWindowModel.getScissorsManager().getS() == null)
             mainWindowModel.getPlacer().onMousePressed(e);
     }
     @FXML
     private void onMouseDragged(MouseEvent e) {
-        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+        if(mainWindowModel.getScissorsManager().getS() == null)
             mainWindowModel.getPlacer().onMouseDragged(e);
     }
     @FXML
     private void onMouseReleased(MouseEvent e) {
-        if(mainWindowModel.getScissorsManager().getScissorsList().size() < 1)
+        if(mainWindowModel.getScissorsManager().getS() == null)
             mainWindowModel.getPlacer().onMouseReleased(e);
     }
 

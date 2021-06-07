@@ -145,9 +145,9 @@ public class Placer {
     }
 
     public void drawLines_s() {
-        mainWindowModel.getScissorsManager().setS(scissors);
         scissors.calcCrossingPoint();
-        mainWindowModel.getScissorsManager().getScissorsList().add(scissors);
+        mainWindowModel.getScissorsManager().setS(scissors);
+//        mainWindowModel.getScissorsManager().addScissors(scissors);
         mainWindowModel.setCurrentlySelected(scissors);
         mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
         mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
