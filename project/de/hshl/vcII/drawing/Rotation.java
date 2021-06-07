@@ -17,10 +17,10 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-            s.setRotate(s.getRotate() < 90 ? s.getRotate() - 1 : s.getRotate());
+            s.getRectangle().setRotate(s.getRectangle().getRotate() < 90 ? s.getRectangle().getRotate() - 1 : s.getRectangle().getRotate());
+            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate());
             s.setSpin(s.getSpin() - 1);
             determineOrientation(s);
-            s.updateLines();
         }
     }
 
@@ -36,7 +36,8 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-            s.setRotate(s.getRotate() < 90 ? s.getRotate() + 1 : s.getRotate());
+            s.getRectangle().setRotate(s.getRectangle().getRotate() < 90 ? s.getRectangle().getRotate() + 1 : s.getRectangle().getRotate());
+            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate());
             s.setSpin(s.getSpin() + 1);
             determineOrientation(s);
         }

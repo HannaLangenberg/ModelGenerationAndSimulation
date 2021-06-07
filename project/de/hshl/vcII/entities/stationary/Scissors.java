@@ -4,58 +4,90 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import project.de.hshl.vcII.utils.MyVector;
 
-public class Scissors extends Rectangle {
+public class Scissors {
+    private Rectangle rectangle;
     private Line leftLine;
     private Line rightLine;
-    private Group g;
+    private final Group g;
 
     public Group getG() {
         return g;
     }
 
-    public void setG(Group g) {
-        this.g = g;
-    }
-
     private MyVector posVec; //upper left corner
     private MyVector centerPoint; //middle of rectangle
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint;
+
     private double e_alpha;
     private double spin;
     private int orientation;
 
     public Scissors() {
-        this.posVec = new MyVector(0,0);
-        this.orientation = 2;
-        this.setFill(Color.TRANSPARENT);
-        this.setStroke(Color.DARKGRAY);
-        this.getStrokeDashArray().addAll(3d, 10d);
-        this.leftLine = new Line();
-        this.rightLine = new Line();
+        posVec = new MyVector(0,0);
+        orientation = 2;
+        leftLine = new Line();
+        rightLine = new Line();
+        rectangle = new Rectangle();
+        setUnmarkedStroke();
         initializeLines();
         g = new Group();
-        g.getChildren().addAll(this, leftLine, rightLine);
+        g.getChildren().addAll(rectangle, leftLine, rightLine);
+    }
+    public void setUnmarkedStroke() {
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setStroke(Color.DARKGRAY);
+        rectangle.getStrokeDashArray().addAll(3d, 10d);
+    }
+    public void setMarkedStroke() {
+        rectangle.setStrokeType(StrokeType.OUTSIDE);
+        rectangle.setStroke(new Color(0, 0.8, 0, 1));
+        rectangle.setStrokeWidth(2);
+    }
+    public void calcCrossingPoint() {
+        updateLines();
+        double x = leftLine.getStartX() + 0.67 * (leftLine.getEndX() - leftLine.getStartX());
+        double y = leftLine.getStartY() + 0.67 * (leftLine.getEndY() - leftLine.getStartY());
+        crossingPoint = new MyVector(x,y);
     }
 
+    public void applyRotation() {
+        upperLeft  = new MyVector(
+                rectangle.localToParent(rectangle.getX(), rectangle.getY()).getX(),
+                rectangle.localToParent(rectangle.getX(), rectangle.getY()).getY());
+        upperRight = new MyVector(
+                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
+                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
+        lowerLeft  = new MyVector(
+                rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getX(),
+                rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getY());
+        lowerRight = new MyVector(
+                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
+                rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
+    }
 
     private void initializeLines() {
         leftLine.setStroke(Color.GREEN);
         leftLine.setStrokeWidth(3);
-
         rightLine.setStroke(Color.GREEN);
         rightLine.setStrokeWidth(3);
         updateLines();
     }
 
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
     public void calcCenterPoint() {
-        if(this.getRotate() != 0) {
-            double x = this.getX() + (this.getWidth() * Math.cos(Math.toRadians(this.getRotate()) + this.getHeight() * Math.sin(Math.toRadians(this.getRotate()))))/2;
-            double y = this.getY() + ( this.getWidth() * Math.sin(Math.toRadians(this.getRotate()) *-1 + this.getHeight() * Math.cos(Math.toRadians(this.getRotate()))))/2;
+        if(rectangle.getRotate() != 0) {
+            double x = rectangle.getX() + (rectangle.getWidth() * Math.cos(Math.toRadians(rectangle.getRotate()) + rectangle.getHeight() * Math.sin(Math.toRadians(rectangle.getRotate()))))/2;
+            double y = rectangle.getY() + ( rectangle.getWidth() * Math.sin(Math.toRadians(rectangle.getRotate()) *-1 + rectangle.getHeight() * Math.cos(Math.toRadians(rectangle.getRotate()))))/2;
 
             setCenterPoint(new MyVector(x,y));
         }
-        setCenterPoint(new MyVector(this.getX() + this.getWidth()/2, this.getY() +this.getHeight()/2));
+        setCenterPoint(new MyVector(rectangle.getX() + rectangle.getWidth()/2, rectangle.getY() + rectangle.getHeight()/2));
     }
 
     public MyVector getPosVec() {
@@ -64,8 +96,8 @@ public class Scissors extends Rectangle {
 
     public void setPosVec(MyVector posVec) {
         this.posVec = posVec;
-        this.setX(posVec.x);
-        this.setY(posVec.y);
+        rectangle.setX(posVec.x);
+        rectangle.setY(posVec.y);
         updateLines();
         calcCenterPoint();
     }
@@ -87,15 +119,17 @@ public class Scissors extends Rectangle {
     }
 
     public void updateLines() {
-        leftLine.setStartX(getX());
-        leftLine.setStartY(getY());
-        leftLine.setEndX(getX() + 3.0/4 * getWidth());
-        leftLine.setEndY(getY() + getHeight());
+        applyRotation();
 
-        rightLine.setStartX(getX() + getWidth());
-        rightLine.setStartY(getY());
-        rightLine.setEndX(getX() + 1.0/4 * getWidth());
-        rightLine.setEndY(getY() + getHeight());
+        leftLine.setStartX(upperLeft.x);
+        leftLine.setStartY(upperLeft.y);
+        leftLine.setEndX(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x));
+        leftLine.setEndY(lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y));
+
+        rightLine.setStartX(upperRight.x);
+        rightLine.setStartY(upperRight.y);
+        rightLine.setEndX(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x));
+        rightLine.setEndY(lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y));
     }
 
     public MyVector getCenterPoint() {

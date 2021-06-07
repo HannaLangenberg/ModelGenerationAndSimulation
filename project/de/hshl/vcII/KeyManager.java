@@ -44,13 +44,13 @@ public class KeyManager {
             }
         }
         for(Scissors s : mainWindowModel.getScissorsManager().getScissorsList()){
-            if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getWidth(), s.getHeight())){
+            if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getRectangle().getWidth(), s.getRectangle().getHeight())){
                 mark(s);
                 mainWindowModel.setChoiceMade(true);
                 mainWindowModel.setCurrentlySelected(s);
                 mainWindowModel.getScissorsManager().setS(s);
-                if(!mainWindowModel.getADrawingPane().getChildren().contains(s)) {
-                    mainWindowModel.getADrawingPane().getChildren().add(s);
+                if(!mainWindowModel.getADrawingPane().getChildren().contains(s.getRectangle())) {
+                    mainWindowModel.getADrawingPane().getChildren().add(s.getRectangle());
                     return;
                 }
             }
@@ -138,10 +138,7 @@ public class KeyManager {
             ((Wall) o).getCollision().setStroke(new Color(0, 0.8, 0, 1));
             ((Wall) o).getCollision().setFill(Color.TRANSPARENT);
         } else if (o instanceof Scissors){
-            ((Scissors) o).setStrokeType(StrokeType.OUTSIDE);
-            ((Scissors) o).setStrokeWidth(2);
-            ((Scissors) o).setStroke(new Color(0, 0.8, 0, 1));
-            ((Scissors) o).setFill(Color.TRANSPARENT);
+            ((Scissors) o).setMarkedStroke();
         }
     }
 
@@ -154,7 +151,7 @@ public class KeyManager {
             ((Ball) mainWindowModel.getCurrentlySelected()).setStrokeType(StrokeType.CENTERED);
         }
         else if(mainWindowModel.getCurrentlySelected() instanceof Scissors)
-            ((Scissors) mainWindowModel.getCurrentlySelected()).setStrokeWidth(0);
+            ((Scissors) mainWindowModel.getCurrentlySelected()).setUnmarkedStroke();
         mainWindowModel.setChoiceMade(false);
     }
 

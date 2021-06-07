@@ -148,9 +148,9 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
     @FXML
     private void choiceSchere(){
-        Scissors g = new Scissors();
-        mainWindowModel.setCurrentlySelected(g);
-        mainWindowModel.getScissorsManager().setS(g);
+        Scissors s = new Scissors();
+        mainWindowModel.setCurrentlySelected(s);
+        mainWindowModel.getScissorsManager().setS(s);
         mainWindowModel.getBallManager().setB(null);
         mainWindowModel.getWallManager().setW(null);
         activateLists();
