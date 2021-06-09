@@ -27,15 +27,6 @@ public class Scissors {
     private double e_alpha;
     private double spin;
     private int orientation;
-
-    public boolean isClosing() {
-        return closing;
-    }
-
-    public void setClosing(boolean closing) {
-        this.closing = closing;
-    }
-
     private boolean closing = false;
 
     public Scissors() {
@@ -47,6 +38,7 @@ public class Scissors {
         orientation = 2;
         setUnmarkedStroke();
         initializeLines();
+        calcCrossingPoint();
         g.getChildren().addAll(rectangle, leftLine, rightLine);
         closing = false;
     }
@@ -138,9 +130,9 @@ public class Scissors {
             leftLine.getTransforms().add(new Rotate( 1, crossingPoint.x, crossingPoint.y));
             rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
         }
-        else
+        else {
             setClosing(false);
-
+        }
         draw(aDrawingPane);
     }
 
@@ -154,6 +146,21 @@ public class Scissors {
     //_GETTER_&_SETTER__________________________________________________________________________________________________
     public Rectangle getRectangle() {
         return rectangle;
+    }
+
+    public void setClosing(boolean closing) {
+        this.closing = closing;
+    }
+
+    public static void setCrossingPoint(MyVector crossingPoint) {
+        Scissors.crossingPoint = crossingPoint;
+    }
+    public static MyVector getCrossingPoint() {
+        return crossingPoint;
+    }
+
+    public boolean isClosing() {
+        return closing;
     }
 
     public void setCenterPoint(MyVector centerPoint) {

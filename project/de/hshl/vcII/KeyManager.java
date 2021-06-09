@@ -89,9 +89,10 @@ public class KeyManager {
                 break;
             case S:
                 //close scissors
-                if(!mainWindowModel.isChoiceMade())
-                    ((Scissors) mainWindowModel.getCurrentlySelected()).setClosing(true);
-                    ((Scissors) mainWindowModel.getCurrentlySelected()).getRectangle().setStrokeWidth(0);
+                if(!mainWindowModel.isChoiceMade() & mainWindowModel.getScissorsManager().getS() != null) {
+                    mainWindowModel.getScissorsManager().getS().setClosing(true);
+                    mainWindowModel.getScissorsManager().getS().getRectangle().setStrokeWidth(0);
+                }
                 break;
             case DELETE:
                 // The chosen block is deleted

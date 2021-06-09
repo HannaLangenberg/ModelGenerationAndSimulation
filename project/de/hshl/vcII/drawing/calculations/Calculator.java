@@ -1,6 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
@@ -13,7 +14,7 @@ public class Calculator {
     private static MyVector a_R = new MyVector(0,0);
     private static MyVector a_R_H = new MyVector(0,0);
     private static MyVector a_R_G = new MyVector(0,0);
-    private static  MyVector deltas = new MyVector(0,0);
+    private static MyVector deltas = new MyVector(0,0);
     private static double f_H;
     private static double f_N;
     private static double rk_G;
@@ -21,6 +22,7 @@ public class Calculator {
     private static double f_R_G;
     private static double f_R_max;
     private static double angle_max_H;
+    private static double omega;
 
 
     //_COLLISION________________________________________________________________________________________________________
@@ -92,6 +94,10 @@ public class Calculator {
         );
 
         return new MyVector(s,t);
+    }
+    public static double calcBlade(Scissors s, Ball b) {
+//        omega = (()()+()())/()
+        return 0;
     }
     //_Calculate_deltas_used_in_both_(t_&_s)____________________________________________________________________________
     private static MyVector calcDeltas(Wall w, Ball b) {

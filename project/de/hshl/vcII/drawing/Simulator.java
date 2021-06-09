@@ -61,6 +61,7 @@ public class Simulator {
         s = mainWindowModel.getScissorsManager().getS();
         if(s != null & s.isClosing()) {
             s.animate(mainWindowModel.getADrawingPane());
+
         }
 
     }

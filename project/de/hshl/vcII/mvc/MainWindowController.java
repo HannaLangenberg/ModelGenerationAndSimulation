@@ -133,7 +133,6 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
-        mainWindowModel.getScissorsManager().setS(null);
         activateLists();
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
@@ -143,7 +142,6 @@ public class MainWindowController implements Initializable {
         mainWindowModel.setCurrentlySelected(w);
         mainWindowModel.getWallManager().setW(w);
         mainWindowModel.getBallManager().setB(null);
-        mainWindowModel.getScissorsManager().setS(null);
         activateLists();
     }
     // Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
@@ -478,9 +476,9 @@ public class MainWindowController implements Initializable {
         mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
             cb_update();
         });
-        mainWindowModel.getScissorsManager().getScissorsList().addListener((InvalidationListener) observable -> {
+        /*mainWindowModel.getScissorsManager().getScissorsList().addListener((InvalidationListener) observable -> {
             cb_update();
-        });
+        });*/
     }
     public void cb_update() {
         cb_choose.getItems().clear();
@@ -490,7 +488,7 @@ public class MainWindowController implements Initializable {
         for (Wall w : mainWindowModel.getWallManager().getWalls())
             cb_choose.getItems().add("Wand Nummer " + w.getNumber());
 
-        for (Scissors s : mainWindowModel.getScissorsManager().getScissorsList())
+        if(mainWindowModel.getScissorsManager().getS() != null)
             cb_choose.getItems().add("Schere");
 
 

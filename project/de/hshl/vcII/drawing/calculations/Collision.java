@@ -1,6 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
@@ -128,6 +129,11 @@ public class Collision {
         possibleCorner = new MyVector(0,0);
         s = -5;
         t = -5;
+    }
+
+    //_Ball_And_Wall_Collision__________________________________________________________________________________________
+    public static void checkScissors(Scissors s, Ball b, double e) {
+
     }
 
     //_Split_and_rearrange_velocity_vector_using_orthogonal_projection__________________________________________________
