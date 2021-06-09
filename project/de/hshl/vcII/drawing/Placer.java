@@ -138,8 +138,8 @@ public class Placer {
 
     public void redrawLines_s() {
         mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
-        scissors.getRectangle().setWidth(xEnd - xStart);
-        scissors.getRectangle().setHeight(yEnd - yStart);
+        scissors.getRectangle().setWidth(Math.abs(xEnd - xStart));
+        scissors.getRectangle().setHeight(Math.abs(yEnd - yStart));
         scissors.setPosVec(new MyVector(xStart, yStart));
         mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
     }

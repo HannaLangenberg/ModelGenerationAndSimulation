@@ -1,5 +1,6 @@
 package project.de.hshl.vcII.drawing;
 
+import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.drawing.calculations.Collision;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.entities.moving.Ball;
@@ -53,15 +54,17 @@ public class Simulator {
             Movement.calcAcceleration(b);
             Movement.checkCollisions(b, epsilon);
             Collision.checkBalls(b, epsilon);
+            Collision.checkScissors(b, epsilon);
             Movement.calcVelocity(b);
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }
 
-        s = mainWindowModel.getScissorsManager().getS();
-        if(s != null & s.isClosing()) {
-            s.animate(mainWindowModel.getADrawingPane());
-
+        if(mainWindowModel.getScissorsManager().getS() != null) {
+            s = mainWindowModel.getScissorsManager().getS();
+            if (s.isClosing()) {
+                s.animate(mainWindowModel.getADrawingPane());
+            }
         }
 
     }

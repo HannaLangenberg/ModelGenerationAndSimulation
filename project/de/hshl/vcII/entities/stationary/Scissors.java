@@ -20,8 +20,8 @@ public class Scissors {
         return g;
     }
     private MyVector posVec; //upper left corner
-    private MyVector centerPoint; //middle of rectangle
-    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, crossingPoint, directionalVector, llStart, rlStart, llVector, rlVector;
+    private MyVector centerPoint, crossingPoint; //middle of rectangle
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llStart, rlStart, llVector, rlVector;
     private static double angle;
 
     private double e_alpha;
@@ -43,7 +43,7 @@ public class Scissors {
         closing = false;
     }
     private void initializeLines() {
-        leftLine.setStroke(Color.GREEN);
+        leftLine.setStroke(Color.NAVY);
         leftLine.setStrokeWidth(3);
         rightLine.setStroke(Color.GREEN);
         rightLine.setStrokeWidth(3);
@@ -152,10 +152,10 @@ public class Scissors {
         this.closing = closing;
     }
 
-    public static void setCrossingPoint(MyVector crossingPoint) {
-        Scissors.crossingPoint = crossingPoint;
+    public void setCrossingPoint(MyVector crossingPoint) {
+        this.crossingPoint = crossingPoint;
     }
-    public static MyVector getCrossingPoint() {
+    public MyVector getCrossingPoint() {
         return crossingPoint;
     }
 

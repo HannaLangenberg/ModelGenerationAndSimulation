@@ -3,7 +3,6 @@ package project.de.hshl.vcII.drawing.calculations;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -22,7 +21,7 @@ public class Calculator {
     private static double f_R_G;
     private static double f_R_max;
     private static double angle_max_H;
-    private static double omega;
+    private static double lambda, rho;
 
 
     //_COLLISION________________________________________________________________________________________________________
@@ -95,9 +94,13 @@ public class Calculator {
 
         return new MyVector(s,t);
     }
-    public static double calcBlade(Scissors s, Ball b) {
-//        omega = (()()+()())/()
-        return 0;
+    public static MyVector calcBlade(Scissors s, Ball b, MyVector left, MyVector right) {
+        lambda = ((s.getCrossingPoint().x - b.getPosVec().x)*(left.x - s.getCrossingPoint().x)+(s.getCrossingPoint().y - b.getPosVec().y)*(left.y - s.getCrossingPoint().y))
+                /(-Math.pow((left.x-s.getCrossingPoint().x), 2) - Math.pow((left.y - s.getCrossingPoint().y), 2));
+        rho    = ((s.getCrossingPoint().x - b.getPosVec().x)*(right.x - s.getCrossingPoint().x)+(s.getCrossingPoint().y - b.getPosVec().y)*(right.y - s.getCrossingPoint().y))
+                /(-Math.pow((right.x-s.getCrossingPoint().x), 2) - Math.pow((right.y - s.getCrossingPoint().y), 2));
+
+        return new MyVector(lambda, rho);
     }
     //_Calculate_deltas_used_in_both_(t_&_s)____________________________________________________________________________
     private static MyVector calcDeltas(Wall w, Ball b) {
@@ -148,6 +151,13 @@ public class Calculator {
 
         return new MyVector(x,y);
     }
+    public static MyVector calcCoord_onBlade(Scissors s, double omega, MyVector line) {
+        return MyVector.add(s.getCrossingPoint(), MyVector.multiply(MyVector.subtract(s.getCrossingPoint(), line), omega));
+    }
+    public static MyVector calcMissingXCoordinate(Scissors s, Ball b, double omega, MyVector line) {
+        double x = s.getCrossingPoint().x + ((b.getPosVec().y - s.getCrossingPoint().y)/(line.y - s.getCrossingPoint().y))*(line.x - s.getCrossingPoint().x);
+        return new MyVector(x, b.getPosVec().y);
+    }
 
     //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
     public static boolean checkDistance(Ball b, double epsilon, boolean sidesHit) {
@@ -161,6 +171,13 @@ public class Calculator {
     }
     public static boolean checkDistance(Ball b, MyVector wCoord, double epsilon) {
         return MyVector.distance(b.getPosVec(), wCoord) <= b.getRadius() + epsilon;
+    }
+    public static int checkPosition(Ball b, MyVector hc) {
+        if(b.getPosVec().x < hc.x) // Links
+            return 0;
+        else if(b.getPosVec().x > hc.x) // Rechts
+            return 1;
+        else return 2;
     }
 
     //_Split_and_rearrange_velocity_vector_using_orthogonal_projection__________________________________________________
