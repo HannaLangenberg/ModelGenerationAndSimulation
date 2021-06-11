@@ -10,7 +10,6 @@ public class Mode {
 
     public void toggleMode(boolean mode) {
         MainWindowModel mainWindowModel = MainWindowModel.get();
-        //TODO geht bestimmt effizienter
         if(mode){
             mainWindowModel.getStage().getScene().getStylesheets().remove(Utils.darkMode);
             mainWindowModel.getStage().getScene().getStylesheets().add(Utils.lightMode);

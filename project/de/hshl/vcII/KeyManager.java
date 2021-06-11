@@ -89,7 +89,7 @@ public class KeyManager {
                 break;
             case S:
                 //close scissors
-                if(!mainWindowModel.isChoiceMade() & mainWindowModel.getScissorsManager().getS() != null) {
+                if(mainWindowModel.getScissorsManager().getS() != null) {
                     mainWindowModel.getScissorsManager().getS().setClosing(true);
                     mainWindowModel.getScissorsManager().getS().getRectangle().setStrokeWidth(0);
                 }

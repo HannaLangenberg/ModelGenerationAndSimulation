@@ -20,8 +20,8 @@ public class Scissors {
         return g;
     }
     private MyVector posVec; //upper left corner
-    private MyVector centerPoint, crossingPoint; //middle of rectangle
-    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llStart, rlStart, llVector, rlVector;
+    private MyVector centerPoint, crossingPoint, llStart, rlStart; //middle of rectangle
+    private static MyVector lowerLeft, lowerRight, directionalVector, llVector, rlVector;
     private static double angle;
 
     private double e_alpha;
@@ -52,13 +52,13 @@ public class Scissors {
     public void updateLines() {
         applyRotation(0);
 
-        leftLine.setStartX(upperLeft.x);
-        leftLine.setStartY(upperLeft.y);
+        leftLine.setStartX(llStart.x);
+        leftLine.setStartY(llStart.y);
         leftLine.setEndX(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x));
         leftLine.setEndY(lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y));
 
-        rightLine.setStartX(upperRight.x);
-        rightLine.setStartY(upperRight.y);
+        rightLine.setStartX(rlStart.x);
+        rightLine.setStartY(rlStart.y);
         rightLine.setEndX(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x));
         rightLine.setEndY(lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y));
     }
@@ -76,21 +76,21 @@ public class Scissors {
 
     public void applyRotation(int decision) {
         switch (decision) {
-            case 0:
-                upperLeft  = new MyVector(
-                        rectangle.localToParent(rectangle.getX(), rectangle.getY()).getX(),
-                        rectangle.localToParent(rectangle.getX(), rectangle.getY()).getY());
-                upperRight = new MyVector(
-                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
-                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
+            case 0: // abhängig von Gruppenrotation
+                llStart  = new MyVector(
+                        g.localToParent(rectangle.getX(), rectangle.getY()).getX(),
+                        g.localToParent(rectangle.getX(), rectangle.getY()).getY());
+                rlStart = new MyVector(
+                        g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
+                        g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
                 lowerLeft  = new MyVector(
-                        rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getX(),
-                        rectangle.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getY());
+                        g.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getX(),
+                        g.localToParent(rectangle.getX(),                           rectangle.getY() + rectangle.getHeight()).getY());
                 lowerRight = new MyVector(
-                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
-                        rectangle.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
+                        g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
+                        g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
                 break;
-            case 1:
+            case 1: // abhängig von einzelne Linienrotation
                 llStart = new MyVector(leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(), leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY());
                 rlStart = new MyVector(rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getX(), rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getY());
                 break;
@@ -98,7 +98,6 @@ public class Scissors {
     }
 
     public void calcCrossingPoint() {
-        updateLines();
         double x = leftLine.getStartX() + 2.0/3 * (leftLine.getEndX() - leftLine.getStartX());
         double y = leftLine.getStartY() + 2.0/3 * (leftLine.getEndY() - leftLine.getStartY());
         crossingPoint = new MyVector(x,y);
@@ -116,7 +115,7 @@ public class Scissors {
     }
 
     public void calcDirectionalVector() {
-        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, upperLeft));
+        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, llStart));
     }
 
     public void animate(AnchorPane aDrawingPane) {
@@ -125,7 +124,7 @@ public class Scissors {
         llVector = MyVector.subtract(crossingPoint, llStart);
         rlVector = MyVector.subtract(crossingPoint, rlStart);
         angle = MyVector.angle(llVector, rlVector);
-        System.out.println(angle);
+//        System.out.println(angle);
         if(angle > 1) {
             leftLine.getTransforms().add(new Rotate( 1, crossingPoint.x, crossingPoint.y));
             rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
@@ -196,6 +195,7 @@ public class Scissors {
         rectangle.setX(posVec.x);
         rectangle.setY(posVec.y);
         updateLines();
+        calcCrossingPoint();
         calcCenterPoint();
     }
     public MyVector getPosVec() {
@@ -214,5 +214,21 @@ public class Scissors {
     }
     public Line getRightLine() {
         return rightLine;
+    }
+
+    public MyVector getLlStart() {
+        return llStart;
+    }
+
+    public void setLlStart(MyVector llStart) {
+        this.llStart = llStart;
+    }
+
+    public MyVector getRlStart() {
+        return rlStart;
+    }
+
+    public void setRlStart(MyVector rlStart) {
+        this.rlStart = rlStart;
     }
 }

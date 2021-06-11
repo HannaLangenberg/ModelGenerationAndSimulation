@@ -154,7 +154,7 @@ public class Calculator {
     public static MyVector calcCoord_onBlade(Scissors s, double omega, MyVector line) {
         return MyVector.add(s.getCrossingPoint(), MyVector.multiply(MyVector.subtract(s.getCrossingPoint(), line), omega));
     }
-    public static MyVector calcMissingXCoordinate(Scissors s, Ball b, double omega, MyVector line) {
+    public static MyVector calcMissingXCoordinate(Scissors s, Ball b, MyVector line) {
         double x = s.getCrossingPoint().x + ((b.getPosVec().y - s.getCrossingPoint().y)/(line.y - s.getCrossingPoint().y))*(line.x - s.getCrossingPoint().x);
         return new MyVector(x, b.getPosVec().y);
     }

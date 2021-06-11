@@ -1,6 +1,5 @@
 package project.de.hshl.vcII.drawing.calculations;
 
-import javafx.scene.paint.Color;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -169,24 +168,65 @@ public class Collision {
     //_Ball_And_Wall_Collision__________________________________________________________________________________________
     public static void checkScissors(Ball b, double e) {
         if(MainWindowModel.get().getScissorsManager().getS() != null) {
-//            Scissors s = MainWindowModel.get().getScissorsManager().getS();
-            Scissors s;
+            Scissors s = MainWindowModel.get().getScissorsManager().getS();
             s.calcCrossingPoint();
-            lambda_rho_Parameters = Calculator.calcBlade(s, b, new MyVector(s.getLeftLine().getStartX(), s.getLeftLine().getStartY()), new MyVector(s.getRightLine().getStartX(), s.getRightLine().getStartY()));
+            lambda_rho_Parameters = Calculator.calcBlade(s, b, s.getLlStart(), s.getRlStart());
             lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1;
             rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;
 
             if(lambda_onBlade) {
-                lambda_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.x, new MyVector(s.getLeftLine().getStartX(), s.getLeftLine().getStartY()));
+                lambda_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.x, s.getLlStart());
                 collision_LambdaOnBlade = Calculator.checkDistance(b, lambda_dp, e);
+                if(collision_LambdaOnBlade)
+                    deflect(b,0);
+                /*if (collision_LambdaOnBlade & !s.isClosing()) {
+                    deflect(b, 0);
+//                }
+                else if(collision_LambdaOnBlade & s.isClosing()) {
+                    shoot(b, s);
+                }*/
             }
             if(rho_onBlade) {
-                rho_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.y, new MyVector(s.getRightLine().getStartX(), s.getRightLine().getStartY()));
+                rho_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.y, s.getRlStart());
                 collision_RhoOnBlade    = Calculator.checkDistance(b, rho_dp, e);
+                if(collision_RhoOnBlade)
+                    deflect(b,1);
+                /*if (collision_RhoOnBlade & !s.isClosing()) {
+                    deflect(b,1);
+                }
+                else if (collision_RhoOnBlade & s.isClosing()) {
+                    shoot(b, s);
+                }*/
             }
-            lambda_hc = Calculator.calcMissingXCoordinate(s, b, lambda_rho_Parameters.x, new MyVector(s.getLeftLine().getStartX(), s.getLeftLine().getStartY()));
-            rho_hc    = Calculator.calcMissingXCoordinate(s, b, lambda_rho_Parameters.y, new MyVector(s.getRightLine().getStartX(), s.getRightLine().getStartY()));
+            lambda_hc = Calculator.calcMissingXCoordinate(s, b, s.getLlStart());
+            rho_hc    = Calculator.calcMissingXCoordinate(s, b, s.getRlStart());
         }
+    }
+
+    public static void shoot(Ball b, Scissors s) {
+
+    }
+    public static void deflect(Ball b, int decision) {
+        MyVector normedCenterLine, vOrthogonal, vParallel;
+        switch (decision) {
+            case 0: // lambda
+                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
+
+                vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+                vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+                lambda_dp = new MyVector(0,0);
+                break;
+            case 1: // rho
+                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
+
+                vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+                vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+                rho_dp = new MyVector(0,0);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + decision);
+        }
+        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
     }
 
     //_Split_and_rearrange_velocity_vector_using_orthogonal_projection__________________________________________________

@@ -20,6 +20,7 @@ public class Rotation {
             s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate());
             s.setSpin(s.getSpin() - 1);
             determineOrientation(s);
+            s.applyRotation(0);
         }
     }
 
@@ -38,6 +39,7 @@ public class Rotation {
             s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate());
             s.setSpin(s.getSpin() + 1);
             determineOrientation(s);
+            s.applyRotation(0);
         }
     }
 

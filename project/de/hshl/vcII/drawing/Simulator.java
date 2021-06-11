@@ -50,6 +50,13 @@ public class Simulator {
     private void runSimulation(){
         runSim_called++;
 
+        if(mainWindowModel.getScissorsManager().getS() != null) {
+            s = mainWindowModel.getScissorsManager().getS();
+            if (s.isClosing()) {
+                s.animate(mainWindowModel.getADrawingPane());
+            }
+        }
+
         for (Ball b: mainWindowModel.getBallManager().getBalls()) {
             Movement.calcAcceleration(b);
             Movement.checkCollisions(b, epsilon);
@@ -59,14 +66,6 @@ public class Simulator {
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
         }
-
-        if(mainWindowModel.getScissorsManager().getS() != null) {
-            s = mainWindowModel.getScissorsManager().getS();
-            if (s.isClosing()) {
-                s.animate(mainWindowModel.getADrawingPane());
-            }
-        }
-
     }
 
     public boolean isRunning() {
