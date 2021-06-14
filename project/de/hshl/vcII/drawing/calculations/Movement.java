@@ -32,7 +32,7 @@ public class Movement {
 
         // Iterate through the balls and walls and check for collisions
         for (Wall w : walls)
-            Collision.checkWalls(w,b,epsilon);
+            WallCollision.checkWalls(w,b,epsilon);
     }
 
     public static void calcPosition(Ball b) {

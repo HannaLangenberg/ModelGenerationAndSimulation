@@ -1,9 +1,8 @@
 package project.de.hshl.vcII.drawing;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import project.de.hshl.vcII.drawing.calculations.Calculator;
-import project.de.hshl.vcII.drawing.calculations.Collision;
+import project.de.hshl.vcII.drawing.calculations.WallCalculations;
+import project.de.hshl.vcII.drawing.calculations.WallCollision;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -44,8 +43,8 @@ public class Placer {
                         return mouse.y;
                 }
                 else {
-                    s_t_parameters = Calculator.calc_s_t_Parameters(wall, mouse);
-                    if(Collision.checkBallPlacement(wall, b, s_t_parameters, epsilon)) {
+                    s_t_parameters = WallCalculations.calc_s_t_Parameters(wall, mouse);
+                    if(WallCollision.checkBallPlacement(wall, b, s_t_parameters, epsilon)) {
                         return Calculator.getDroppedPerpendicular().y - b.getRadius() - epsilon/2;
                     }
                     else

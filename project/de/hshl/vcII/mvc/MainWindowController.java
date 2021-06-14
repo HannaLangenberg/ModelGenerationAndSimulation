@@ -1,6 +1,8 @@
 package project.de.hshl.vcII.mvc;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -35,6 +37,8 @@ import java.util.ResourceBundle;
  */
 
 public class MainWindowController implements Initializable {
+    @FXML
+    public CheckBox cb_choice_active;
     @FXML
     private CheckBox chb_Wind;
     @FXML
@@ -114,7 +118,6 @@ public class MainWindowController implements Initializable {
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().removeAll(mainWindowModel.getBallManager().getBalls());
         mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
-//        mainWindowModel.getScissorsManager().getScissorsList().removeAll(mainWindowModel.getScissorsManager().getScissorsList());
         mainWindowModel.getScissorsManager().setS(null);
         mainWindowModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
@@ -149,10 +152,8 @@ public class MainWindowController implements Initializable {
     private void choiceSchere(){
         Scissors s = new Scissors();
         mainWindowModel.setCurrentlySelected(s);
-//        mainWindowModel.getScissorsManager().setS(s);
         mainWindowModel.getBallManager().setB(null);
         mainWindowModel.getWallManager().setW(null);
-        activateLists();
     }
 
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
@@ -287,8 +288,10 @@ public class MainWindowController implements Initializable {
     }
     @FXML
     private void onMouseReleased(MouseEvent e) {
-        if(mainWindowModel.getScissorsManager().getS() == null)
+        if(mainWindowModel.getScissorsManager().getS() == null) {
             mainWindowModel.getPlacer().onMouseReleased(e);
+            activateLists();
+        }
     }
 
 
@@ -481,9 +484,9 @@ public class MainWindowController implements Initializable {
         mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
             cb_update();
         });
-        /*mainWindowModel.getScissorsManager().getScissorsList().addListener((InvalidationListener) observable -> {
+        if(mainWindowModel.getScissorsManager().getS() != null)
             cb_update();
-        });*/
+
     }
     public void cb_update() {
         cb_choose.getItems().clear();
@@ -495,14 +498,28 @@ public class MainWindowController implements Initializable {
 
         if(mainWindowModel.getScissorsManager().getS() != null)
             cb_choose.getItems().add("Schere");
-
-
-        cb_choose.setValue(cb_choose.getItems().get(0));
     }
 
-    public void cb_choose() {
+    public void cb_choose(String s) {
         if(cb_choose.getValue() == null) return;
-        mainWindowModel.getKeyManager().choose(cb_choose.getValue());
+
+        mainWindowModel.getKeyManager().choose(s);
     }
 
+    public void chb_Choice_OnAction(ActionEvent actionEvent) {
+        cb_choose.setDisable(!cb_choice_active.isSelected());
+        if (cb_choose.isDisabled()) {
+            mainWindowModel.getKeyManager().unMarkAll();
+        }
+        else {
+            cb_choose.setPromptText("wähle...");
+            cb_choose.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> oV, String oldValue, String newValue) {
+                    cb_choose(newValue);
+
+                }
+            });
+        }
+    }
 }

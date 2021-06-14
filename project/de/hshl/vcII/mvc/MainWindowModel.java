@@ -43,7 +43,7 @@ public class MainWindowModel {
     // Variables to maintain the window
     private boolean fullscreen = false, choiceEnabled = false, choiceMade = false, arrowsActive = false;
     private int[] minWindowSize = new int[] {900, 400};
-    private double screenWidth, screenHeight, scissorsSpeed;
+    private double screenWidth, screenHeight, scissorsSpeed = 1.0;
     private double savedSceneX, savedSceneY, savedSceneWidth, savedSceneHeight;
     private final int taskbarHeight = 36;
 

@@ -8,6 +8,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Rotate;
+import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
@@ -121,8 +122,8 @@ public class Scissors {
     }
 
     public void calcDirectionalVector() {
-        directionalVector = MyVector.multiply(MyVector.norm(MyVector.subtract(lowerLeft, upperLeft)), MainWindowModel.get().getScissorsSpeed());
-//        directionalVector = MyVector.subtract(lowerLeft, upperLeft);
+        directionalVector = MyVector.multiply(MyVector.norm(MyVector.subtract(lowerLeft, upperLeft)), 1 * MainWindowModel.get().getScissorsSpeed());
+//        directionalVector = MyVector.multiply(MyVector.subtract(lowerLeft, upperLeft), MainWindowModel.get().getScissorsSpeed());
     }
 
     public void animate(AnchorPane aDrawingPane) {
@@ -131,14 +132,9 @@ public class Scissors {
         angle = MyVector.angle(llVector, rlVector);
 //        System.out.println(angle);
         if(angle > 1) {
-<<<<<<< Updated upstream
             leftLine.getTransforms().add(new Rotate(MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
             rightLine.getTransforms().add(new Rotate(-MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
-=======
-            leftLine.getTransforms().add(new Rotate(  1, crossingPoint.x, crossingPoint.y));
-            rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
             applyRotation(1);
->>>>>>> Stashed changes
         }
         else {
             setClosing(false);

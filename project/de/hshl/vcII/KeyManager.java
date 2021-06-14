@@ -104,23 +104,38 @@ public class KeyManager {
     }
 
     public void choose(String s){
+        unMarkAll();
         if (!mainWindowModel.isChoiceMade()) {
             String[] strings = s.split(" ");
             if (strings[0].equals("Ball")) {
                 for (Ball b : mainWindowModel.getBallManager().getBalls()) {
                     if ((b.getNumber() + "").equals(strings[2])) {
+                        unMark();
                         mainWindowModel.setCurrentlySelected(b);
+                        mark(b);
+                        mainWindowModel.getBallManager().setB(b);
                     }
                 }
             } else if (strings[0].equals("Wand")) {
                 for (Wall w : mainWindowModel.getWallManager().getWalls()) {
                     if ((w.getNumber() + "").equals(strings[2])) {
+                        unMark();
                         mainWindowModel.setCurrentlySelected(w);
+                        mark(w);
+                        mainWindowModel.getWallManager().setW(w);
+                        if(!mainWindowModel.getADrawingPane().getChildren().contains(w.getCollision())) {
+                            mainWindowModel.getADrawingPane().getChildren().add(w.getCollision());
+                            return;
+                        }
                     }
                 }
             }else {
+                mainWindowModel.getScissorsManager().getS().setMarkedStroke();
                 mainWindowModel.setCurrentlySelected(mainWindowModel.getScissorsManager().getS());
-
+                if(!mainWindowModel.getADrawingPane().getChildren().contains(mainWindowModel.getScissorsManager().getS().getG())) {
+                    mainWindowModel.getADrawingPane().getChildren().add(mainWindowModel.getScissorsManager().getS().getG());
+                    return;
+                }
             }
             mainWindowModel.setChoiceMade(true);
         }else{
@@ -143,6 +158,21 @@ public class KeyManager {
         } else if (o instanceof Scissors){
             ((Scissors) o).setMarkedStroke();
         }
+    }
+
+    public void unMarkAll() {
+        for(Ball b : mainWindowModel.getBallManager().getBalls()) {
+            b.setStroke(b.getStrokeColor());
+            b.setStrokeWidth(5);
+            b.setStrokeType(StrokeType.CENTERED);
+        }
+        for(Wall w : mainWindowModel.getWallManager().getWalls()) {
+            w.getCollision().setStrokeWidth(0);
+        }
+        if(mainWindowModel.getScissorsManager().getS() != null) {
+            mainWindowModel.getScissorsManager().getS().setUnmarkedStroke();
+        }
+        mainWindowModel.setChoiceMade(false);
     }
 
     private void unMark(){
