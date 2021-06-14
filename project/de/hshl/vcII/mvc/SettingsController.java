@@ -18,7 +18,7 @@ import static project.de.hshl.vcII.utils.Utils.isDouble;
 public class SettingsController {
     private MainWindowModel mainWindowModel = MainWindowModel.get();
 
-    private Slider sl_Radius, sl_Weight;
+    private Slider sl_Radius, sl_Weight, sl_ScissorsSpeed;
     private Label lCurrentRadius, lCurrentWeight;
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     private VBox vb_displayCurrentParams;
@@ -28,9 +28,10 @@ public class SettingsController {
     private boolean wind_changed = false;
     private boolean currentParamsOpen = false;
 
-    public void initialize(Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
+    public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
                            TextField tf_Wind_X, TextField tf_Wind_Y, TextField tf_v0_X, TextField tf_v0_Y,
                            VBox vb_displayCurrentParams){
+        this.sl_ScissorsSpeed = sl_ScissorsSpeed;
         this.sl_Radius = sl_Radius;
         this.lCurrentRadius = lCurrentRadius;
         this.sl_Weight = sl_Weight;
@@ -99,6 +100,10 @@ public class SettingsController {
             lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass())*1000);
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+    }
+
+    public void sl_ScissorsSpeed_OnDragDetected(){
+        mainWindowModel.setScissorsSpeed(sl_ScissorsSpeed.getValue());
     }
 
     //------Helpers,-Getter-&-Setter------------------------------------------------------------------------------------

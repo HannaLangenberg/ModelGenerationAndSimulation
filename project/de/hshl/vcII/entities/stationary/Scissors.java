@@ -109,7 +109,7 @@ public class Scissors {
     public void calcCenterPoint() {
         if(rectangle.getRotate() != 0) {
             double x = rectangle.getX() + (rectangle.getWidth() * Math.cos(Math.toRadians(rectangle.getRotate()) + rectangle.getHeight() * Math.sin(Math.toRadians(rectangle.getRotate()))))/2;
-            double y = rectangle.getY() + ( rectangle.getWidth() * Math.sin(Math.toRadians(rectangle.getRotate()) *-1 + rectangle.getHeight() * Math.cos(Math.toRadians(rectangle.getRotate()))))/2;
+            double y = rectangle.getY() + (rectangle.getWidth() * Math.sin(Math.toRadians(rectangle.getRotate()) *-1 + rectangle.getHeight() * Math.cos(Math.toRadians(rectangle.getRotate()))))/2;
 
             setCenterPoint(new MyVector(x,y));
         }
@@ -117,8 +117,8 @@ public class Scissors {
     }
 
     public void calcDirectionalVector() {
-//        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, upperLeft));
-        directionalVector = MyVector.subtract(lowerLeft, upperLeft);
+        directionalVector = MyVector.multiply(MyVector.norm(MyVector.subtract(lowerLeft, upperLeft)), MainWindowModel.get().getScissorsSpeed());
+//        directionalVector = MyVector.subtract(lowerLeft, upperLeft);
     }
 
     public void animate(AnchorPane aDrawingPane) {
@@ -129,8 +129,8 @@ public class Scissors {
         angle = MyVector.angle(llVector, rlVector);
 //        System.out.println(angle);
         if(angle > 1) {
-            leftLine.getTransforms().add(new Rotate(  1, crossingPoint.x, crossingPoint.y));
-            rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
+            leftLine.getTransforms().add(new Rotate(MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
+            rightLine.getTransforms().add(new Rotate(-MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
         }
         else {
             setClosing(false);

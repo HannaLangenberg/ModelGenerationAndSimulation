@@ -43,7 +43,7 @@ public class MainWindowModel {
     // Variables to maintain the window
     private boolean fullscreen = false, choiceEnabled = false, choiceMade = false, arrowsActive = false;
     private int[] minWindowSize = new int[] {900, 400};
-    private double screenWidth, screenHeight;
+    private double screenWidth, screenHeight, scissorsSpeed;
     private double savedSceneX, savedSceneY, savedSceneWidth, savedSceneHeight;
     private final int taskbarHeight = 36;
 
@@ -160,6 +160,14 @@ public class MainWindowModel {
 
     public void setCurrentlySelected(Object currentlySelected) {
         this.currentlySelected = currentlySelected;
+    }
+
+    public void setScissorsSpeed(double scissorsSpeed) {
+        this.scissorsSpeed = scissorsSpeed;
+    }
+
+    public double getScissorsSpeed() {
+        return scissorsSpeed;
     }
 
     public boolean isFullscreen() {

@@ -38,7 +38,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private CheckBox chb_Wind;
     @FXML
-    private Slider sl_Weight, sl_Radius;
+    private Slider sl_Weight, sl_Radius, sl_ScissorsSpeed;
     @FXML
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
@@ -80,7 +80,7 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-               settingsController.initialize(sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
+               settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
                 tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
         // Get the original MainWindowModel
@@ -240,9 +240,14 @@ public class MainWindowController implements Initializable {
     public void sl_Radius_OnDragDetected(){
         settingsController.sl_Radius_OnDragDetected();
     }
+
+    public void sl_ScissorsSpeed_OnDragDetected(){
+        settingsController.sl_ScissorsSpeed_OnDragDetected();
+    }
     public void btn_showCurrentParams_OnAction() throws IOException {
         settingsController.btn_showCurrentParams_OnAction();
     }
+
 
     //-Mouse-&-Key-Listener---------------------------------------------------------------------------------------------
     // Is called whenever the mouse is clicked.
