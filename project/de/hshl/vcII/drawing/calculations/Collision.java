@@ -173,37 +173,62 @@ public class Collision {
             lambda_rho_Parameters = Calculator.calcBlade(s, b, s.getLlStart(), s.getRlStart());
             lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1;
             rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;
-
-            if(lambda_onBlade) {
-                lambda_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.x, s.getLlStart());
-                collision_LambdaOnBlade = Calculator.checkDistance(b, lambda_dp, e);
-                if(collision_LambdaOnBlade)
-                    deflect(b,0);
-                /*if (collision_LambdaOnBlade & !s.isClosing()) {
-                    deflect(b, 0);
-//                }
-                else if(collision_LambdaOnBlade & s.isClosing()) {
-                    shoot(b, s);
-                }*/
-            }
-            if(rho_onBlade) {
-                rho_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.y, s.getRlStart());
-                collision_RhoOnBlade    = Calculator.checkDistance(b, rho_dp, e);
-                if(collision_RhoOnBlade)
-                    deflect(b,1);
-                /*if (collision_RhoOnBlade & !s.isClosing()) {
-                    deflect(b,1);
-                }
-                else if (collision_RhoOnBlade & s.isClosing()) {
-                    shoot(b, s);
-                }*/
-            }
             lambda_hc = Calculator.calcMissingXCoordinate(s, b, s.getLlStart());
             rho_hc    = Calculator.calcMissingXCoordinate(s, b, s.getRlStart());
+            int decision = checkClosest(b); // 0 = left blade 1 = right blade
+
+            switch (decision) {
+                case 0: // left blade
+                    if(lambda_onBlade) {
+                        lambda_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.x, s.getLlStart());
+                        collision_LambdaOnBlade = Calculator.checkDistance(b, lambda_dp, e);
+                        /*if(collision_LambdaOnBlade)
+                            deflect(b,0);*/
+                        if (collision_LambdaOnBlade & !s.isClosing()) {
+                            deflect(b, 0);
+                        }
+                        else if(collision_LambdaOnBlade & s.isClosing()) {
+                            shoot(b, s);
+                        }
+                    }
+
+                    break;
+                case 1: // right blade
+                    if(rho_onBlade) {
+                        rho_dp = Calculator.calcCoord_onBlade(s, lambda_rho_Parameters.y, s.getRlStart());
+                        collision_RhoOnBlade = Calculator.checkDistance(b, rho_dp, e);
+                        /*if (collision_RhoOnBlade)
+                            deflect(b, 1);*/
+                        if (collision_RhoOnBlade & !s.isClosing()) {
+                            deflect(b,1);
+                        }
+                        else if (collision_RhoOnBlade & s.isClosing()) {
+                            shoot(b, s);
+                        }
+                    }
+
+                    break;
+            }
+
+
         }
+    }
+    private static int checkClosest(Ball b) {
+        double lambdaDistance = Math.abs(b.getPosVec().x - lambda_hc.x);
+        double    rhoDistance = Math.abs(b.getPosVec().x -    rho_hc.x);
+
+        if(lambdaDistance < rhoDistance)
+            return 0; // Collision on left blade
+        else return 1; // Collision on right blade
     }
 
     public static void shoot(Ball b, Scissors s) {
+        s.calcDirectionalVector();
+        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), Scissors.getDirectionalVector()), b.getVelVec());
+        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), Scissors.getDirectionalVector());
+
+        b.setVelVec(MyVector.add(b.getVelVec(), Scissors.getDirectionalVector()));
+//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.add(vParallel, Scissors.getDirectionalVector())));
 
     }
     public static void deflect(Ball b, int decision) {

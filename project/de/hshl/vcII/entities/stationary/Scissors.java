@@ -20,8 +20,8 @@ public class Scissors {
         return g;
     }
     private MyVector posVec; //upper left corner
-    private MyVector centerPoint, crossingPoint, llStart, rlStart; //middle of rectangle
-    private static MyVector lowerLeft, lowerRight, directionalVector, llVector, rlVector;
+    private MyVector centerPoint, crossingPoint, llStart, llEnd, rlStart, rlEnd; //middle of rectangle
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llVector, rlVector;
     private static double angle;
 
     private double e_alpha;
@@ -77,10 +77,10 @@ public class Scissors {
     public void applyRotation(int decision) {
         switch (decision) {
             case 0: // abhängig von Gruppenrotation
-                llStart  = new MyVector(
+                upperLeft = llStart  = new MyVector(
                         g.localToParent(rectangle.getX(), rectangle.getY()).getX(),
                         g.localToParent(rectangle.getX(), rectangle.getY()).getY());
-                rlStart = new MyVector(
+                upperRight = rlStart = new MyVector(
                         g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
                         g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
                 lowerLeft  = new MyVector(
@@ -89,6 +89,8 @@ public class Scissors {
                 lowerRight = new MyVector(
                         g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
                         g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
+                llEnd = new MyVector(leftLine.localToParent(leftLine.getEndX(), leftLine.getEndY()).getX(), leftLine.localToParent(leftLine.getEndX(), leftLine.getEndY()).getY());
+                rlEnd = new MyVector(rightLine.localToParent(rightLine.getEndX(), rightLine.getEndY()).getX(), rightLine.localToParent(rightLine.getEndX(), rightLine.getEndY()).getY());
                 break;
             case 1: // abhängig von einzelne Linienrotation
                 llStart = new MyVector(leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(), leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY());
@@ -98,8 +100,8 @@ public class Scissors {
     }
 
     public void calcCrossingPoint() {
-        double x = leftLine.getStartX() + 2.0/3 * (leftLine.getEndX() - leftLine.getStartX());
-        double y = leftLine.getStartY() + 2.0/3 * (leftLine.getEndY() - leftLine.getStartY());
+        double x = llStart.x + 2.0/3 * (llEnd.x - llStart.x);
+        double y = llStart.y + 2.0/3 * (llEnd.y - llStart.y);
         crossingPoint = new MyVector(x,y);
 //        System.out.println(crossingPoint);
 //        System.out.println(leftLine.toString());
@@ -115,7 +117,8 @@ public class Scissors {
     }
 
     public void calcDirectionalVector() {
-        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, llStart));
+//        directionalVector = MyVector.norm(MyVector.subtract(lowerLeft, upperLeft));
+        directionalVector = MyVector.subtract(lowerLeft, upperLeft);
     }
 
     public void animate(AnchorPane aDrawingPane) {
@@ -126,7 +129,7 @@ public class Scissors {
         angle = MyVector.angle(llVector, rlVector);
 //        System.out.println(angle);
         if(angle > 1) {
-            leftLine.getTransforms().add(new Rotate( 1, crossingPoint.x, crossingPoint.y));
+            leftLine.getTransforms().add(new Rotate(  1, crossingPoint.x, crossingPoint.y));
             rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
         }
         else {
@@ -149,6 +152,13 @@ public class Scissors {
 
     public void setClosing(boolean closing) {
         this.closing = closing;
+    }
+
+    public static void setDirectionalVector(MyVector directionalVector) {
+        Scissors.directionalVector = directionalVector;
+    }
+    public static MyVector getDirectionalVector() {
+        return directionalVector;
     }
 
     public void setCrossingPoint(MyVector crossingPoint) {
