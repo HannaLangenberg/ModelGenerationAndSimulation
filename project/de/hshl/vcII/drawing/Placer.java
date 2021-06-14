@@ -58,11 +58,11 @@ public class Placer {
 
             for(Ball ball : balls) {
                 double deltaY = mouse.y - ball.getPosVec().y;
-                if((deltaY > 0 & deltaY <= ball.getRadius() + epsilon + w.getCollision().getHeight()) & (mouse.x-w.getCollision().getWidth() <= ball.getPosVec().x & mouse.x+w.getCollision().getWidth() >= ball.getPosVec().x))
+                if((deltaY > 0 & deltaY <= ball.getRadius() + epsilon + w.getCollision().getHeight()) & (mouse.x-w.getCollision().getWidth()/2-ball.getRadius() <= ball.getPosVec().x & mouse.x+w.getCollision().getWidth()/2+ball.getRadius() >= ball.getPosVec().x))
                 {
                     return ball.getPosVec().y + ball.getRadius() + w.getCollision().getHeight()/2 + epsilon/2;
                 }
-                else if((deltaY < 0 && deltaY >= -ball.getRadius() - epsilon - w.getCollision().getHeight()/2) & (mouse.x-w.getCollision().getWidth() <= ball.getPosVec().x & mouse.x+w.getCollision().getWidth() >= ball.getPosVec().x))
+                else if((deltaY < 0 && deltaY >= -ball.getRadius() - epsilon - w.getCollision().getHeight()/2) & (mouse.x-w.getCollision().getWidth()/2-ball.getRadius() <= ball.getPosVec().x & mouse.x+w.getCollision().getWidth()/2+ball.getRadius() >= ball.getPosVec().x))
                 {
                     return ball.getPosVec().y + ball.getRadius() + w.getCollision().getHeight()/2 + epsilon/2;
                 }

@@ -15,10 +15,11 @@ public class ScissorsCollisions {
     static MyVector rho_dp;
     private static MyVector rho_hc;
     private static MyVector lambda_rho_Parameters;
+    private static Scissors s;
 
     public static void checkScissors(Ball b, double e) {
         if(MainWindowModel.get().getScissorsManager().getS() != null) {
-            Scissors s = MainWindowModel.get().getScissorsManager().getS();
+            s = MainWindowModel.get().getScissorsManager().getS();
             lambda_rho_Parameters = ScissorsCalculations.calcBlade(s, b, s.getLlStart(), s.getRlStart());
             lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1;
             rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;

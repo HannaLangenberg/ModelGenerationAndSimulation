@@ -175,16 +175,4 @@ public class WallCollision {
         }
         return WallCalculations.checkDistance(b, s_onEdge||t_onEdge, e+15);
     }
-
-    public static boolean setBallPlacement(Wall w, Ball b, MyVector s_t_Parameters, double e) {
-        s = s_t_Parameters.x;
-        t = s_t_Parameters.y;
-        boolean s_onEdge = s >= -1 && s <= 1;
-        boolean t_onEdge = t >= -1 && t <= 1;
-
-        if (s_onEdge) {
-            WallCalculations.calcSideCollisions(w, s_t_Parameters, 0);
-        }
-        return WallCalculations.checkDistance(b, s_onEdge||t_onEdge, e);
-    }
 }

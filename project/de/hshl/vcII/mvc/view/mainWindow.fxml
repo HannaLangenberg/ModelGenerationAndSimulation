@@ -302,7 +302,7 @@
                                  <children>
                                     <CheckBox mnemonicParsing="false" onAction="#arrows" text="Pfeile anzeigen">
                                        <VBox.margin>
-                                          <Insets left="15.0" top="10.0" />
+                                          <Insets left="10.0" top="10.0" />
                                        </VBox.margin></CheckBox>
                                     <Region VBox.vgrow="ALWAYS" />
                                     <HBox prefHeight="28.0" prefWidth="239.0">
