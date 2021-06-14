@@ -1,5 +1,6 @@
 package project.de.hshl.vcII.drawing;
 
+import javafx.scene.transform.Rotate;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 
@@ -17,7 +18,8 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate());
+//            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate());
+            s.getG().getTransforms().add(new Rotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate(), s.getCrossingPoint().x, s.getCrossingPoint().y));
             s.setSpin(s.getSpin() - 1);
             determineOrientation(s);
             s.applyRotation(0);
@@ -36,7 +38,8 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate());
+//            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate());
+            s.getG().getTransforms().add(new Rotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate(), s.getCrossingPoint().x, s.getCrossingPoint().y));
             s.setSpin(s.getSpin() + 1);
             determineOrientation(s);
             s.applyRotation(0);

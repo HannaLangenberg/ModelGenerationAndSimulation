@@ -89,8 +89,12 @@ public class Scissors {
                 lowerRight = new MyVector(
                         g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getX(),
                         g.localToParent(rectangle.getX() + rectangle.getWidth(), rectangle.getY() + rectangle.getHeight()).getY());
-                llEnd = new MyVector(leftLine.localToParent(leftLine.getEndX(), leftLine.getEndY()).getX(), leftLine.localToParent(leftLine.getEndX(), leftLine.getEndY()).getY());
-                rlEnd = new MyVector(rightLine.localToParent(rightLine.getEndX(), rightLine.getEndY()).getX(), rightLine.localToParent(rightLine.getEndX(), rightLine.getEndY()).getY());
+
+                llEnd = new MyVector(leftLine.localToParent(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x), lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y)).getX(),
+                                     leftLine.localToParent(lowerLeft.x + 3.0/4 * (lowerRight.x - lowerLeft.x), lowerLeft.y + 3.0/4 * (lowerRight.y - lowerLeft.y)).getY());
+                rlEnd = new MyVector(rightLine.localToParent(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x), lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y)).getX(),
+                                     rightLine.localToParent(lowerLeft.x + 1.0/4 * (lowerRight.x - lowerLeft.x), lowerLeft.y + 1.0/4 * (lowerRight.y - lowerLeft.y)).getY());
+
                 break;
             case 1: // abhängig von einzelne Linienrotation
                 llStart = new MyVector(leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(), leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY());
@@ -122,15 +126,19 @@ public class Scissors {
     }
 
     public void animate(AnchorPane aDrawingPane) {
-        applyRotation(1);
-        calcCrossingPoint();
         llVector = MyVector.subtract(crossingPoint, llStart);
         rlVector = MyVector.subtract(crossingPoint, rlStart);
         angle = MyVector.angle(llVector, rlVector);
 //        System.out.println(angle);
         if(angle > 1) {
+<<<<<<< Updated upstream
             leftLine.getTransforms().add(new Rotate(MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
             rightLine.getTransforms().add(new Rotate(-MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
+=======
+            leftLine.getTransforms().add(new Rotate(  1, crossingPoint.x, crossingPoint.y));
+            rightLine.getTransforms().add(new Rotate(-1, crossingPoint.x, crossingPoint.y));
+            applyRotation(1);
+>>>>>>> Stashed changes
         }
         else {
             setClosing(false);

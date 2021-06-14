@@ -169,7 +169,6 @@ public class Collision {
     public static void checkScissors(Ball b, double e) {
         if(MainWindowModel.get().getScissorsManager().getS() != null) {
             Scissors s = MainWindowModel.get().getScissorsManager().getS();
-            s.calcCrossingPoint();
             lambda_rho_Parameters = Calculator.calcBlade(s, b, s.getLlStart(), s.getRlStart());
             lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1;
             rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;
@@ -224,10 +223,10 @@ public class Collision {
 
     public static void shoot(Ball b, Scissors s) {
         s.calcDirectionalVector();
-        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), Scissors.getDirectionalVector()), b.getVelVec());
-        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), Scissors.getDirectionalVector());
+        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector()), b.getVelVec());
+        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector());
 
-        b.setVelVec(MyVector.add(b.getVelVec(), Scissors.getDirectionalVector()));
+        b.setVelVec(MyVector.add(b.getVelVec(), s.getDirectionalVector()));
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.add(vParallel, Scissors.getDirectionalVector())));
 
     }
