@@ -43,15 +43,17 @@ public class KeyManager {
                 }
             }
         }
-        Scissors s = mainWindowModel.getScissorsManager().getS();
-        if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getRectangle().getWidth(), s.getRectangle().getHeight())){
-            mark(s);
-            mainWindowModel.setChoiceMade(true);
-            mainWindowModel.setCurrentlySelected(s);
-            mainWindowModel.getScissorsManager().setS(s);
-            if(!mainWindowModel.getADrawingPane().getChildren().contains(s.getG())) {
-                mainWindowModel.getADrawingPane().getChildren().add(s.getG());
-                return;
+        if (mainWindowModel.getScissorsManager().getS() != null) {
+            Scissors s = mainWindowModel.getScissorsManager().getS();
+            if(clickingHitBox.intersects(s.getPosVec().x, s.getPosVec().y, s.getRectangle().getWidth(), s.getRectangle().getHeight())){
+                mark(s);
+                mainWindowModel.setChoiceMade(true);
+                mainWindowModel.setCurrentlySelected(s);
+                mainWindowModel.getScissorsManager().setS(s);
+                if(!mainWindowModel.getADrawingPane().getChildren().contains(s.getG())) {
+                    mainWindowModel.getADrawingPane().getChildren().add(s.getG());
+                    return;
+                }
             }
         }
 
