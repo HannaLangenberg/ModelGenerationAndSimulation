@@ -132,7 +132,7 @@ public class WallCollision {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(-1,1));
             System.out.println("4");
         }
-        collision_onCorner = WallCalculations.checkDistance(b, possibleCorner, e);
+        collision_onCorner = Calculator.checkDistance(b, possibleCorner, e);
 
     }
 
@@ -143,10 +143,10 @@ public class WallCollision {
         boolean t_onEdge = t >= -1 && t <= 1;
 
         if (s_onEdge) {
-            WallCalculations.calcSideCollisions(w, s_t_Parameters, 0);
+            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 0);
         }
         if (t_onEdge) {
-            WallCalculations.calcSideCollisions(w, s_t_Parameters, 1);
+            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 1);
         }
         collision_onEdge = WallCalculations.checkDistance(b, s_onEdge||t_onEdge, e);
     }

@@ -291,7 +291,7 @@ public class WallCalculations {
 
     //_Check_plane's_sides_for_collisions_______________________________________________________________________________
 
-    public static void calcSideCollisions(Wall w, MyVector s_t, int decision) {
+    public static void calcDroppedPerpendicular(Wall w, MyVector s_t, int decision) {
         switch (decision) {
             case 0:
                 if(s_t.y < 0)
@@ -309,9 +309,6 @@ public class WallCalculations {
     }
     //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
 
-    public static boolean checkDistance(Ball b, MyVector wCoord, double epsilon) {
-        return MyVector.distance(b.getPosVec(), wCoord) <= b.getRadius() + epsilon;
-    }
     public static boolean checkDistance(Ball b, boolean sidesHit, double epsilon) {
         if (sidesHit) {
             double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);

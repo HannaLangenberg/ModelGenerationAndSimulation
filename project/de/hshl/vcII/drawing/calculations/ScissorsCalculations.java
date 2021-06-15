@@ -8,8 +8,7 @@ public class ScissorsCalculations {
 
     private static double lambda;
     private static double rho;
-    static double lambda_velocity;
-    static double rho_velocity;
+    static double lambda_velocity, rho_velocity, average_velocity;
 
     public static int checkPosition(Ball b, MyVector hc) {
         if(b.getPosVec().x < hc.x) // Links
@@ -19,7 +18,7 @@ public class ScissorsCalculations {
         else return 2;
     }
 
-    public static MyVector calcBlade(Scissors s, Ball b, MyVector left, MyVector right) {
+    public static MyVector calc_lambda_rho_Parameters(Scissors s, Ball b, MyVector left, MyVector right) {
         lambda = ((s.getCrossingPoint().x - b.getPosVec().x)*(left.x - s.getCrossingPoint().x)+(s.getCrossingPoint().y - b.getPosVec().y)*(left.y - s.getCrossingPoint().y))
                 /(-Math.pow((left.x-s.getCrossingPoint().x), 2) - Math.pow((left.y - s.getCrossingPoint().y), 2));
         rho    = ((s.getCrossingPoint().x - b.getPosVec().x)*(right.x - s.getCrossingPoint().x)+(s.getCrossingPoint().y - b.getPosVec().y)*(right.y - s.getCrossingPoint().y))
@@ -33,7 +32,8 @@ public class ScissorsCalculations {
         return new MyVector(x, b.getPosVec().y);
     }
 
-    public static MyVector calcCoord_onBlade(Scissors s, double omega, MyVector line) {
+    // calc dp
+    public static MyVector calcDroppedPerpendicular(Scissors s, double omega, MyVector line) {
         return MyVector.add(s.getCrossingPoint(), MyVector.multiply(MyVector.subtract(s.getCrossingPoint(), line), omega));
     }
 
@@ -41,4 +41,11 @@ public class ScissorsCalculations {
         lambda_velocity = (Math.PI * Math.abs(MyVector.distance(s.getCrossingPoint(), lambda_dp)))/3;
         rho_velocity    = (Math.PI * Math.abs(MyVector.distance(s.getCrossingPoint(), rho_dp)))/3;
     }
+
+    public static void calcAverageDeflectVelocity(Scissors s, MyVector lambda_dp, MyVector rho_dp) {
+        calcDeflectVelocity(s, lambda_dp, rho_dp);
+        average_velocity = (lambda_velocity + rho_velocity) / 2;
+    }
+
+
 }

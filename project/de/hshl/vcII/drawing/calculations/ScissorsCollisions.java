@@ -6,13 +6,14 @@ import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCollisions {
+    static double lambda, rho;
     private static boolean lambda_onBlade;
     private static boolean rho_onBlade;
     private static boolean collision_LambdaOnBlade;
     private static boolean collision_RhoOnBlade;
-    static MyVector lambda_dp;
+    static MyVector lambda_dp = new MyVector(0,0);
+    static MyVector rho_dp = new MyVector(0,0);
     private static MyVector lambda_hc;
-    static MyVector rho_dp;
     private static MyVector rho_hc;
     private static MyVector lambda_rho_Parameters;
     private static Scissors s;
@@ -20,40 +21,61 @@ public class ScissorsCollisions {
     public static void checkScissors(Ball b, double e) {
         if(MainWindowModel.get().getScissorsManager().getS() != null) {
             s = MainWindowModel.get().getScissorsManager().getS();
-            lambda_rho_Parameters = ScissorsCalculations.calcBlade(s, b, s.getLlStart(), s.getRlStart());
-            lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1;
-            rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;
-            lambda_hc = ScissorsCalculations.calcMissingXCoordinate(s, b, s.getLlStart());
-            rho_hc    = ScissorsCalculations.calcMissingXCoordinate(s, b, s.getRlStart());
-            int decision = checkClosest(b); // 0 = left blade 1 = right blade
+            lambda_rho_Parameters = ScissorsCalculations.calc_lambda_rho_Parameters(s, b, s.getLlStart(), s.getRlStart());
 
-            if(lambda_onBlade) {
-                lambda_dp = ScissorsCalculations.calcCoord_onBlade(s, lambda_rho_Parameters.x, s.getLlStart());
-                collision_LambdaOnBlade = WallCalculations.checkDistance(b, lambda_dp, e);
-            }
-            if(rho_onBlade) {
-                rho_dp = ScissorsCalculations.calcCoord_onBlade(s, lambda_rho_Parameters.y, s.getRlStart());
-                collision_RhoOnBlade = WallCalculations.checkDistance(b, rho_dp, e);
-            }
+            checkBlades(b, e);
+        }
+    }
 
-            switch (decision) {
-                case 0: // left blade
-                    if (collision_LambdaOnBlade) {
-                        deflect(b, s,0);
-                    }
-                    break;
+    private static void checkBlades(Ball b, double e) {
+        lambda = lambda_rho_Parameters.x; // Wo befinden wir uns auf dem von der Klinge aufgespannten Vektor
+        rho    = lambda_rho_Parameters.y;
 
-                case 1: // right blade
-                    if (collision_RhoOnBlade) {
-                        deflect(b, s,1);
-                    }
-                    break;
+        lambda_onBlade = lambda_rho_Parameters.x >= 0 & lambda_rho_Parameters.x <= 1; // sind wir auf der Klinge
+        rho_onBlade    = lambda_rho_Parameters.y >= 0 & lambda_rho_Parameters.y <= 1;
 
-                case 2:
-                    if (collision_LambdaOnBlade & collision_RhoOnBlade & s.isClosing())
-                        shoot(b, s);
-                    break;
-            }
+        lambda_hc = ScissorsCalculations.calcMissingXCoordinate(s, b, s.getLlStart());
+        rho_hc    = ScissorsCalculations.calcMissingXCoordinate(s, b, s.getRlStart());
+
+        if(lambda_onBlade) // Parametermäßig auf der linken Klinge
+        {
+            lambda_dp = ScissorsCalculations.calcDroppedPerpendicular(s, lambda, s.getLlStart());
+            collision_LambdaOnBlade = Calculator.checkDistance(b, lambda_dp, e); // Kollidieren mit der linken Klinge
+        }
+        if(rho_onBlade) // Parametermäßig auf der rechten Klinge
+        {
+            rho_dp = ScissorsCalculations.calcDroppedPerpendicular(s, rho, s.getRlStart());
+            collision_RhoOnBlade = Calculator.checkDistance(b, rho_dp, e); // Kollidieren mit der rechten Klinge
+        }
+
+        /*
+        * durch das epsilon werden an engen Stellen beide Kollisions-booleans auf true gesetzt.
+        * Daher prüfen welche die nähere Klinge ist
+        * */
+        int decision = checkClosest(b); // 0 = left blade 1 = right blade 2 = both blades
+        switch (decision) {
+            case 0: // left blade
+                if (collision_LambdaOnBlade) {
+                    if(s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x))
+                        deflect_Dynamic(b, s, 0);
+                    else
+                        deflect_Static(b, 0);
+                }
+                break;
+
+            case 1: // right blade
+                if (collision_RhoOnBlade) {
+                    if(s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x))
+                        deflect_Dynamic(b, s,1);
+                    else
+                        deflect_Static(b, 1);
+                }
+                break;
+
+            case 2: // both blades
+                if (collision_LambdaOnBlade & collision_RhoOnBlade & s.isClosing())
+                    shoot(b, s);
+                break;
         }
     }
 
@@ -71,27 +93,76 @@ public class ScissorsCollisions {
 
     public static void shoot(Ball b, Scissors s) {
         s.calcDirectionalVector();
-        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector()), b.getVelVec());
-        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector());
+        ScissorsCalculations.calcAverageDeflectVelocity(s, lambda_dp, rho_dp);
+//        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector()), b.getVelVec());
+//        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector());
 
-        b.setVelVec(MyVector.add(b.getVelVec(), s.getDirectionalVector()));
+        b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity)));
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.add(vParallel, s.getDirectionalVector())));
 
     }
 
-    public static void deflect(Ball b, Scissors s, int decision) {
-        MyVector normedCenterLine, vOrthogonal, vParallel;
+    public static void deflect_Static(Ball b, int decision) {
+        MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel;
         switch (decision) {
             case 0: // lambda
                 normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
+                lambda_dp = new MyVector(0,0);
+                break;
+            case 1: // rho
+                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
+                rho_dp = new MyVector(0,0);
+                break;
+        }
+        vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+        vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+
+        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+    }
+    public static void deflect_Dynamic(Ball b, Scissors s, int decision) {
+        MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel, vParallel_Blade = new MyVector(0,0);
+        switch (decision) {
+            case 0: // lambda
+                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
+                ScissorsCalculations.calcDeflectVelocity(s, lambda_dp, rho_dp);
+                vParallel_Blade = MyVector.multiply(MyVector.multiply(normedCenterLine, -1), ScissorsCalculations.lambda_velocity);
+                lambda_dp = new MyVector(0,0);
+                break;
+            case 1: // rho
+                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
+                ScissorsCalculations.calcDeflectVelocity(s, lambda_dp, rho_dp);
+                vParallel_Blade = MyVector.multiply(MyVector.multiply(normedCenterLine, -1), ScissorsCalculations.rho_velocity);
+                rho_dp = new MyVector(0,0);
+                break;
+        }
+        vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+        vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+
+        b.setVelVec(MyVector.add(vOrthogonal, Collision.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5)));
+//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+
+
+
+        /*if (s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x)) {
+//            centerShock(b.getVelVec(), b.getMass(), Calculator.getLambda_velocity(), 20);
+//            b.setVelVec(MyVector.multiply(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)), (MainWindowModel.get().getScissorsSpeed()+1)));
+//            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply( MyVector.multiply(vParallel, -1), (MainWindowModel.get().getScissorsSpeed()+1))));
+//            vParallel = MyVector.multiply(vParallel, MainWindowModel.get().getScissorsSpeed()+1);
+              b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(MyVector.multiply(normedCenterLine, -1), (MainWindowModel.get().getScissorsSpeed()*600))));
+              System.out.println("Accelerated");
+        }*/
+    }
+
+    /*
+    * normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
                 ScissorsCalculations.calcDeflectVelocity(s, lambda_dp, rho_dp);
 
                 /*vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
                 vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);*/
 
-                if (s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x)) {
+//                if (s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x)) {
 
-                    MyVector lambda_Vel = Collision.centerShock(b.getVelVec(), b.getMass(), MyVector.multiply(normedCenterLine, -Calculator.getLambda_velocity()), 20);
+//        MyVector lambda_Vel = Collision.centerShock(b.getVelVec(), b.getMass(), MyVector.multiply(normedCenterLine, -Calculator.getLambda_velocity()), 20);
 
 
 
@@ -99,40 +170,9 @@ public class ScissorsCollisions {
 //            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply( MyVector.multiply(vParallel, -1), (MainWindowModel.get().getScissorsSpeed()+1))));
 //            vParallel = MyVector.multiply(vParallel, MainWindowModel.get().getScissorsSpeed()+1);
 //                    b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(MyVector.multiply(normedCenterLine, -1), (MainWindowModel.get().getScissorsSpeed()*600))));
-                    System.out.println("Accelerated");
-                }
+//        System.out.println("Accelerated");
+//    }
 
-
-
-                lambda_dp = new MyVector(0,0);
-                break;
-            case 1: // rho
-                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
-                ScissorsCalculations.calcDeflectVelocity(s, lambda_dp, rho_dp);
-
-
-                rho_dp = new MyVector(0,0);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + decision);
-        }
-        vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-        vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
-        /*if (s.isClosing() & (lambda_hc.x < b.getPosVec().x & b.getPosVec().x < rho_hc.x)) {
-
-            centerShock(b.getVelVec(), b.getMass(), Calculator.getLambda_velocity(), 20);
-
-
-
-//            b.setVelVec(MyVector.multiply(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)), (MainWindowModel.get().getScissorsSpeed()+1)));
-//            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply( MyVector.multiply(vParallel, -1), (MainWindowModel.get().getScissorsSpeed()+1))));
-//            vParallel = MyVector.multiply(vParallel, MainWindowModel.get().getScissorsSpeed()+1);
-            b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(MyVector.multiply(normedCenterLine, -1), (MainWindowModel.get().getScissorsSpeed()*600))));
-            System.out.println("Accelerated");
-        }*/
-
-        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-    }
 
     private static MyVector bladeShock(MyVector p1, MyVector v1, double m1, MyVector p2, MyVector v2, double m2) {
         MyVector normedCenterLine = MyVector.norm(MyVector.subtract(p1, p2));

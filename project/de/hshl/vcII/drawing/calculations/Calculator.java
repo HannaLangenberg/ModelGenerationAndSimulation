@@ -23,6 +23,9 @@ public class Calculator {
         ScissorsCalculations.rho_velocity = rho_velocity;
     }
 
+    public static boolean checkDistance(Ball b, MyVector dp_Coord, double epsilon) {
+        return MyVector.distance(b.getPosVec(), dp_Coord) <= b.getRadius() + epsilon;
+    }
 
     //_GETTERS_SETTERS__________________________________________________________________________________________________
     public static void setDroppedPerpendicular(MyVector droppedPerpendicular) {
