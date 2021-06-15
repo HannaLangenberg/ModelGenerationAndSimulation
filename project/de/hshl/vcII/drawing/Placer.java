@@ -139,7 +139,7 @@ public class Placer {
         mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
         if(Math.abs(xEnd - xStart) < 200)
             scissors.getRectangle().setWidth(Math.abs(xEnd - xStart));
-        if (Math.abs(yEnd - yStart) < 400)
+        if (Math.abs(yEnd - yStart) < 350)
             scissors.getRectangle().setHeight(Math.abs(yEnd - yStart));
         scissors.setPosVec(new MyVector(xStart, yStart));
         mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());

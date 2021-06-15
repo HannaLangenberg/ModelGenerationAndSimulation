@@ -112,10 +112,10 @@ public class WallCollision {
 
     }
     private static void checkCorners(Wall w, Ball b, double e) {
-        s_onPosCorner = (s >=  1 + (-b.getRadius()-e)/75)  &  (s <=  1 + (b.getRadius()+e)/75);
-        s_onNegCorner = (s >= -1 + (-b.getRadius()-e)/75)  &  (s <= -1 + (b.getRadius()+e)/75);
-        t_onPosCorner = (t >=  1 + (-b.getRadius()-e)/75)  &  (t <=  1 + (b.getRadius()+e)/75);
-        t_onNegCorner = (t >= -1 + (-b.getRadius()-e)/75)  &  (t <= -1 + (b.getRadius()+e)/75);
+        s_onPosCorner = (s >=  1 + (-b.getRadius()-e)/150)  &  (s <=  1 + (b.getRadius()+e)/150);
+        s_onNegCorner = (s >= -1 + (-b.getRadius()-e)/150)  &  (s <= -1 + (b.getRadius()+e)/150);
+        t_onPosCorner = (t >=  1 + (-b.getRadius()-e)/ 50)  &  (t <=  1 + (b.getRadius()+e)/ 50);
+        t_onNegCorner = (t >= -1 + (-b.getRadius()-e)/ 50)  &  (t <= -1 + (b.getRadius()+e)/ 50);
 
         if(s_onPosCorner & t_onPosCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(1, 1));
