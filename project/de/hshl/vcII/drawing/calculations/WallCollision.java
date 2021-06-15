@@ -93,6 +93,7 @@ public class WallCollision {
             }
 
             reset();
+            WallCalculations.reset();
         }
     }
 

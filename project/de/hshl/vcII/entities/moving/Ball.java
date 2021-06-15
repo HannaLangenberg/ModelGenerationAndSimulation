@@ -22,6 +22,7 @@ public class Ball extends Ellipse {
     private MyVector vel0Vec;
     private MyVector accVec;
     private MyVector frcVec;
+    private MyVector rolVec;
     private Arrow arrow;
     private boolean isColliding;
     private Arrow a;
@@ -59,8 +60,10 @@ public class Ball extends Ellipse {
         this.vel0Vec = vel0Vec;
         this.accVec = accVec;
         this.frcVec = frcVec;
-        setFrcVec(new MyVector(0.24, 0.18)); // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
-        //setRadius(radius);
+        // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
+        setFrcVec(new MyVector(0.24, 0.18));
+        // Rollreibung für Fahrradreifen auf Straße zwei Komponenten, da sie einen Breich angeben. 0,002 - 0,004 i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
+        setRolVec(new MyVector(0.002, 0.004));
         this.mass = new SimpleDoubleProperty(mass);
         this.radius = new SimpleDoubleProperty(radius);
         this.setRadius(radius);
@@ -175,6 +178,13 @@ public class Ball extends Ellipse {
 
     public Color getStrokeColor() {
         return strokeColor;
+    }
+
+    public void setRolVec(MyVector rolVec) {
+        this.rolVec = rolVec;
+    }
+    public MyVector getRolVec() {
+        return rolVec;
     }
 
     public Arrow getArrow() { return arrow; }

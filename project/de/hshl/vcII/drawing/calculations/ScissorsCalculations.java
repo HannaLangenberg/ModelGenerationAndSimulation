@@ -6,8 +6,7 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCalculations {
 
-    private static double lambda;
-    private static double rho;
+    private static double lambda, rho;
     static double lambda_velocity, rho_velocity, average_velocity;
 
     public static int checkPosition(Ball b, MyVector hc) {
@@ -16,6 +15,11 @@ public class ScissorsCalculations {
         else if(b.getPosVec().x > hc.x) // Rechts
             return 1;
         else return 2;
+    }
+
+    public static void reset() {
+        lambda = rho = 0;
+        lambda_velocity = rho_velocity = average_velocity = 0;
     }
 
     public static MyVector calc_lambda_rho_Parameters(Scissors s, Ball b, MyVector left, MyVector right) {

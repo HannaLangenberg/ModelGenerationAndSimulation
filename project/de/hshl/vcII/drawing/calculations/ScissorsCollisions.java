@@ -11,11 +11,8 @@ public class ScissorsCollisions {
     private static boolean rho_onBlade;
     private static boolean collision_LambdaOnBlade;
     private static boolean collision_RhoOnBlade;
-    static MyVector lambda_dp = new MyVector(0,0);
-    static MyVector rho_dp = new MyVector(0,0);
-    private static MyVector lambda_hc;
-    private static MyVector rho_hc;
-    private static MyVector lambda_rho_Parameters;
+    static MyVector lambda_dp = new MyVector(0,0), rho_dp = new MyVector(0,0);
+    private static MyVector lambda_hc, rho_hc, lambda_rho_Parameters;
     private static Scissors s;
 
     public static void checkScissors(Ball b, double e) {
@@ -24,7 +21,19 @@ public class ScissorsCollisions {
             lambda_rho_Parameters = ScissorsCalculations.calc_lambda_rho_Parameters(s, b, s.getLlStart(), s.getRlStart());
 
             checkBlades(b, e);
+
+            reset();
+            ScissorsCalculations.reset();
         }
+    }
+
+    private static void reset() {
+        collision_LambdaOnBlade = collision_RhoOnBlade = false;
+        lambda_onBlade = rho_onBlade = false;
+        lambda_hc = lambda_dp = new MyVector(0,0);
+        rho_hc = rho_dp = new MyVector(0,0);
+        lambda = rho = 0;
+        s = null;
     }
 
     private static void checkBlades(Ball b, double e) {
@@ -97,7 +106,8 @@ public class ScissorsCollisions {
 //        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector()), b.getVelVec());
 //        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector());
 
-        b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity)));
+        b.setVelVec(MyVector.add(b.getVelVec(), s.getDirectionalVector()));
+//        b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity)));
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.add(vParallel, s.getDirectionalVector())));
 
     }

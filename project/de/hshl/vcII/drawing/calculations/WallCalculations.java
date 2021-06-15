@@ -6,20 +6,27 @@ import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
 public class WallCalculations {
+    //Collision
     static MyVector deltas = new MyVector(0,0);
     static MyVector droppedPerpendicular;
+    //Friction
     static MyVector a_H = new MyVector(0,0);
     static MyVector a_N = new MyVector(0,0);
     private static MyVector a_R = new MyVector(0,0);
     static MyVector a_R_H = new MyVector(0,0);
     static MyVector a_R_G = new MyVector(0,0);
+    static MyVector a_R_R = new MyVector(0,0);
     static double f_H;
     static double f_N;
     private static double rk_G;
+    private static double rk_R;
     static double f_R_H;
     static double f_R_G;
+    static double f_R_R;
     static double angle_max_H;
+    static double angle_max_R;
 
+    //COLLISION_________________________________________________________________________________________________________
     //_Calculate_Plane_Parameters_______________________________________________________________________________________
     public static MyVector calc_s_t_Parameters(Wall w, MyVector position) {
         deltas = calcDeltas(w, position);
@@ -63,40 +70,84 @@ public class WallCalculations {
         MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
         b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-        droppedPerpendicular = new MyVector(0,0);
-        deltas = new MyVector(0,0);
     }
 
-    //_REIBUNG__________________________________________________________________________________________________________
+    //_Calculate_"dropped_perpendicular"'s_missing_coordinate___________________________________________________________
+    public static MyVector calcCoord_onEdge(Wall w, MyVector s_t) {
+        /*
+         *       e_x: (posX) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
+         *       e_y: (posY) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
+         * */
+        double x = w.getPosVec().x
+                + (   s_t.x * w.getCollision().getWidth()  * Math.cos(Math.toRadians(w.getE_alpha()))
+                + s_t.y * w.getCollision().getHeight() * Math.sin(Math.toRadians(w.getE_alpha()))
+        )
+                /2;
+        double y = w.getPosVec().y
+                + (   s_t.x * w.getCollision().getWidth()  * Math.sin(Math.toRadians(w.getE_alpha())) *-1
+                + s_t.y * w.getCollision().getHeight() * Math.cos(Math.toRadians(w.getE_alpha()))
+        )
+                /2;
+
+        return new MyVector(x,y);
+    }
+
+    //_Check_plane's_sides_for_collisions_______________________________________________________________________________
+    public static void calcDroppedPerpendicular(Wall w, MyVector s_t, int decision) {
+        switch (decision) {
+            case 0:
+                if(s_t.y < 0)
+                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, -1));
+                else
+                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, 1));
+                break;
+            case 1:
+                if(s_t.x < 0)
+                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(-1, s_t.y));
+                else
+                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector( 1, s_t.y));
+                break;
+        }
+    }
+
+    //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
+    public static boolean checkDistance(Ball b, boolean sidesHit, double epsilon) {
+        if (sidesHit) {
+            double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
+
+            return distance <= b.getRadius() + epsilon;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * FRICTION_________________________________________________________________________________________________________
+     * Zur Berechnung der Reibung muss beachtet werden, dass das Koordinatensystem von JavaFX auf dem Kopf steht.
+     * Damit man nicht umdenken muss, sind die Quadrantenangaben, als hätte man das Karthesische darüber gelegt.
+     * So ist bezeichnet beispielsweise Q4 den Bereich wo x und y Achse positiv sind ( "unten rechts" )
+     * Die Formeln sind:
+     *      Betrag der Hangabtriebskraft:         F_H = sin(a) * F_G
+     *      Betrag der Normalkraft:               F_N = cos(a) * F_G
+     * Für die zweite Abgabe hatten wir Gleitreibung und Haftreibung verwendet. Da wir allerdings Reibung auf eine Kugel
+     * anwenden möchten, wurde im Folgenden auf Rollreibung umgestellt. Allerdings haben wir die Haft- und Gleitreibung
+     * im Code gelassen, da sie unsere Arbeit zeigt.
+     * __noch von der Haft- und Gleitreibung______________________________
+     * Die Reibungskoeffizienten sind für jeden Ball in frcVec gespeichert
+     *      rk_H = b.getFrcVec().x;
+     *      rk_G = b.getFrcVec().y;
+     * Reibungskräfte:
+     *      Maximale Haftreibung:                f_R_H = rk_H * F_N;
+     *              Gleitreibung:                f_R_G = rk_G * F_N;
+     *
+     * maximaler Winkel, der möglich ist, ohne, dass der Gegenstand sich bewegt:
+     *      max Böschungswinkel:                 angle_max_H = Math.atan(rk_H);
+     * __jetzt Rollreibung________________________________________________
+     *
+     * */
+
     //_Berechne_HAFT_und_GLEITreibung_basiert_auf_Rotation______________________________________________________________
     public static void initializeForces(Wall w, Ball b, int decision) {
-        /*
-         * Beachten Sie weiter, dass das Koordinatensystem von JavaFX auf dem Kopf steht.
-         * Damit man nicht umdenken muss, sind die Quadrantenangaben, als hätte man das Karthesische darüber gelegt.
-         * So ist bezeichnet beispielsweise Q4 den Bereich wo x und y Achse positiv sind (" unten rechts ")
-         * Die Formeln sind:
-         * Betrag der Hangabtriebskraft:
-         *   F_H = sin(a) * F_G
-         *
-         * Betrag der Normalkraft:
-         *   F_N = cos(a) * F_G
-         *
-         * Reibungskoeffizienten in Ball frcVec gespeichert
-         *   rk_H = b.getFrcVec().x;
-         *   rk_G = b.getFrcVec().y;
-         *
-         * Reibungskräfte:
-         * Maximale Haftreibung:
-         *   f_R_H   = rk_H * F_N;
-         *
-         * Gleitreibung:
-         *   f_R_G   = rk_G * F_N;
-         *
-         * maximaler Winkel, der möglich ist, ohne, dass der Gegenstand sich bewegt: (max Böschungswinkel)
-         *   angle_max_H = Math.atan(rk_H);
-         *
-         * */
-
         /*
          * Entscheidung zwischen rotateLeft und rotateRight
          * Orientation von wall:
@@ -104,8 +155,11 @@ public class WallCalculations {
          * 1: Rotation nach rechts
          * */
 
-        angle_max_H = Math.atan(b.getFrcVec().x);     //Rückgabe in Radians
-        angle_max_H = Math.toDegrees(angle_max_H);    //Wir rechnen aber in Degree
+        angle_max_H = Math.atan(b.getFrcVec().x);                   //Rückgabe in Radians
+        angle_max_H = Math.toDegrees(angle_max_H);                  //Wir rechnen aber in Degree
+
+        angle_max_R = Math.atan(b.getRolVec().x / b.getRadius());   //Rückgabe in Radians
+        angle_max_R = Math.toDegrees(angle_max_R);                  //Wir rechnen aber in Degree
         double vel = MyVector.length(b.getVelVec());
 
         switch (decision)
@@ -125,14 +179,20 @@ public class WallCalculations {
                  * */
                 zersaegenSpaltenUndAufstapeln(b, w.getE_alpha());
 
-                if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_H) {
+//                    dontMove();
+                }
+                else {
+
+                }
+                /*if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }
                 else {
                     calcGleitreibung(b);
                     b.setAccVec(MyVector.add(b.getAccVec(), a_R_G));
-                }
+                }*/
                 break;
             case 1: //Rechts
                 //Winkel: +1++
@@ -155,30 +215,31 @@ public class WallCalculations {
         f_H = Utils.CONSTANT_OF_GRAVITATION * Math.sin(Math.toRadians(a));
         f_N = Utils.CONSTANT_OF_GRAVITATION * Math.cos(Math.toRadians(a));
         f_R_H = b.getFrcVec().x * f_N;
+        f_R_R = b.getRolVec().x * f_N;
     }
 
     //LINKS
     /*
-    * Kräfte in Vektoren zerlegen bei Rotation nach LINKS
-    * a_H:
-    * Hangabtriebskraft als Vektor zeigt in Q3
-    * Daher a + 180° rechnen, oder -cos(a) und sin(a) verwenden
-    *   a_H_x: -cos(a) * F_H
-    *   a_H_y:  sin(a) * F_H
-    *
-    * a_N:
-    * Normalkraft als Vektor zeigt in Q4
-    * Daher a nochmals +90, oder sin(a) und cos(a) verwenden
-    *   a_N_x:  sin(a) * F_N
-    *   a_N_y:  cos(a) * F_N
-    *
-    *a_R:
-    * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
-    * als Vektor zeigt in Q1
-    * Daher a += 90, oder cos(a) und -sin(a) verwenden
-    *   a_R_x:  cos(a)
-    *   a_R_y: -sin(a)
-    * */
+     * Kräfte in Vektoren zerlegen bei Rotation nach LINKS
+     * a_H:
+     * Hangabtriebskraft als Vektor zeigt in Q3
+     * Daher a + 180° rechnen, oder -cos(a) und sin(a) verwenden
+     *   a_H_x: -cos(a) * F_H
+     *   a_H_y:  sin(a) * F_H
+     *
+     * a_N:
+     * Normalkraft als Vektor zeigt in Q4
+     * Daher a nochmals +90, oder sin(a) und cos(a) verwenden
+     *   a_N_x:  sin(a) * F_N
+     *   a_N_y:  cos(a) * F_N
+     *
+     *a_R:
+     * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
+     * als Vektor zeigt in Q1
+     * Daher a += 90, oder cos(a) und -sin(a) verwenden
+     *   a_R_x:  cos(a)
+     *   a_R_y: -sin(a)
+     * */
     private static void zersaegenSpaltenUndAufstapeln(Ball b, double a)
     {
         double x,y;
@@ -206,29 +267,29 @@ public class WallCalculations {
 
     //RECHTS
     /*
-    * Kräfte in Vektoren zerlegen bei Rotation nach RECHTS
-    *
-    * a_H:
-    * Hangabtriebskraft als Vektor zeigt in Q4
-    * Den erhaltenen Winkel können wir übernehmen, dieser beträgt +360--.
-    * Darauf wenden wir cos(a) und -sin(a) an.
-    *   a_H_x:  cos(a) * F_H
-    *   a_H_y: -sin(a) * F_H
-    *
-    * a_N:
-    * Normalkraft als Vektor zeigt in Q3
-    * Daher a -= 90, oder sin(a) und cos(a) verwenden
-    *   a_N_x:  sin(a) * F_N
-    *   a_N_y:  cos(a) * F_N
-    *
-    * a_R:
-    * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
-    * als Vektor zeigt in Q2
-    * Daher a -= 90, oder -cos(a) und sin(a) verwenden
-    *   a_R_x: -cos(a)
-    *   a_R_y:  sin(a)
-    *
-    * */
+     * Kräfte in Vektoren zerlegen bei Rotation nach RECHTS
+     *
+     * a_H:
+     * Hangabtriebskraft als Vektor zeigt in Q4
+     * Den erhaltenen Winkel können wir übernehmen, dieser beträgt +360--.
+     * Darauf wenden wir cos(a) und -sin(a) an.
+     *   a_H_x:  cos(a) * F_H
+     *   a_H_y: -sin(a) * F_H
+     *
+     * a_N:
+     * Normalkraft als Vektor zeigt in Q3
+     * Daher a -= 90, oder sin(a) und cos(a) verwenden
+     *   a_N_x:  sin(a) * F_N
+     *   a_N_y:  cos(a) * F_N
+     *
+     * a_R:
+     * Einheitsvektor Reibung vorbereitet in Gegenrichtung zu Hangabtriebsbeschleunigung
+     * als Vektor zeigt in Q2
+     * Daher a -= 90, oder -cos(a) und sin(a) verwenden
+     *   a_R_x: -cos(a)
+     *   a_R_y:  sin(a)
+     *
+     * */
     private static void beeteUmstechen(Ball b, double a)
     {
         double x, y;
@@ -269,53 +330,18 @@ public class WallCalculations {
         a_R_G = MyVector.multiply(a_R, f_R_G);                  // GLEIT_reibungs_BESCHLEUNIGUNG
     }
 
-    //_Calculate_"dropped_perpendicular"'s_missing_coordinate___________________________________________________________
-    public static MyVector calcCoord_onEdge(Wall w, MyVector s_t) {
-        /*
-         *       e_x: (posX) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
-         *       e_y: (posY) + 1/2 ( s*rW*(-sin(a)) + t*rH(cos(a)) )
-         * */
-        double x = w.getPosVec().x
-                + (   s_t.x * w.getCollision().getWidth()  * Math.cos(Math.toRadians(w.getE_alpha()))
-                + s_t.y * w.getCollision().getHeight() * Math.sin(Math.toRadians(w.getE_alpha()))
-        )
-                /2;
-        double y = w.getPosVec().y
-                + (   s_t.x * w.getCollision().getWidth()  * Math.sin(Math.toRadians(w.getE_alpha())) *-1
-                + s_t.y * w.getCollision().getHeight() * Math.cos(Math.toRadians(w.getE_alpha()))
-        )
-                /2;
+    //Berechne Rollreibung
+    private static void calcRollreibung(Ball b) {
+        rk_R = b.getRolVec().x;
+        f_R_R = rk_R * f_N;
 
-        return new MyVector(x,y);
+        a_R_R = MyVector.multiply(a_R, f_R_R);
     }
 
-    //_Check_plane's_sides_for_collisions_______________________________________________________________________________
-
-    public static void calcDroppedPerpendicular(Wall w, MyVector s_t, int decision) {
-        switch (decision) {
-            case 0:
-                if(s_t.y < 0)
-                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, -1));
-                else
-                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, 1));
-                break;
-            case 1:
-                if(s_t.x < 0)
-                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(-1, s_t.y));
-                else
-                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector( 1, s_t.y));
-                break;
-        }
+    //RESET_____________________________________________________________________________________________________________
+    public static void reset() {
+        droppedPerpendicular = deltas = a_H = a_N = a_R = a_R_H = a_R_G = new MyVector(0,0);
+        f_H = f_N = rk_G = f_R_H = f_R_G = angle_max_H = 0;
     }
-    //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
 
-    public static boolean checkDistance(Ball b, boolean sidesHit, double epsilon) {
-        if (sidesHit) {
-            double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
-
-            return distance <= b.getRadius() + epsilon;
-        } else {
-            return false;
-        }
-    }
 }
