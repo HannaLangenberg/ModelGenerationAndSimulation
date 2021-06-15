@@ -7,12 +7,13 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCollisions {
     static double lambda, rho;
-    private static boolean lambda_onBlade;
-    private static boolean rho_onBlade;
-    private static boolean collision_LambdaOnBlade;
-    private static boolean collision_RhoOnBlade;
+    private static boolean lambda_onBlade, lambda_onPosTip, lambda_onNegTip;
+    private static boolean rho_onBlade, rho_onPosTip, rho_onNegTip;
+    private static boolean collision_LambdaOnBlade, collision_LambdaOnTip;
+    private static boolean collision_RhoOnBlade, collision_RhoOnTip;
     static MyVector lambda_dp = new MyVector(0,0), rho_dp = new MyVector(0,0);
     private static MyVector lambda_hc, rho_hc, lambda_rho_Parameters;
+    private static MyVector possibleTip = new MyVector(0,0);
     private static Scissors s;
 
     public static void checkScissors(Ball b, double e) {
@@ -21,6 +22,7 @@ public class ScissorsCollisions {
             lambda_rho_Parameters = ScissorsCalculations.calc_lambda_rho_Parameters(s, b, s.getLlStart(), s.getRlStart());
 
             checkBlades(b, e);
+            checkTips(b, e);
 
             reset();
             ScissorsCalculations.reset();
@@ -28,8 +30,8 @@ public class ScissorsCollisions {
     }
 
     private static void reset() {
-        collision_LambdaOnBlade = collision_RhoOnBlade = false;
-        lambda_onBlade = rho_onBlade = false;
+        collision_LambdaOnBlade = collision_LambdaOnTip = collision_RhoOnBlade = collision_RhoOnTip = false;
+        lambda_onBlade = lambda_onPosTip = rho_onBlade = rho_onPosTip = false;
         lambda_hc = lambda_dp = new MyVector(0,0);
         rho_hc = rho_dp = new MyVector(0,0);
         lambda = rho = 0;
@@ -58,9 +60,9 @@ public class ScissorsCollisions {
         }
 
         /*
-        * durch das epsilon werden an engen Stellen beide Kollisions-booleans auf true gesetzt.
-        * Daher prüfen welche die nähere Klinge ist
-        * */
+         * durch das epsilon werden an engen Stellen beide Kollisions-booleans auf true gesetzt.
+         * Daher prüfen welche die nähere Klinge ist
+         * */
         int decision = checkClosest(b); // 0 = left blade 1 = right blade 2 = both blades
         switch (decision) {
             case 0: // left blade
@@ -87,6 +89,36 @@ public class ScissorsCollisions {
                 break;
         }
     }
+
+    private static void checkTips(Ball b, double e) {
+        lambda_onPosTip = (lambda >=  1 + (-b.getRadius()-e)/150)  &  (lambda <=  1 + (b.getRadius()+e)/150);
+        lambda_onNegTip = (lambda >= -1 + (-b.getRadius()-e)/150)  &  (lambda <= -1 + (b.getRadius()+e)/150);
+        rho_onPosTip = (rho >=  1 + (-b.getRadius()-e)/ 50)  &  (rho <=  1 + (b.getRadius()+e)/ 50);
+        rho_onNegTip = (rho >= -1 + (-b.getRadius()-e)/ 50)  &  (rho <= -1 + (b.getRadius()+e)/ 50);
+
+        if(lambda_onPosTip) {
+            possibleTip = s.getLlStart();
+            System.out.println("1");
+        }
+        else if(rho_onPosTip) {
+            possibleTip = s.getRlStart();
+            System.out.println("2");
+        }
+        else if(lambda_onNegTip) {
+            possibleTip = s.getLlEnd();
+            System.out.println("3");
+        }
+        else if(rho_onNegTip) {
+            possibleTip = s.getRlEnd();
+            System.out.println("4");
+        }
+
+        if(lambda_onNegTip | lambda_onNegTip)
+            collision_LambdaOnTip = Calculator.checkDistance(b, possibleTip, e);
+        else if(rho_onPosTip | rho_onNegTip)
+            collision_RhoOnTip = Calculator.checkDistance(b, possibleTip, e);
+    }
+
 
     private static int checkClosest(Ball b) {
         double lambdaDistance = Math.abs(b.getPosVec().x - lambda_hc.x);

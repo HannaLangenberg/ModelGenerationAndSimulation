@@ -245,4 +245,12 @@ public class Scissors {
     public void setRlStart(MyVector rlStart) {
         this.rlStart = rlStart;
     }
+
+    public MyVector getLlEnd() {
+        return llEnd;
+    }
+
+    public MyVector getRlEnd() {
+        return rlEnd;
+    }
 }
