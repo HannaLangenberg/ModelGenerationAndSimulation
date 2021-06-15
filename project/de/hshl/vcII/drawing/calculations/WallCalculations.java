@@ -179,11 +179,12 @@ public class WallCalculations {
                  * */
                 zersaegenSpaltenUndAufstapeln(b, w.getE_alpha());
 
-                if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_H) {
-//                    dontMove();
+                if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_R) {
+                    dontMove(b);
                 }
                 else {
-
+                    calcRollreibung(b);
+                    b.setAccVec(MyVector.add(b.getAccVec(), a_R_R));
                 }
                 /*if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
                     calcHaftreibung(b);
@@ -199,16 +200,33 @@ public class WallCalculations {
                 calcForces(w.getSpin(), b);
                 //Winkel: +360--
                 beeteUmstechen(b, w.getE_alpha());
-                if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
+                if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_R) {
+                    dontMove(b);
+                }
+                else {
+                    calcRollreibung(b);
+                    b.setAccVec(MyVector.add(b.getAccVec(), a_R_R));
+                }
+                /*if(Math.abs(w.getSpin()) <= angle_max_H & vel <= f_R_H) {
                     calcHaftreibung(b);
                     b.setVelVec(MyVector.add(b.getVelVec(), a_R_H));
                 }
                 else {
                     calcGleitreibung(b);
                     b.setAccVec(MyVector.add(b.getAccVec(), a_R_G));
-                }
+                }*/
                 break;
         }
+    }
+
+    private static void dontMove(Ball b) {
+        /*
+        * Was passiert, solange dieser Winkel noch nicht überschritten ist, ist, dass sich alle wirkenden Kräfte
+        * gegenseitig aufheben. Daher setzen wir sie hier der Einfachheit halber direkt auf null
+        * TODO ggf später ausführlicher machen
+        * */
+        b.setVelVec(MyVector.multiply(b.getVelVec(), 0));
+        b.setAccVec(MyVector.multiply(b.getAccVec(), 0));
     }
 
     private static void calcForces(double a, Ball b) {
