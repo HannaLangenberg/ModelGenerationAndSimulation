@@ -136,11 +136,11 @@ public class Placer {
     }
 
     public void redrawLines_s() {
-        if(Math.abs(xEnd - xStart) > 150 || yEnd - yStart > 400)
-            return;
         mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
-        scissors.getRectangle().setWidth(Math.abs(xEnd - xStart));
-        scissors.getRectangle().setHeight(Math.abs(yEnd - yStart));
+        if(Math.abs(xEnd - xStart) < 200)
+            scissors.getRectangle().setWidth(Math.abs(xEnd - xStart));
+        if (Math.abs(yEnd - yStart) < 400)
+            scissors.getRectangle().setHeight(Math.abs(yEnd - yStart));
         scissors.setPosVec(new MyVector(xStart, yStart));
         mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
     }
