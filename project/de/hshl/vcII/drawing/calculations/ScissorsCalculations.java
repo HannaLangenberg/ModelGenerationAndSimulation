@@ -6,20 +6,46 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCalculations {
 
-    private static double lambda, rho;
+    static double lambda, rho, a, o, f;
+    private static MyVector a_onLambdaBlade, a_onRhoBlade;
     static double lambda_velocity, rho_velocity, average_velocity;
+    static MyVector cp, rv, bp, hv;
 
-    public static int checkPosition(Ball b, MyVector hc) {
-        if(b.getPosVec().x < hc.x) // Links
-            return 0;
-        else if(b.getPosVec().x > hc.x) // Rechts
-            return 1;
-        else return 2;
+    public static boolean checkPosition(Scissors s, Ball b) {
+        //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llstart
+         calcCommonPoint(s, b);
+        // lambda (a) auch für rho verwenden und Punkte für Vektoren berechnen
+         a_onLambdaBlade = calcDroppedPerpendicular(s, a, s.getLlStart());
+         a_onRhoBlade    = calcDroppedPerpendicular(s, a, s.getRlStart());
+        // ball schnittpunkt zwischen 0 und 1 innen
+        f = MyVector.applyVectorEquation(a_onLambdaBlade, MyVector.subtract(a_onLambdaBlade, a_onRhoBlade), b.getPosVec());
+
+        if(f >= 0 & f <= 1)
+            return true;
+        else
+            return false;
+
+    }
+
+    private static void calcCommonPoint(Scissors s, Ball b) {
+        cp = s.getCrossingPoint();
+        rv = MyVector.subtract(s.getCrossingPoint(), s.getLlStart());
+        bp = b.getPosVec();
+        hv = MyVector.norm(MyVector.subtract(s.getRlStart(), s.getLlStart()));
+
+        // entspricht unserem lambda, also Skalierungsfaktor entlang der linken Klinge
+        a = ((cp.y - bp.y) * hv.x + (-cp.x + bp.x) * hv.y)
+            /(-rv.y * hv.x + rv.x * hv.y);
+
+        // Skalierungsfaktor entlang des Hilfsvektors
+        o = ((cp.x - bp.x)*(-s.getLlStart().y - cp.y) + (cp.y - bp.y)*(rv.x))
+            /(-(rv.y) * hv.x + (rv.x) * hv.y);
     }
 
     public static void reset() {
-        lambda = rho = 0;
+        lambda = rho = a = o = f = 0 ;
         lambda_velocity = rho_velocity = average_velocity = 0;
+        a_onLambdaBlade = a_onRhoBlade = cp = hv = bp = rv = new MyVector(0,0);
     }
 
     public static MyVector calc_lambda_rho_Parameters(Scissors s, Ball b, MyVector left, MyVector right) {
@@ -31,7 +57,7 @@ public class ScissorsCalculations {
         return new MyVector(lambda, rho);
     }
 
-    public static MyVector calcMissingXCoordinate(Scissors s, Ball b, MyVector line) {
+    public static MyVector calcCoordOnBlade(Scissors s, Ball b, MyVector line) {
         double x = s.getCrossingPoint().x + ((b.getPosVec().y - s.getCrossingPoint().y)/(line.y - s.getCrossingPoint().y))*(line.x - s.getCrossingPoint().x);
         return new MyVector(x, b.getPosVec().y);
     }

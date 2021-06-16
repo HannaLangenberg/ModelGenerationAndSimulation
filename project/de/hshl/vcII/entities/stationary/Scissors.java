@@ -14,14 +14,14 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class Scissors {
     private Rectangle rectangle;
-    private Line leftLine;
-    private Line rightLine;
+    private Line leftLine, leftLine_bts;
+    private Line rightLine, rightLine_bts;
     private final Group g;
     public Group getG() {
         return g;
     }
     private MyVector posVec; //upper left corner
-    private MyVector centerPoint, crossingPoint, llStart, llEnd, rlStart, rlEnd; //middle of rectangle
+    private MyVector centerPoint, crossingPoint, llStart, llStart_angle, llEnd, rlStart, rlStart_angle, rlEnd; //middle of rectangle
     private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llVector, rlVector;
     private static double angle;
 
@@ -78,10 +78,10 @@ public class Scissors {
     public void applyRotation(int decision) {
         switch (decision) {
             case 0: // abhängig von Gruppenrotation
-                upperLeft = llStart  = new MyVector(
+                upperLeft = llStart = llStart_angle = new MyVector(
                         g.localToParent(rectangle.getX(), rectangle.getY()).getX(),
                         g.localToParent(rectangle.getX(), rectangle.getY()).getY());
-                upperRight = rlStart = new MyVector(
+                upperRight = rlStart = rlStart_angle = new MyVector(
                         g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getX(),
                         g.localToParent(rectangle.getX() + rectangle.getWidth(),     rectangle.getY()).getY());
                 lowerLeft  = new MyVector(
@@ -98,8 +98,32 @@ public class Scissors {
 
                 break;
             case 1: // abhängig von einzelne Linienrotation
-                llStart = new MyVector(leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(), leftLine.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY());
-                rlStart = new MyVector(rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getX(), rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getY());
+                                llStart_angle = new MyVector(leftLine .localToParent( leftLine.getStartX(), leftLine .getStartY()).getX(),  leftLine.localToParent( leftLine.getStartX(),  leftLine.getStartY()).getY());
+                rlStart_angle = new MyVector(rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getX(), rightLine.localToParent(rightLine.getStartX(), rightLine.getStartY()).getY());
+
+                llStart = new MyVector(leftLine_bts.localToParent(leftLine_bts.getStartX(), leftLine_bts.getStartY()).getX(),leftLine_bts.localToParent(leftLine_bts.getStartX(), leftLine_bts.getStartY()).getY());
+                rlStart = new MyVector(rightLine_bts.localToParent(rightLine_bts.getStartX(), rightLine_bts.getStartY()).getX(), rightLine_bts.localToParent(rightLine_bts.getStartX(), rightLine_bts.getStartY()).getY());
+
+                llEnd   = new MyVector( leftLine_bts.localToParent( leftLine_bts.getEndX(), leftLine_bts.getEndY()).getX(),  leftLine_bts.localToParent( leftLine_bts.getEndX(),  leftLine_bts.getEndY()).getY());
+                rlEnd   = new MyVector(rightLine_bts.localToParent(rightLine_bts.getEndX(), rightLine_bts.getEndY()).getX(), rightLine_bts.localToParent(rightLine_bts.getEndX(), rightLine_bts.getEndY()).getY());
+
+                break;
+            case 2:
+
+                leftLine_bts = new Line
+                (
+                    g.localToParent(leftLine.getStartX(), leftLine.getStartY()).getX(),
+                    g.localToParent(leftLine.getStartX(), leftLine.getStartY()).getY(),
+                    g.localToParent(leftLine.getEndX(),   leftLine.getEndY()).getX(),
+                    g.localToParent(leftLine.getEndX(),   leftLine.getEndY()).getY()
+                );
+                rightLine_bts = new Line
+                (
+                    g.localToParent(rightLine.getStartX(), rightLine.getStartY()).getX(),
+                    g.localToParent(rightLine.getStartX(), rightLine.getStartY()).getY(),
+                    g.localToParent(rightLine.getEndX(),   rightLine.getEndY()).getX(),
+                    g.localToParent(rightLine.getEndX(),   rightLine.getEndY()).getY()
+                );
                 break;
         }
     }
@@ -108,8 +132,6 @@ public class Scissors {
         double x = llStart.x + 2.0/3 * (llEnd.x - llStart.x);
         double y = llStart.y + 2.0/3 * (llEnd.y - llStart.y);
         crossingPoint = new MyVector(x,y);
-//        System.out.println(crossingPoint);
-//        System.out.println(leftLine.toString());
     }
     public void calcCenterPoint() {
         if(rectangle.getRotate() != 0) {
@@ -127,18 +149,25 @@ public class Scissors {
     }
 
     public void animate(AnchorPane aDrawingPane) {
-        llVector = MyVector.subtract(crossingPoint, llStart);
-        rlVector = MyVector.subtract(crossingPoint, rlStart);
+        llVector = MyVector.subtract(crossingPoint, llStart_angle);
+        rlVector = MyVector.subtract(crossingPoint, rlStart_angle);
         angle = MyVector.angle(llVector, rlVector);
+        Rotate rotate_left = new Rotate(0,  crossingPoint.x, crossingPoint.y);
+        Rotate rotate_right = new Rotate(0,  crossingPoint.x, crossingPoint.y);
 //        System.out.println(angle);
         if(angle > 1) {
-            leftLine.getTransforms().add(new Rotate(MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
-            rightLine.getTransforms().add(new Rotate(-MainWindowModel.get().getScissorsSpeed(), crossingPoint.x, crossingPoint.y));
-            applyRotation(1);
+            rotate_left.setAngle(rotate_left.getAngle() + MainWindowModel.get().getScissorsSpeed());
+            rotate_right.setAngle(rotate_right.getAngle() - MainWindowModel.get().getScissorsSpeed());
         }
         else {
             setClosing(false);
         }
+        leftLine.getTransforms().add(rotate_left);
+        leftLine_bts.getTransforms().add(rotate_left);
+        rightLine.getTransforms().add(rotate_right);
+        rightLine_bts.getTransforms().add(rotate_right);
+
+        applyRotation(1);
         draw(aDrawingPane);
     }
 

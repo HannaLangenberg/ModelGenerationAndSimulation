@@ -45,6 +45,23 @@
         return MyVector.divide(vec, length(vec));
     }
 
+    // Construct and apply a variable Vector
+    public static double applyVectorEquation(MyVector ov, MyVector rv, MyVector p) {
+        // ov + s * rv
+        double s = (p.x - ov.x)/(rv.x);
+//        double sy = (p.y - ov.y)/(rv.y);
+        if(Double.isNaN(s))
+        {
+            s = (p.y - ov.y)/(rv.y);
+        }
+        /*if(Double.isNaN(sy))
+        {
+            sy = s;
+        }
+        if(s == sy)*/
+        return s;
+    }
+
     // Calculate the orthogonal projection between given vector and shock normal
     public static MyVector orthogonalProjection(MyVector vec, MyVector normal) {
         return MyVector.multiply(normal, MyVector.dot(normal, vec));

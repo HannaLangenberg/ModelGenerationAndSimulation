@@ -73,7 +73,7 @@ public class SettingsController {
         {
             mainWindowModel.setSavedSceneHeight(stage.getHeight());
 
-            stage.setHeight(600);
+            stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
 
             vb_displayCurrentParams.getChildren().add(cRootPane);
             currentParamsOpen = true;

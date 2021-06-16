@@ -39,6 +39,8 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
     @FXML
     public CheckBox cb_choice_active;
+    public Slider sl_Elasticity;
+    public Label lCurrentElasticity;
     @FXML
     private CheckBox chb_Wind;
     @FXML

@@ -92,6 +92,7 @@ public class KeyManager {
             case S:
                 //close scissors
                 if(mainWindowModel.getScissorsManager().getS() != null) {
+                    mainWindowModel.getScissorsManager().getS().applyRotation(2);
                     mainWindowModel.getScissorsManager().getS().setClosing(true);
                     mainWindowModel.getScissorsManager().getS().getRectangle().setStrokeWidth(0);
                 }
