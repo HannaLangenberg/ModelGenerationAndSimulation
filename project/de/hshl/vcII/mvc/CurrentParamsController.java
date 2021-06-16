@@ -19,8 +19,6 @@ public class CurrentParamsController {
     @FXML
     public Label l_current_Delta_T;
     @FXML
-    public Label l_current_FPS;
-    @FXML
     public Label l_current_Gravitation;
     @FXML
     public TableView<Ball> tv_ball_params;
@@ -34,6 +32,12 @@ public class CurrentParamsController {
     public TableColumn<Ball, Integer> tc_Radius;
     @FXML
     public TableColumn<Ball, Integer> tc_Mass;
+    @FXML
+    public TableColumn<Ball, String> tc_potE;
+    @FXML
+    public TableColumn<Ball, String> tc_kinE;
+    @FXML
+    public TableColumn<Ball, String> tc_lossE;
 
     private ObservableList<Ball> ballObservableList;
 
@@ -43,7 +47,6 @@ public class CurrentParamsController {
     void initialize() {
         l_current_Gravitation.setText("(" + Utils.GRAVITY.x + "/" + Utils.GRAVITY.y + ")");
         l_current_Delta_T.setText(String.valueOf(Utils.DELTA_T));
-        l_current_FPS.setText("60" + " fps");
         ballObservableList = FXCollections.observableArrayList();
     }
 

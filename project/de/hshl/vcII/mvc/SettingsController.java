@@ -25,7 +25,6 @@ public class SettingsController {
     private AnchorPane cRootPane;
     private CurrentParamsController currentParamsController;
 
-    private boolean wind_changed = false;
     private boolean currentParamsOpen = false;
 
     public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
@@ -45,6 +44,7 @@ public class SettingsController {
 
         initWindFields(tf_Wind_X);
         initWindFields(tf_Wind_Y);
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
             this.cRootPane = loader.load();
@@ -113,7 +113,6 @@ public class SettingsController {
 
     private void initWindFields(TextField tf) {
         tf.textProperty().addListener((observableValue, s, t1) -> {
-            wind_changed = true;
             Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
         });
     }
@@ -124,7 +123,7 @@ public class SettingsController {
 
     public void setV0() {
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
+            b.setVel0Vec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
         }
     }
 }

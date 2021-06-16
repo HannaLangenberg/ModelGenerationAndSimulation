@@ -104,19 +104,26 @@
     -fx-background-color: #FEFEFE;
 }
 
+.table-view .scroll-bar:horizontal * {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
 
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
 
 .table-view {
    -fx-background-color: #DCDCDC;
    -fx-background-radius: 4;
+   -fx-focus-color: transparent;
+
 }
 
-.table-view *.scroll-bar:horizontal,
-.table-view *.scroll-bar:horizontal *.increment-button,
-.table-view *.scroll-bar:horizontal *.decrement-button,
-.table-view *.scroll-bar:horizontal *.increment-arrow,
-.table-view *.scroll-bar:horizontal *.decrement-arrow {
-    -fx-background-color: null;
+
+.table-column {
+    -fx-padding: 0 0 0 15px;
 }
 
 .table-view .column-header {
