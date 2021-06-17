@@ -3,6 +3,8 @@ package project.de.hshl.vcII.drawing.calculations;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
+
 /**
  * Klasse für Ball gegen Wand Kollisionen
  *
@@ -72,6 +74,7 @@ public class WallCollision {
     private static boolean s_onNegCorner;
     private static boolean t_onPosCorner;
     private static boolean t_onNegCorner;
+    static int corner;
     private static MyVector s_t_Parameters;
     private static MyVector possibleCorner = new MyVector(0,0);
 
@@ -108,32 +111,46 @@ public class WallCollision {
         MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
         MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
 
+
+        if( (corner == 4 & vParallel.x < 0)
+                || (corner == 7 & vParallel.x > 0)
+                || (corner == 5 & vParallel.x < 0)
+                || (corner == 6 & vParallel.x > 0))
+        {
+            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
+        }
+        b.setColliding_Parallel_B(false);
     }
     private static void checkCorners(Wall w, Ball b, double e) {
-        s_onPosCorner = (s >=  1 + (-b.getRadius()-e)/150)  &  (s <=  1 + (b.getRadius()+e)/150);
-        s_onNegCorner = (s >= -1 + (-b.getRadius()-e)/150)  &  (s <= -1 + (b.getRadius()+e)/150);
-        t_onPosCorner = (t >=  1 + (-b.getRadius()-e)/ 50)  &  (t <=  1 + (b.getRadius()+e)/ 50);
-        t_onNegCorner = (t >= -1 + (-b.getRadius()-e)/ 50)  &  (t <= -1 + (b.getRadius()+e)/ 50);
+        s_onPosCorner = (s >=  1 + (-b.getRadius()-e)/w.getCollision().getWidth()/2)   &  (s <=  1 + (b.getRadius()+e)/w.getCollision().getWidth()/2);
+        s_onNegCorner = (s >= -1 + (-b.getRadius()-e)/w.getCollision().getWidth()/2)   &  (s <= -1 + (b.getRadius()+e)/w.getCollision().getWidth()/2);
+        t_onPosCorner = (t >=  1 + (-b.getRadius()-e)/w.getCollision().getHeight()/2)  &  (t <=  1 + (b.getRadius()+e)/w.getCollision().getHeight()/2);
+        t_onNegCorner = (t >= -1 + (-b.getRadius()-e)/w.getCollision().getHeight()/2)  &  (t <= -1 + (b.getRadius()+e)/w.getCollision().getHeight()/2);
 
         if(s_onPosCorner & t_onPosCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(1, 1));
-            System.out.println("1");
+            corner = 5;
+            System.out.println("5");
         }
         else if(s_onPosCorner & t_onNegCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(1,-1));
-            System.out.println("2");
+            corner = 4;
+            System.out.println("4");
         }
         else if(s_onNegCorner & t_onNegCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(-1,-1));
-            System.out.println("3");
+            corner = 7;
+            System.out.println("7");
         }
         else if(s_onNegCorner & t_onPosCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(-1,1));
-            System.out.println("4");
+            corner = 6;
+            System.out.println("6");
         }
         collision_onCorner = Calculator.checkDistance(b, possibleCorner, e);
+        b.setColliding_Parallel_B(collision_onCorner);
 
     }
 
@@ -144,12 +161,13 @@ public class WallCollision {
         boolean t_onEdge = t >= -1 && t <= 1;
 
         if (s_onEdge) {
-            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 0);
+            WallCalculations.calcDroppedPerpendicular(b, w, s_t_Parameters, 0);
         }
         if (t_onEdge) {
-            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 1);
+            WallCalculations.calcDroppedPerpendicular(b, w, s_t_Parameters, 1);
         }
         collision_onEdge = WallCalculations.checkDistance(b, s_onEdge||t_onEdge, e);
+        b.setColliding_Parallel_B(collision_onEdge);
     }
 
     private static void reset() {
@@ -165,6 +183,7 @@ public class WallCollision {
         t = -5;
     }
 
+    //_for snapping in Placer__
     public static boolean checkBallPlacement(Wall w, Ball b, MyVector s_t_Parameters, double e) {
         s = s_t_Parameters.x;
         t = s_t_Parameters.y;

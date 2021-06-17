@@ -25,6 +25,7 @@ public class WallCalculations {
     static double f_R_R;
     static double angle_max_H;
     static double angle_max_R;
+    static int side; //0 = top, 1 = right, 2 = bottom, 3 = left
 
     //COLLISION_________________________________________________________________________________________________________
     //_Calculate_Plane_Parameters_______________________________________________________________________________________
@@ -69,7 +70,29 @@ public class WallCalculations {
         MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
         MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+
+        if( (side == 1 & vParallel.x < 0)
+         || (side == 3 & vParallel.x > 0)) {
+            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
+        }
+
+        if ((side == 2 & vParallel.y < 0)) {
+            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
+        }
+
+        if(side == 0 & vParallel.y > 0) {
+            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
+            if(Math.abs(vParallel.y) < Utils.CONSTANT_OF_GRAVITATION/3)
+            {
+                b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, 0)));
+                b.setColliding_Orthogonal_F(true);
+            }
+        }
+        if(MyVector.length(b.getVelVec()) == MyVector.length(vOrthogonal) & b.isColliding_Parallel_B()) {
+            b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+        }
+        b.setColliding_Parallel_B(false);
     }
 
     //_Calculate_"dropped_perpendicular"'s_missing_coordinate___________________________________________________________
@@ -93,24 +116,32 @@ public class WallCalculations {
     }
 
     //_Check_plane's_sides_for_collisions_______________________________________________________________________________
-    public static void calcDroppedPerpendicular(Wall w, MyVector s_t, int decision) {
+    public static void calcDroppedPerpendicular(Ball b, Wall w, MyVector s_t, int decision) {
         switch (decision) {
             case 0:
-                if(s_t.y < 0)
+                if(s_t.y < 0) {
                     droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, -1));
-                else
+                    side = 0;
+                }
+                else {
                     droppedPerpendicular = calcCoord_onEdge(w, new MyVector(s_t.x, 1));
+                    side = 2;
+                }
                 break;
             case 1:
-                if(s_t.x < 0)
+                if(s_t.x < 0) {
                     droppedPerpendicular = calcCoord_onEdge(w, new MyVector(-1, s_t.y));
-                else
-                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector( 1, s_t.y));
+                    side = 3;
+                }
+                else {
+                    droppedPerpendicular = calcCoord_onEdge(w, new MyVector(1, s_t.y));
+                    side = 1;
+                }
                 break;
         }
     }
 
-    //_Overloaded_checkDistance_(for_sides_&_corners)___________________________________________________________________
+    //_Overloaded_checkDistance_(for_sides_&_placer)____________________________________________________________________
     public static boolean checkDistance(Ball b, boolean sidesHit, double epsilon) {
         if (sidesHit) {
             double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
@@ -155,8 +186,8 @@ public class WallCalculations {
          * 1: Rotation nach rechts
          * */
 
-        angle_max_H = Math.atan(b.getFrcVec().x);                   //Rückgabe in Radians
-        angle_max_H = Math.toDegrees(angle_max_H);                  //Wir rechnen aber in Degree
+//        angle_max_H = Math.atan(b.getFrcVec().x);                   //Rückgabe in Radians
+//        angle_max_H = Math.toDegrees(angle_max_H);                  //Wir rechnen aber in Degree
 
         angle_max_R = Math.atan(b.getRolVec().x / b.getRadius());   //Rückgabe in Radians
         angle_max_R = Math.toDegrees(angle_max_R);                  //Wir rechnen aber in Degree
@@ -201,7 +232,7 @@ public class WallCalculations {
                 //Winkel: +360--
                 beeteUmstechen(b, w.getE_alpha());
                 if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_R) {
-                    dontMove(b);
+                    dontMove(b); //TODO
                 }
                 else {
                     calcRollreibung(b);
@@ -359,7 +390,7 @@ public class WallCalculations {
     //RESET_____________________________________________________________________________________________________________
     public static void reset() {
         droppedPerpendicular = deltas = a_H = a_N = a_R = a_R_H = a_R_G = new MyVector(0,0);
-        f_H = f_N = rk_G = f_R_H = f_R_G = angle_max_H = 0;
+        f_H = f_N = rk_G = f_R_H = f_R_G = angle_max_H = side = 0;
     }
 
 }

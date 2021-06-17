@@ -28,7 +28,11 @@ public class Collision {
             // Beides mit Energieverlust
             if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)
                 || (b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
-                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), -b.getVelVec().y)); // Energieverlust
+                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), b.getVelVec().y)); // Energieverlust
+            }
+
+            if((b.getPosVec().y < b.getRadius() + e) & (b.getVelVec().y < 0)) {
+                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
             }
 
             if((b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
