@@ -18,8 +18,8 @@ import static project.de.hshl.vcII.utils.Utils.isDouble;
 public class SettingsController {
     private MainWindowModel mainWindowModel = MainWindowModel.get();
 
-    private Slider sl_Radius, sl_Weight, sl_ScissorsSpeed;
-    private Label lCurrentRadius, lCurrentWeight;
+    private Slider sl_Radius, sl_Weight, sl_Elasticity, sl_ScissorsSpeed;
+    private Label lCurrentRadius, lCurrentWeight, lCurrentElasticity;
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     private VBox vb_displayCurrentParams;
     private AnchorPane cRootPane;
@@ -28,19 +28,25 @@ public class SettingsController {
     private boolean currentParamsOpen = false;
 
     public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
-                           TextField tf_Wind_X, TextField tf_Wind_Y, TextField tf_v0_X, TextField tf_v0_Y,
-                           VBox vb_displayCurrentParams){
+                           Slider sl_Elasticity, Label lCurrentElasticity, TextField tf_Wind_X, TextField tf_Wind_Y,
+                           TextField tf_v0_X, TextField tf_v0_Y, VBox vb_displayCurrentParams){
         this.sl_ScissorsSpeed = sl_ScissorsSpeed;
         this.sl_Radius = sl_Radius;
         this.lCurrentRadius = lCurrentRadius;
         this.sl_Weight = sl_Weight;
         this.lCurrentWeight = lCurrentWeight;
+        this.sl_Elasticity = sl_Elasticity;
+        this.lCurrentElasticity = lCurrentElasticity;
         this.tf_Wind_X = tf_Wind_X;
         this.tf_Wind_Y = tf_Wind_Y;
         this.tf_v0_X = tf_v0_X;
         this.tf_v0_Y = tf_v0_Y;
         this.vb_displayCurrentParams = vb_displayCurrentParams;
         this.cRootPane = new AnchorPane();
+
+        lCurrentRadius.setText(lCurrentRadius.getText() + " " + sl_Radius.getValue());
+        lCurrentWeight.setText(lCurrentWeight.getText() + " " + sl_Weight.getValue()); // TODO Gewicht in Kg
+        lCurrentElasticity.setText(lCurrentElasticity.getText() + " " + sl_Elasticity.getValue()*100);
 
         initWindFields(tf_Wind_X);
         initWindFields(tf_Wind_Y);
@@ -86,6 +92,7 @@ public class SettingsController {
 
 
     //-Parameter-Setting------------------------------------------------------------------------------------------------
+    //_slider__
     public void sl_Radius_OnDragDetected(){
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
             ((Ball) mainWindowModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
@@ -96,10 +103,18 @@ public class SettingsController {
 
     public void sl_Weight_OnDragDetected() {
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue()/1000);
-            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass())*1000);
+            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
+            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
+    }
+
+    public void sl_Elasticity_OnDragDetected() {
+        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainWindowModel.getCurrentlySelected()).setElasticity(sl_Elasticity.getValue());
+            lCurrentElasticity.setText("Aktuelle Elastizität [%]: " + (((Ball) mainWindowModel.getCurrentlySelected()).getElasticity())*100);
+        }
+        System.out.println("-----\t" + sl_Elasticity.getValue()*100 + "\t-----");
     }
 
     public void sl_ScissorsSpeed_OnDragDetected(){
@@ -123,7 +138,9 @@ public class SettingsController {
 
     public void setV0() {
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setVel0Vec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
+            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
         }
     }
+
+
 }

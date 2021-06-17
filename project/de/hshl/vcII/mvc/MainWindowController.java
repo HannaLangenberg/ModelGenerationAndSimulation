@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
+import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -39,7 +40,9 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
     @FXML
     public CheckBox cb_choice_active;
+    @FXML
     public Slider sl_Elasticity;
+    @FXML
     public Label lCurrentElasticity;
     @FXML
     private CheckBox chb_Wind;
@@ -86,7 +89,7 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-               settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, tf_Wind_X, tf_Wind_Y,
+               settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity, lCurrentElasticity, tf_Wind_X, tf_Wind_Y,
                 tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
         // Get the original MainWindowModel
@@ -134,7 +137,7 @@ public class MainWindowController implements Initializable {
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
-        Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 2.75);
+        Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 2.75,0.5,0,0,0,0);
         mainWindowModel.setCurrentlySelected(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.getWallManager().setW(null);
@@ -195,15 +198,19 @@ public class MainWindowController implements Initializable {
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
     private void run(){
-        mainWindowModel.getSimulator().run();
         // check all TextFields for values
         settingsController.fillVariables();
         if (firstTime) {
             settingsController.setV0();
+            Calculator.calcInitial_TotalEnergy();
             firstTime = false;
         }
         if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
+
+        mainWindowModel.getSimulator().run();
+
         if (mainWindowModel.getSimulator().isRunning()) {
+            Calculator.calcTotalEnergy();
             d_play.setVisible(true);
             hb_pause.setVisible(false);
         } else {
@@ -218,6 +225,7 @@ public class MainWindowController implements Initializable {
     }
 
     //-Parameter-Setting------------------------------------------------------------------------------------------------
+    //_textfield__
     public void tf_v0_X_OnChange(ActionEvent actionEvent) {
     }
     public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
@@ -227,6 +235,7 @@ public class MainWindowController implements Initializable {
     public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
     }
 
+    //_choicebox__
     public void chb_Wind_OnAction(ActionEvent actionEvent) {
         gp_Wind.setDisable(!chb_Wind.isSelected());
 
@@ -236,17 +245,21 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    //_slider__
     public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
         settingsController.sl_Weight_OnDragDetected();
     }
-
     public void sl_Radius_OnDragDetected(){
         settingsController.sl_Radius_OnDragDetected();
     }
-
+    public void sl_Elasticity_OnDragDetected(MouseEvent mouseEvent) {
+        settingsController.sl_Elasticity_OnDragDetected();
+    }
     public void sl_ScissorsSpeed_OnDragDetected(){
         settingsController.sl_ScissorsSpeed_OnDragDetected();
     }
+
+    //_button__
     public void btn_showCurrentParams_OnAction() throws IOException {
         settingsController.btn_showCurrentParams_OnAction();
     }

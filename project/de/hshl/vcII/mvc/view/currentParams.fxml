@@ -22,16 +22,18 @@
                                 <Insets bottom="5.0" />
                             </VBox.margin>
                         </Label>
-                        <TableView fx:id="tv_ball_params" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="855.0">
+                        <TableView fx:id="tv_ball_params" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="850.0">
                             <columns>
                                 <TableColumn fx:id="tc_No" editable="false" prefWidth="40.0" text="No" />
-                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="110.0" text="Pos" />
-                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="110.0" text="Geschw." />
-                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="110.0" text="Radius" />
-                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="110.0" text="Mass" />
-                                <TableColumn fx:id="tc_potE" editable="false" minWidth="-Infinity" prefWidth="125.0" text="potentielle Energie" />
-                                <TableColumn fx:id="tc_kinE" editable="false" minWidth="-Infinity" prefWidth="125.0" text="kinetische Energie" />
-                                <TableColumn fx:id="tc_lossE" editable="false" minWidth="-Infinity" prefWidth="125.0" text="Verlust" />
+                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Pos" />
+                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Geschw." />
+                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Radius" />
+                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Mass" />
+                                <TableColumn fx:id="tc_Elasticity" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Elastizität" />
+                                <TableColumn fx:id="tc_TotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="ges. Energie" />
+                                <TableColumn fx:id="tc_PotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="pot. Energie" />
+                                <TableColumn fx:id="tc_KinE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="kin. Energie" />
+                                <TableColumn fx:id="tc_LossE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Verlust" />
                             </columns>
                         </TableView>
                     </children>
@@ -43,7 +45,7 @@
                                 <Insets bottom="5.0" />
                             </VBox.margin>
                         </Label>
-                        <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="125.0">
+                        <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="125.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.0" minWidth="10.0" prefWidth="75.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="61.0" />
@@ -58,8 +60,8 @@
                                 <Label layoutX="10.0" layoutY="107.0" prefHeight="17.0" prefWidth="73.0" text="Gravitation:" GridPane.rowIndex="1" />
                                 <Label text="delta_t:" GridPane.rowIndex="2" />
                                 <Label fx:id="l_current_Wind" text="_ph_" GridPane.columnIndex="1" />
-                                <Label fx:id="l_current_Delta_T" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <Label fx:id="l_current_Gravitation" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label fx:id="l_current_Delta_T" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             </children>
                         </GridPane>
                     </children>

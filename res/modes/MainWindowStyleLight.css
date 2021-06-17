@@ -5,8 +5,8 @@
 
 .anchor-drawing-pane{
     -fx-background-color: #DCDCDC;
-}
 
+}
 
 
 .menu-bar{
@@ -79,8 +79,7 @@
 }
 
 .slider:hover > .thumb {
-     -fx-border-radius: 4;
-     -fx-border-color: #1999C9
+     -fx-background-color: #1999C9;
 }
 
 .slider:selected > .thumb {
@@ -122,9 +121,7 @@
 }
 
 
-.table-column {
-    -fx-padding: 0 0 0 15px;
-}
+
 
 .table-view .column-header {
     -fx-background-color: transparent;
@@ -140,6 +137,13 @@
 
 .table-view .table-cell {
     -fx-text-fill: #303030;
+    /*-fx-padding: 0 0 0 15px;*/
+    -fx-text-align: center;
+}
+.table-view .table-cell {
+    -fx-bounds-type: logical_vertical_center;
+    /*-fx-padding: 0 0 0 15px;*/
+    -fx-alignment: center;
 }
 
 .table-row-cell {

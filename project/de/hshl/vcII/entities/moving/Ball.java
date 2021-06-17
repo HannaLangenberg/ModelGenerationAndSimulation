@@ -5,18 +5,21 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
-import project.de.hshl.vcII.mvc.MainWindowController;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Ball extends Ellipse {
-    private static final double RADIUS = 25, MASS = 2.75;
+    private static final double RADIUS = 25, MASS = 2.75, DEFAULT_ELASTICITY = 0.5;
 
     private DoubleProperty mass;
     private DoubleProperty radius;
+    private DoubleProperty totE;
+    private DoubleProperty potE;
+    private DoubleProperty kinE;
+    private DoubleProperty lostE;
+    private DoubleProperty elasticity;
     private MyVector posVec;
     private MyVector velVec;
     private MyVector vel0Vec;
@@ -46,6 +49,11 @@ public class Ball extends Ellipse {
     public Ball() {
         this.mass = new SimpleDoubleProperty(MASS);
         this.radius = new SimpleDoubleProperty(RADIUS);
+        this.elasticity = new SimpleDoubleProperty(DEFAULT_ELASTICITY);
+        this.totE = new SimpleDoubleProperty();
+        this.potE = new SimpleDoubleProperty();
+        this.kinE = new SimpleDoubleProperty();
+        this.lostE = new SimpleDoubleProperty();
         this.setFill(randomCol);
         this.setStroke(strokeColor);
         this.setStrokeWidth(5);
@@ -53,19 +61,25 @@ public class Ball extends Ellipse {
         this.toBack();
     }
 
-    public Ball(int number, MyVector posVec, MyVector velVec, MyVector vel0Vec, MyVector accVec, MyVector frcVec, double radius, double mass) {
+    public Ball(int number, MyVector posVec, MyVector velVec, MyVector vel0Vec, MyVector accVec, MyVector frcVec, double radius, double mass, double elasticity, double totE, double potE, double kinE, double lostE) {
         this.number = number;
         this.posVec = posVec;
         this.velVec = velVec;
         this.vel0Vec = vel0Vec;
         this.accVec = accVec;
         this.frcVec = frcVec;
-        // Haft- und Gleitreibung für Stein auf Holz i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
+        // Haft- und Gleitreibung für Stein auf Holz (i.d.R.)
+        // Der maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
         setFrcVec(new MyVector(0.24, 0.18));
-        // Rollreibung für Fahrradreifen auf Straße zwei Komponenten, da sie einen Breich angeben. 0,002 - 0,004 i.d.R. maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
+        // Rollreibung für Fahrradreifen auf Straße zwei Komponenten, da ein Breich angeben war. 0,002 - 0,004
         setRolVec(new MyVector(0.002, 0.004));
         this.mass = new SimpleDoubleProperty(mass);
         this.radius = new SimpleDoubleProperty(radius);
+        this.elasticity = new SimpleDoubleProperty(elasticity);
+        this.totE = new SimpleDoubleProperty(totE);
+        this.potE = new SimpleDoubleProperty(potE);
+        this.kinE = new SimpleDoubleProperty(kinE);
+        this.lostE = new SimpleDoubleProperty(lostE);
         this.setRadius(radius);
         this.setStrokeWidth(5);
         this.setFill(randomCol);
@@ -73,7 +87,6 @@ public class Ball extends Ellipse {
         this.isColliding = false;
         this.toBack();
     }
-
 
     public void draw(AnchorPane aDrawingPane) {
         Platform.runLater(() -> {
@@ -102,6 +115,7 @@ public class Ball extends Ellipse {
     }
 
     //_GETTERS_&_SETTERS________________________________________________________________________________________________
+    //int
     public void setNumber(int number) {
         this.number = number;
     }
@@ -109,10 +123,28 @@ public class Ball extends Ellipse {
         return number;
     }
 
+    //Arrow
+    public Arrow getArrow() { return arrow; }
+
+    //boolean
+    public void setColliding(boolean colliding) {
+        isColliding = colliding;
+    }
+    public boolean isColliding() {
+        return isColliding;
+    }
+
+    //Color
+    public Color getStrokeColor() {
+        return strokeColor;
+    }
+
+    //MyVector
     public void setPosVec(MyVector posVec) {
         this.posVec = posVec;
         this.setCenterX(posVec.x);
         this.setCenterY(posVec.y);
+
     }
     public MyVector getPosVec() {
         return posVec;
@@ -146,6 +178,14 @@ public class Ball extends Ellipse {
         return frcVec;
     }
 
+    public void setRolVec(MyVector rolVec) {
+        this.rolVec = rolVec;
+    }
+    public MyVector getRolVec() {
+        return rolVec;
+    }
+
+    //DoubleProperty
     public void setMass(double mass) {
         this.mass.set(mass);
     }
@@ -161,7 +201,6 @@ public class Ball extends Ellipse {
         this.setRadiusX(radius);
         this.setRadiusY(radius);
     }
-
     public double getRadius() {
         return radius.get();
     }
@@ -169,25 +208,56 @@ public class Ball extends Ellipse {
         return radius;
     }
 
-    public void setColliding(boolean colliding) {
-        isColliding = colliding;
+    public void setPotE(double potE) {
+        this.potE.set(potE);
     }
-    public boolean isColliding() {
-        return isColliding;
+    public double getPotE() {
+        return potE.get();
     }
-
-    public Color getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setRolVec(MyVector rolVec) {
-        this.rolVec = rolVec;
-    }
-    public MyVector getRolVec() {
-        return rolVec;
+    public DoubleProperty potEProperty() {
+        return potE;
     }
 
-    public Arrow getArrow() { return arrow; }
+    public void setKinE(double kinE) {
+        this.kinE.set(kinE);
+    }
+    public double getKinE() {
+        return kinE.get();
+    }
+    public DoubleProperty kinEProperty() {
+        return kinE;
+    }
+
+    public void setLostE(double lostE) {
+        this.lostE.set(lostE);
+    }
+    public double getLostE() {
+        return lostE.get();
+    }
+    public DoubleProperty lostEProperty() {
+        return lostE;
+    }
+
+    public void setTotE(double totE) {
+        this.totE.set(totE);
+    }
+    public double getTotE() {
+        return totE.get();
+    }
+    public DoubleProperty totEProperty() {
+        return totE;
+    }
+
+    public void setElasticity(double elasticity) {
+        this.elasticity.set(elasticity);
+    }
+    public double getElasticity() {
+        return elasticity.get();
+    }
+    public DoubleProperty elasticityProperty() {
+        return elasticity;
+    }
+
     //_toString()_______________________________________________________________________________________________________
     @Override
     public String toString() {

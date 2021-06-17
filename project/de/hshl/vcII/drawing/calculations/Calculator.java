@@ -1,30 +1,56 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
+import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
 
 public class Calculator {
-    private static double f_R_max;
-
-
-    public static double getLambda_velocity() {
-        return ScissorsCalculations.lambda_velocity;
-    }
-
-    public static void setLambda_velocity(double lambda_velocity) {
-        ScissorsCalculations.lambda_velocity = lambda_velocity;
-    }
-
-    public static double getRho_velocity() {
-        return ScissorsCalculations.rho_velocity;
-    }
-
-    public static void setRho_velocity(double rho_velocity) {
-        ScissorsCalculations.rho_velocity = rho_velocity;
-    }
+    private static double initial_TotE, totE, potE, kinE, lostE = 0;
 
     public static boolean checkDistance(Ball b, MyVector dp_Coord, double epsilon) {
         return MyVector.distance(b.getPosVec(), dp_Coord) <= b.getRadius() + epsilon;
+    }
+
+    public static void calcInitial_TotalEnergy() {
+        // initial_TotE = potE + kinE
+        for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
+            calcPotentialEnergy(b);
+            calcKineticEnergy(b);
+            calcLostEnergy(b);
+            initial_TotE = totE = potE + kinE;
+            b.setTotE(initial_TotE);
+        }
+    }
+
+    public static void calcTotalEnergy() {
+        // totE = potE + kinE + lossE
+        for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
+            calcPotentialEnergy(b);
+            calcKineticEnergy(b);
+            calcLostEnergy(b);
+
+            totE = potE + kinE + lostE;
+            b.setTotE(totE);
+        }
+    }
+
+    private static void calcPotentialEnergy(Ball b) {
+        // potE = m * g * h
+        potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainWindowModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
+        b.setPotE(potE);
+    }
+
+    private static void calcKineticEnergy(Ball b) {
+        // kinE = 1/2 * m * v^2
+        kinE = (b.getMass() * Math.pow(MyVector.length(b.getVelVec()), 2))/2;
+        b.setKinE(kinE);
+    }
+
+    private static void calcLostEnergy(Ball b) {
+        // lossE = totE - kinE - potE
+        lostE = totE - potE - kinE;
+        b.setLostE(lostE);
     }
 
     //_GETTERS_SETTERS__________________________________________________________________________________________________
@@ -33,75 +59,5 @@ public class Calculator {
     }
     public static MyVector getDroppedPerpendicular() {
         return WallCalculations.droppedPerpendicular;
-    }
-
-    public static void setA_H(MyVector a_H) {
-        WallCalculations.a_H = a_H;
-    }
-    public static MyVector getA_H() {
-        return WallCalculations.a_H;
-    }
-
-    public static void setA_N(MyVector a_N) {
-        WallCalculations.a_N = a_N;
-    }
-    public static MyVector getA_N() {
-        return WallCalculations.a_N;
-    }
-
-    public static void setA_R_H(MyVector a_R_H) {
-        WallCalculations.a_R_H = a_R_H;
-    }
-    public static MyVector getA_R_H() {
-        return WallCalculations.a_R_H;
-    }
-
-    public static void setA_R_G(MyVector a_R_G) {
-        WallCalculations.a_R_G = a_R_G;
-    }
-    public static MyVector getA_R_G() {
-        return WallCalculations.a_R_G;
-    }
-
-    public static void setF_H(double f_H) {
-        WallCalculations.f_H = f_H;
-    }
-    public static double getF_H() {
-        return WallCalculations.f_H;
-    }
-
-    public static void setF_N(double f_N) {
-        WallCalculations.f_N = f_N;
-    }
-    public static double getF_N() {
-        return WallCalculations.f_N;
-    }
-
-    public static void setF_R_H(double f_R_H) {
-        WallCalculations.f_R_H = f_R_H;
-    }
-    public static double getF_R_H() {
-        return WallCalculations.f_R_H;
-    }
-
-    public static void setF_R_G(double f_R_G) {
-        WallCalculations.f_R_G = f_R_G;
-    }
-    public static double getF_R_G() {
-        return WallCalculations.f_R_G;
-    }
-
-    public static void setF_R_max(double f_R_max) {
-        Calculator.f_R_max = f_R_max;
-    }
-    public static double getF_R_max() {
-        return f_R_max;
-    }
-
-    public static void setAngle_max_H(double angle_max_H) {
-        WallCalculations.angle_max_H = angle_max_H;
-    }
-    public static double getAngle_max_H() {
-        return WallCalculations.angle_max_H;
     }
 }

@@ -91,16 +91,32 @@
 
 
 .slider > .track {
-     -fx-background-color: #808080;
+     -fx-background-color: #505050;
 }
+
+.slider .axis  {
+     -fx-tick-label-fill: #303030;
+     /*-fx-tickmarks-fill: navy;*/
+     /*-fx-tick-mark-stroke: navy;*/
+
+}
+
+.axis-tick-mark,
+.axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #505050;
+}
+
+/*.slider > .axis {
+    -fx-tick-mark-stroke: navy;
+}*/
 
 .slider > .thumb {
      -fx-background-color: #FEFEFE;
 }
 
 .slider:hover > .thumb {
-     -fx-border-radius: 4;
-     -fx-border-color: #1999C9
+     -fx-background-color: #1999C9;
 }
 
 .slider:selected > .thumb {
