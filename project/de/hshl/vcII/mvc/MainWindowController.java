@@ -89,8 +89,8 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-               settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity, lCurrentElasticity, tf_Wind_X, tf_Wind_Y,
-                tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
+        settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity, lCurrentElasticity, tf_Wind_X, tf_Wind_Y,
+        tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
         // Get the original MainWindowModel
         mainWindowModel = MainWindowModel.get();
@@ -117,6 +117,108 @@ public class MainWindowController implements Initializable {
         });
     }
 
+
+
+
+    // Start the simulation
+    // Is called whenever the 'Start/Stop' button is clicked.
+    @FXML
+    private void run(){
+        // check all TextFields for values
+        settingsController.fillVariables();
+        if (firstTime) {
+            settingsController.setV0();
+            Calculator.calcInitial_TotalEnergy();
+            firstTime = false;
+        }
+        if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
+
+        mainWindowModel.getSimulator().run();
+
+        if (mainWindowModel.getSimulator().isRunning()) {
+            d_play.setVisible(true);
+            hb_pause.setVisible(false);
+        } else {
+            d_play.setVisible(false);
+            hb_pause.setVisible(true);
+//            settingsController.showCurrentParams();
+        }
+    }
+
+
+
+    //_PARAMETER_SETTING________________________________________________________________________________________________
+    //_textfield__
+    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
+    }
+    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
+    }
+
+    //_choicebox__
+    public void chb_Wind_OnAction(ActionEvent actionEvent) {
+        gp_Wind.setDisable(!chb_Wind.isSelected());
+
+        if(!chb_Wind.isSelected())
+        {
+            Utils.setWind(new MyVector(0,0));
+        }
+    }
+    public void chb_Choice_OnAction(ActionEvent actionEvent) {
+        cb_choose.setDisable(!cb_choice_active.isSelected());
+        if (cb_choose.isDisabled()) {
+            mainWindowModel.getKeyManager().unMarkAll();
+        }
+        else {
+            cb_choose.setPromptText("wähle...");
+            cb_choose.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> oV, String oldValue, String newValue) {
+                    cb_choose(newValue);
+
+                }
+            });
+        }
+    }
+
+    //_slider__
+    public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
+        settingsController.sl_Weight_OnDragDetected();
+    }
+    public void sl_Radius_OnDragDetected(){
+        settingsController.sl_Radius_OnDragDetected();
+    }
+    public void sl_Elasticity_OnDragDetected(MouseEvent mouseEvent) {
+        settingsController.sl_Elasticity_OnDragDetected();
+    }
+    public void sl_ScissorsSpeed_OnDragDetected(){
+        settingsController.sl_ScissorsSpeed_OnDragDetected();
+    }
+
+    //_button__
+    public void btn_showCurrentParams_OnAction() throws IOException {
+        settingsController.btn_showCurrentParams_OnAction();
+    }
+    public void d_play_changeSimSpd(){
+
+    }
+
+    //_Menu__
+    @FXML
+    public void switch_mode() {
+        mainWindowModel.getMode().toggleMode(!lightMode);
+        lightMode = !lightMode;
+        if (!lightMode) {
+            lMode.setText("Dark");
+        }
+        else {
+            lMode.setText("Light");
+        }
+        System.out.println(lightMode);
+    }
     //-Menu-Controls----------------------------------------------------------------------------------------------------
     // Is called whenever 'Clear Screen' is clicked in the 'File' menu
     @FXML
@@ -133,7 +235,6 @@ public class MainWindowController implements Initializable {
         settingsController.getCurrentParamsController().reset();
         firstTime = true;
     }
-
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
@@ -160,7 +261,6 @@ public class MainWindowController implements Initializable {
         mainWindowModel.getBallManager().setB(null);
         mainWindowModel.getWallManager().setW(null);
     }
-
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
     @FXML
     private void toggleGrid() {
@@ -181,90 +281,38 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    @FXML
-    public void switch_mode() {
-        mainWindowModel.getMode().toggleMode(!lightMode);
-        lightMode = !lightMode;
-        if (!lightMode) {
-            lMode.setText("Dark");
-        }
-        else {
-            lMode.setText("Light");
-        }
-        System.out.println(lightMode);
-    }
-
-    // Start the simulation
-    // Is called whenever the 'Start/Stop' button is clicked.
-    @FXML
-    private void run(){
-        // check all TextFields for values
-        settingsController.fillVariables();
-        if (firstTime) {
-            settingsController.setV0();
-            Calculator.calcInitial_TotalEnergy();
-            firstTime = false;
-        }
-        if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
-
-        mainWindowModel.getSimulator().run();
-
-        if (mainWindowModel.getSimulator().isRunning()) {
-            Calculator.calcTotalEnergy();
-            d_play.setVisible(true);
-            hb_pause.setVisible(false);
-        } else {
-            d_play.setVisible(false);
-            hb_pause.setVisible(true);
-            settingsController.showCurrentParams();
-        }
-    }
-
-    public void d_play_changeSimSpd(){
+    private void activateLists(){
+        // Add change listener for cb_choose to always keep it updated
+        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+        if(mainWindowModel.getScissorsManager().getS() != null)
+            cb_update();
 
     }
+    public void cb_update() {
+        cb_choose.getItems().clear();
+        for (Ball b : mainWindowModel.getBallManager().getBalls())
+            cb_choose.getItems().add("Ball Nummer " + b.getNumber());
 
-    //-Parameter-Setting------------------------------------------------------------------------------------------------
-    //_textfield__
-    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
-    }
+        for (Wall w : mainWindowModel.getWallManager().getWalls())
+            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
 
-    //_choicebox__
-    public void chb_Wind_OnAction(ActionEvent actionEvent) {
-        gp_Wind.setDisable(!chb_Wind.isSelected());
-
-        if(!chb_Wind.isSelected())
-        {
-            Utils.setWind(new MyVector(0,0));
-        }
+        if(mainWindowModel.getScissorsManager().getS() != null)
+            cb_choose.getItems().add("Schere");
     }
 
-    //_slider__
-    public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
-        settingsController.sl_Weight_OnDragDetected();
-    }
-    public void sl_Radius_OnDragDetected(){
-        settingsController.sl_Radius_OnDragDetected();
-    }
-    public void sl_Elasticity_OnDragDetected(MouseEvent mouseEvent) {
-        settingsController.sl_Elasticity_OnDragDetected();
-    }
-    public void sl_ScissorsSpeed_OnDragDetected(){
-        settingsController.sl_ScissorsSpeed_OnDragDetected();
-    }
+    public void cb_choose(String s) {
+        if(cb_choose.getValue() == null) return;
 
-    //_button__
-    public void btn_showCurrentParams_OnAction() throws IOException {
-        settingsController.btn_showCurrentParams_OnAction();
+        mainWindowModel.getKeyManager().choose(s);
     }
 
 
+    //_MOUSE_EVENTS_____________________________________________________________________________________________________
     //-Mouse-&-Key-Listener---------------------------------------------------------------------------------------------
     // Is called whenever the mouse is clicked.
     @FXML
@@ -309,7 +357,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-
+    //_KEY_EVENTS_______________________________________________________________________________________________________
     // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
@@ -477,7 +525,6 @@ public class MainWindowController implements Initializable {
             stackPane.setEffect(null);
         }
     }
-
     @FXML
     private void minimize() {
         mainWindowModel.getStage().setIconified(true);
@@ -489,52 +536,5 @@ public class MainWindowController implements Initializable {
     @FXML
     private void exit() {
         System.exit(0);
-    }
-
-    private void activateLists(){
-        // Add change listener for cb_choose to always keep it updated
-        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
-            cb_update();
-        });
-        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
-            cb_update();
-        });
-        if(mainWindowModel.getScissorsManager().getS() != null)
-            cb_update();
-
-    }
-    public void cb_update() {
-        cb_choose.getItems().clear();
-        for (Ball b : mainWindowModel.getBallManager().getBalls())
-            cb_choose.getItems().add("Ball Nummer " + b.getNumber());
-
-        for (Wall w : mainWindowModel.getWallManager().getWalls())
-            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
-
-        if(mainWindowModel.getScissorsManager().getS() != null)
-            cb_choose.getItems().add("Schere");
-    }
-
-    public void cb_choose(String s) {
-        if(cb_choose.getValue() == null) return;
-
-        mainWindowModel.getKeyManager().choose(s);
-    }
-
-    public void chb_Choice_OnAction(ActionEvent actionEvent) {
-        cb_choose.setDisable(!cb_choice_active.isSelected());
-        if (cb_choose.isDisabled()) {
-            mainWindowModel.getKeyManager().unMarkAll();
-        }
-        else {
-            cb_choose.setPromptText("wähle...");
-            cb_choose.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> oV, String oldValue, String newValue) {
-                    cb_choose(newValue);
-
-                }
-            });
-        }
     }
 }

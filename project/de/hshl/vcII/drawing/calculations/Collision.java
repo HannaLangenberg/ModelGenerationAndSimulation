@@ -1,21 +1,65 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
 
 public class Collision {
+
     public static void checkScreen(Ball b, double e)
     {
-        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e || b.getPosVec().y < b.getRadius() + e) {
-            b.setVel0Vec(new MyVector(b.getVel0Vec().x, -b.getVel0Vec().y));
-            b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y));
+        /*
+        * Ist colliding_Bounce true muss der Energieverlust auf die parallele Komponente angewendet werden
+        * Ist colliding_Friction true muss die (Roll-) Reibung auf die orthogonale Komponente angewendet werden
+        * */
+
+        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e
+                || b.getPosVec().y < b.getRadius() + e
+                || b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e
+                || b.getPosVec().x < b.getRadius() + e) {
+            b.setColliding_Parallel_B(true);
         }
 
-        if(b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e || b.getPosVec().x < b.getRadius() + e) {
-            b.setVel0Vec(new MyVector(-b.getVel0Vec().x, b.getVel0Vec().y));
-            b.setVelVec(new MyVector(-b.getVelVec().x, b.getVelVec().y));
+
+        if(b.isColliding_Parallel_B()) {
+            // Gegen "Decke" → einfach nur abstoßen
+            // Gegen Boden → Bouncen irgendwann verbieten
+            // Beides mit Energieverlust
+            if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)
+                || (b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
+                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), -b.getVelVec().y)); // Energieverlust
+            }
+
+            if((b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
+                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
+                if(Math.abs(b.getVelVec().y) < Utils.CONSTANT_OF_GRAVITATION/3)
+                {
+                    b.setVelVec(new MyVector(b.getVelVec().x, 0));
+                    b.setColliding_Orthogonal_F(true);
+                }
+            }
+            if(b.getVelVec().y == 0 & b.isColliding_Parallel_B()) {
+                b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+            }
+
+            b.setColliding_Parallel_B(false);
+        }
+
+        if(b.isColliding_Orthogonal_F()) {
+            // Horizontale Ebene → F_G = F_N
+            // F_G = Utils.CONSTANT_OF_GRAVITATION
+            // f_R_R = R_R_K * F_N
+            // a_R = gespiegelte x-Komponente von bVelVec
+            // a_R_R = a_R * f_R_R
+
+            double f_R_R = b.getRolVec().x * Utils.CONSTANT_OF_GRAVITATION;
+            if(Math.abs(b.getVelVec().x) < 2.5)
+            {
+                b.setVelVec(new MyVector(0, b.getVelVec().y));
+                b.setColliding_Orthogonal_F(false);
+            }
+            b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(new MyVector(-b.getVelVec().x, 0), f_R_R)));
         }
     }
 

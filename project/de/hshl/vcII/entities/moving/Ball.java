@@ -20,6 +20,7 @@ public class Ball extends Ellipse {
     private DoubleProperty kinE;
     private DoubleProperty lostE;
     private DoubleProperty elasticity;
+    private double initialTotE_c, totE_c, potE_c, kinE_c, lostE_c;
     private MyVector posVec;
     private MyVector velVec;
     private MyVector vel0Vec;
@@ -27,7 +28,7 @@ public class Ball extends Ellipse {
     private MyVector frcVec;
     private MyVector rolVec;
     private Arrow arrow;
-    private boolean isColliding;
+    private boolean colliding_Orthogonal_F, colliding_Parallel_B;
     private Arrow a;
 
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
@@ -57,7 +58,7 @@ public class Ball extends Ellipse {
         this.setFill(randomCol);
         this.setStroke(strokeColor);
         this.setStrokeWidth(5);
-        this.isColliding = false;
+        this.colliding_Orthogonal_F = false;
         this.toBack();
     }
 
@@ -84,7 +85,7 @@ public class Ball extends Ellipse {
         this.setStrokeWidth(5);
         this.setFill(randomCol);
         this.setStroke(strokeColor);
-        this.isColliding = false;
+        this.colliding_Orthogonal_F = false;
         this.toBack();
     }
 
@@ -104,7 +105,6 @@ public class Ball extends Ellipse {
     public Arrow drawArrow() {
         arrow = new Arrow();
         MyVector direction = MyVector.add(posVec, velVec);
-        //Stop[] stops = new Stop[]{new Stop(0, Color.RED), new Stop(1, Color.BLUE)};
         arrow.getLine().setStroke(Color.RED);
         arrow.getLine().setStrokeWidth(2);
         arrow.setStartX(posVec.x);
@@ -127,11 +127,18 @@ public class Ball extends Ellipse {
     public Arrow getArrow() { return arrow; }
 
     //boolean
-    public void setColliding(boolean colliding) {
-        isColliding = colliding;
+    public void setColliding_Orthogonal_F(boolean colliding_Orthogonal_F) {
+        this.colliding_Orthogonal_F = colliding_Orthogonal_F;
     }
-    public boolean isColliding() {
-        return isColliding;
+    public boolean isColliding_Orthogonal_F() {
+        return colliding_Orthogonal_F;
+    }
+
+    public void setColliding_Parallel_B(boolean colliding_Parallel_B) {
+        this.colliding_Parallel_B = colliding_Parallel_B;
+    }
+    public boolean isColliding_Parallel_B() {
+        return colliding_Parallel_B;
     }
 
     //Color
@@ -256,6 +263,42 @@ public class Ball extends Ellipse {
     }
     public DoubleProperty elasticityProperty() {
         return elasticity;
+    }
+
+    //_double__
+    public void setInitialTotE_c(double initialTotE_c) {
+        this.initialTotE_c = initialTotE_c;
+    }
+    public double getInitialTotE_c() {
+        return initialTotE_c;
+    }
+
+    public void setTotE_c(double totE_c) {
+        this.totE_c = totE_c;
+    }
+    public double getTotE_c() {
+        return totE_c;
+    }
+
+    public void setPotE_c(double potE_c) {
+        this.potE_c = potE_c;
+    }
+    public double getPotE_c() {
+        return potE_c;
+    }
+
+    public void setKinE_c(double kinE_c) {
+        this.kinE_c = kinE_c;
+    }
+    public double getKinE_c() {
+        return kinE_c;
+    }
+
+    public void setLostE_c(double lostE_c) {
+        this.lostE_c = lostE_c;
+    }
+    public double getLostE_c() {
+        return lostE_c;
     }
 
     //_toString()_______________________________________________________________________________________________________

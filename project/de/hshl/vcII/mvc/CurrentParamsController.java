@@ -37,13 +37,11 @@ public class CurrentParamsController {
     @FXML
     public TableColumn<Ball, String> tc_KinE;
     @FXML
-    public TableColumn<Ball, String> tc_LossE;
+    public TableColumn<Ball, String> tc_LostE;
     @FXML
     public TableColumn<Ball, String> tc_TotE;
     @FXML
     public TableColumn<Ball, String> tc_Elasticity;
-    @FXML
-    public Label l_current_Elasticity;
 
     private ObservableList<Ball> ballObservableList;
 
@@ -73,7 +71,7 @@ public class CurrentParamsController {
         tc_TotE.setCellValueFactory(new PropertyValueFactory<>("totE"));
         tc_PotE.setCellValueFactory(new PropertyValueFactory<>("potE"));
         tc_KinE.setCellValueFactory(new PropertyValueFactory<>("kinE"));
-        tc_LossE.setCellValueFactory(new PropertyValueFactory<>("lostE"));
+        tc_LostE.setCellValueFactory(new PropertyValueFactory<>("lostE"));
 
         tv_ball_params.setItems(ballObservableList);
     }

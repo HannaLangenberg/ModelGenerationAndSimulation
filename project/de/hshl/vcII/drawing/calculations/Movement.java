@@ -12,15 +12,13 @@ public class Movement {
 
     public static void calcAcceleration(Ball b) {
         // add every single ACCELERATION to get accVec
-        b.setAccVec(MyVector.add(Utils.getWind(), Utils.GRAVITY));
+        b.setAccVec(MyVector.addMultiple(b.getAccVec(), Utils.getWind(), Utils.GRAVITY));
     }
 
     public static void calcVelocity(Ball b) {
         // v = v_0 + a * t
-
         b.setVel0Vec(b.getVelVec());
         b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(b.getAccVec(), Utils.DELTA_T)));
-
     }
 
     public static void checkCollisions(Ball b, double epsilon) {
@@ -38,7 +36,6 @@ public class Movement {
     public static void calcPosition(Ball b) {
         // s = s_0 + v_0 * dt
         //                   + 0.5 * a * dt^2
-//        b.setPosVec(MyVector.add(b.getPosVec(), MyVector.multiply(b.getVelVec(), Utils.DELTA_T)));
         b.setPosVec(MyVector.add(b.getPosVec(), MyVector.multiply(b.getVel0Vec(), Utils.DELTA_T)));
         b.setPosVec(MyVector.add(b.getPosVec(), MyVector.multiply(MyVector.multiply(b.getAccVec(), Math.pow(Utils.DELTA_T, 2)), 0.5)));
 

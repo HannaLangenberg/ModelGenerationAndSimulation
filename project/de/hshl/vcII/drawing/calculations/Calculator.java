@@ -17,9 +17,11 @@ public class Calculator {
         for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
             calcPotentialEnergy(b);
             calcKineticEnergy(b);
-            calcLostEnergy(b);
             initial_TotE = totE = potE + kinE;
-            b.setTotE(initial_TotE);
+            calcLostEnergy(b);
+            b.setTotE(Math.round(initial_TotE));
+            b.setTotE_c(initial_TotE);
+            b.setInitialTotE_c(initial_TotE);
         }
     }
 
@@ -31,26 +33,30 @@ public class Calculator {
             calcLostEnergy(b);
 
             totE = potE + kinE + lostE;
-            b.setTotE(totE);
+            b.setTotE(Math.round(totE));
+            b.setTotE_c(totE);
         }
     }
 
     private static void calcPotentialEnergy(Ball b) {
         // potE = m * g * h
         potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainWindowModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
-        b.setPotE(potE);
+        b.setPotE(Math.round(potE));
+        b.setPotE_c(potE);
     }
 
     private static void calcKineticEnergy(Ball b) {
         // kinE = 1/2 * m * v^2
         kinE = (b.getMass() * Math.pow(MyVector.length(b.getVelVec()), 2))/2;
-        b.setKinE(kinE);
+        b.setKinE(Math.round(kinE));
+        b.setKinE_c(kinE);
     }
 
     private static void calcLostEnergy(Ball b) {
         // lossE = totE - kinE - potE
-        lostE = totE - potE - kinE;
-        b.setLostE(lostE);
+        lostE = b.getInitialTotE_c() - potE - kinE;
+        b.setLostE(Math.round(lostE));
+        b.setLostE_c(lostE);
     }
 
     //_GETTERS_SETTERS__________________________________________________________________________________________________

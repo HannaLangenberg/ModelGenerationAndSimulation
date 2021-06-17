@@ -45,7 +45,7 @@ public class SettingsController {
         this.cRootPane = new AnchorPane();
 
         lCurrentRadius.setText(lCurrentRadius.getText() + " " + sl_Radius.getValue());
-        lCurrentWeight.setText(lCurrentWeight.getText() + " " + sl_Weight.getValue()); // TODO Gewicht in Kg
+        lCurrentWeight.setText(lCurrentWeight.getText() + " " + sl_Weight.getValue());
         lCurrentElasticity.setText(lCurrentElasticity.getText() + " " + sl_Elasticity.getValue()*100);
 
         initWindFields(tf_Wind_X);
@@ -62,11 +62,11 @@ public class SettingsController {
 
 
     //-Parameter-Display------------------------------------------------------------------------------------------------
-    public void showCurrentParams() {
+    public void UpdateParams() {
         currentParamsController.update();
     }
 
-    public void btn_showCurrentParams_OnAction() throws IOException {
+    public void btn_showCurrentParams_OnAction(){
         Stage stage = mainWindowModel.getStage();
 
         if(currentParamsOpen)
@@ -75,18 +75,27 @@ public class SettingsController {
             vb_displayCurrentParams.getChildren().remove(cRootPane);
             currentParamsOpen = false;
         }
-        else
+        else if(!currentParamsOpen & !mainWindowModel.getSimulator().isRunning())
         {
             mainWindowModel.setSavedSceneHeight(stage.getHeight());
 
             stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
 
-            vb_displayCurrentParams.getChildren().add(cRootPane);
-            currentParamsOpen = true;
-
             // check all TextFields for values
             fillVariables();
-            showCurrentParams();
+            UpdateParams();
+            vb_displayCurrentParams.getChildren().add(cRootPane);
+            currentParamsOpen = true;
+        }
+        else if(!currentParamsOpen & mainWindowModel.getSimulator().isRunning()){
+            mainWindowModel.setSavedSceneHeight(stage.getHeight());
+
+            stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
+
+            // check all TextFields for values
+            UpdateParams();
+            vb_displayCurrentParams.getChildren().add(cRootPane);
+            currentParamsOpen = true;
         }
     }
 
@@ -104,7 +113,7 @@ public class SettingsController {
     public void sl_Weight_OnDragDetected() {
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
             ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
-            lCurrentWeight.setText("Aktuelles Gewicht [g]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+            lCurrentWeight.setText("Aktuelles Gewicht [Kg]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
     }
@@ -132,15 +141,13 @@ public class SettingsController {
         });
     }
 
-    public CurrentParamsController getCurrentParamsController() {
-        return currentParamsController;
-    }
-
     public void setV0() {
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
             b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
         }
     }
 
-
+    public CurrentParamsController getCurrentParamsController() {
+        return currentParamsController;
+    }
 }

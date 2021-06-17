@@ -1,6 +1,7 @@
 package project.de.hshl.vcII.drawing;
 
 import project.de.hshl.vcII.drawing.calculations.BallCollisions;
+import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.drawing.calculations.ScissorsCollisions;
 import project.de.hshl.vcII.entities.moving.Ball;
@@ -38,10 +39,10 @@ public class Simulator {
         {
             timer.shutdownNow();
             running = false;
-            for(Ball b : mainWindowModel.getBallManager().getBalls()) {
+            /*for(Ball b : mainWindowModel.getBallManager().getBalls()) {
                 System.out.println("PosX: " + b.getCenterX() + " PosY: " + b.getCenterY()
                         + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
-            }
+            }*/
         }
     }
     /**
@@ -65,6 +66,9 @@ public class Simulator {
             Movement.calcVelocity(b);
             Movement.calcPosition(b);
             b.draw(mainWindowModel.getADrawingPane());
+        }
+        if (runSim_called%10 == 0) {
+            Calculator.calcTotalEnergy();
         }
     }
 

@@ -33,7 +33,7 @@
                                 <TableColumn fx:id="tc_TotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="ges. Energie" />
                                 <TableColumn fx:id="tc_PotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="pot. Energie" />
                                 <TableColumn fx:id="tc_KinE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="kin. Energie" />
-                                <TableColumn fx:id="tc_LossE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Verlust" />
+                                <TableColumn fx:id="tc_LostE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Verlust" />
                             </columns>
                         </TableView>
                     </children>
