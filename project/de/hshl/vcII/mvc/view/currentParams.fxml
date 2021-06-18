@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="cRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.CurrentParamsController">
     <children>
@@ -25,15 +18,15 @@
                         <TableView fx:id="tv_ball_params" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="850.0">
                             <columns>
                                 <TableColumn fx:id="tc_No" editable="false" prefWidth="40.0" text="No" />
-                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Pos" />
-                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Geschw." />
-                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Radius" />
-                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Mass" />
+                                <TableColumn fx:id="tc_Pos" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Pos [px]" />
+                                <TableColumn fx:id="tc_V" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Geschw. [px/f]" />
+                                <TableColumn fx:id="tc_Radius" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Radius [px]" />
+                                <TableColumn fx:id="tc_Mass" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Mass [Kg]" />
                                 <TableColumn fx:id="tc_Elasticity" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Elastizität" />
-                                <TableColumn fx:id="tc_TotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="ges. Energie" />
-                                <TableColumn fx:id="tc_PotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="pot. Energie" />
-                                <TableColumn fx:id="tc_KinE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="kin. Energie" />
-                                <TableColumn fx:id="tc_LostE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Verlust" />
+                                <TableColumn fx:id="tc_TotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="ges. Energie [J]" />
+                                <TableColumn fx:id="tc_PotE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="pot. Energie [J]" />
+                                <TableColumn fx:id="tc_KinE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="kin. Energie [J]" />
+                                <TableColumn fx:id="tc_LostE" editable="false" minWidth="-Infinity" prefWidth="90.0" text="Verlust [J]" />
                             </columns>
                         </TableView>
                     </children>

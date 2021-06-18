@@ -89,6 +89,11 @@ public class Ball extends Ellipse {
         this.toBack();
     }
 
+    /**
+     * Draws the ball on the specified AnchorPane. Plattform.runLater is called to unify the thread the simulation
+     * is currently running on and the drawing thread of javafx.
+     * @param aDrawingPane specifies the Pane where the Ball should be drawn to
+     */
     public void draw(AnchorPane aDrawingPane) {
         Platform.runLater(() -> {
             aDrawingPane.getChildren().remove(this);
@@ -307,7 +312,11 @@ public class Ball extends Ellipse {
         return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
                 + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
                 + ") -- a: (" + Math.round(this.accVec.x) +"/"+ accVec.y
-                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius();
+                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius()
+                + " -- ges Energie: " + this.totE_c
+                + " -- pot Energie: " + this.potE_c
+                + " -- kin Energie: " + this.kinE_c
+                + " -- Verlust: " + this.lostE_c;
     }
 
 }

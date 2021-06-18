@@ -1,6 +1,16 @@
 package project.de.hshl.vcII;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -22,13 +32,31 @@ public class KeyManager {
         mainWindowModel = MainWindowModel.get();
     }
 
+    public void manageHover(MouseEvent e){
+        mainWindowModel.setCurrentlySelected(null);
+        Rectangle hoverHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
+        for(Ball b : mainWindowModel.getBallManager().getBalls()){
+            if(hoverHitBox.intersects(b.getPosVec().x - 25, b.getPosVec().y - 25, 50, 50)){
+                mainWindowModel.setTooltip(new Tooltip(b.toString()));
+                String tooltip = b.toString();
+                tooltip =tooltip.replace(".", "");
+                tooltip =tooltip.replace(" -- ", "\n\t");
+                System.out.println(tooltip);
+                mainWindowModel.setTooltipText(tooltip);
+                return;
+            } else {
+                mainWindowModel.setTooltip(null);
+            }
+        }
+    }
+
     /**
      * Toggles only if the 'W' key is pushed.
      * chooses a Wall and highlights it green,
      * @param e to know where the cursor currently is
      */
     public void manageMouse(MouseEvent e){
-       //3333 mainWindowModel.setChoiceMade(false);
+       // mainWindowModel.setChoiceMade(false);
         mainWindowModel.setCurrentlySelected(null);
         Rectangle clickingHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
         for(Wall w : mainWindowModel.getWallManager().getWalls()){
@@ -202,5 +230,33 @@ public class KeyManager {
         }
             mainWindowModel.setCurrentlySelected(null);
             mainWindowModel.setChoiceMade(false);
-    } 
+    }
+
+    private void hoverBox(Ball b, double posX, double posY){
+        AnchorPane aRoot = new AnchorPane();
+        VBox vbParams = new VBox();
+
+        //Label pos = new Label("Position:\t(" + b.getPosVec().x + "/" + b.getPosVec().y + ")");
+        Label v = new Label("Geschw.\t(" + b.getVelVec().x + "/" + b.getVelVec().y + ")");
+        Label a = new Label("Beschl.\t(" + b.getAccVec().x + "/" + b.getAccVec().y + ")");
+        Label radius = new Label("Radius:\t" + b.getRadius());
+        Label mass = new Label("Masse:\t" + b.getMass());
+        Label elasticity = new Label("Elastizität:\t" + b.getElasticity());
+        Label totE = new Label("ges. Energie:\t" + b.getTotE_c());
+        Label potE = new Label("pot. Energie:\t" + b.getPotE_c());
+        Label kinE = new Label("kin. Energie:\t" + b.getKinE_c());
+        Label lostE = new Label("Verlust:\t" + b.getLostE_c());
+
+        vbParams.getChildren().addAll(v, a, radius, mass, elasticity, totE, potE, kinE,lostE);
+        aRoot.getChildren().add(vbParams);
+        aRoot.setMaxSize(150, 300);
+        aRoot.setMinSize(150, 300);
+        aRoot.setPrefSize(150, 300);
+
+        Scene hoverBox = new Scene(aRoot);
+        Stage secondary = new Stage();
+        secondary.initStyle(StageStyle.UNDECORATED);
+        secondary.setScene(hoverBox);
+        secondary.show();
+    }
 }

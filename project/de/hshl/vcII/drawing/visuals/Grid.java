@@ -16,6 +16,11 @@ public class Grid {
     private double gridSpacingX = 100, gridSpacingY = 100;
 
     //- Grid -----------------------------------------------------------------------------------------------------------
+
+    /**
+     * turn the Grin on/off
+     * @param aDrawingPane draws the grid on the specified Pane
+     */
     public void toggleGrid(AnchorPane aDrawingPane){
         if(gridOn){
             removeGrid(aDrawingPane);

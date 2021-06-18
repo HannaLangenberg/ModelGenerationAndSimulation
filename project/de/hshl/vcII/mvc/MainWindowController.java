@@ -331,6 +331,11 @@ public class MainWindowController implements Initializable {
                         aSettingsPane.setDisable(false);
                     }
                 }
+                if(!mainWindowModel.getSimulator().isRunning())
+                    mainWindowModel.getKeyManager().manageHover(e);
+                else
+                    mainWindowModel.setTooltip(null);
+
                 break;
             case SECONDARY:
                 if(mainWindowModel.isChoiceEnabled())

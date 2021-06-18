@@ -88,6 +88,14 @@
 }
 
 
+.tooltip {
+    -fx-background: #FEFEFE;
+    -fx-text-fill: #303030;
+    -fx-background-color: #FEFEFE;
+    -fx-background-radius: 0px;
+    -fx-effect: null;
+}
+
 
 .label{
     -fx-text-fill: #303030;

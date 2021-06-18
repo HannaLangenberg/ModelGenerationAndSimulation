@@ -98,6 +98,8 @@
         return new MyVector(v2.x - v1.x, v2.y - v1.y);
     }
 
+
+    // Overridden because of te TableView
     @Override
     public String toString() {
         return "(" + Math.round(this.x) +"/"+ Math.round(this.y) + ")";

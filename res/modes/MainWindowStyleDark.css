@@ -85,7 +85,7 @@
 
 .text-field {
      -fx-background-color: #505050;
-     -fx-text-fill: FEFEFE
+     -fx-text-fill: #FEFEFE
 }
 
 
@@ -122,6 +122,16 @@
 .slider:selected > .thumb {
      -fx-border-radius: 4;
      -fx-border-color: #1999C9
+}
+
+
+
+.tooltip {
+    -fx-background: #303030;
+    -fx-text-fill: #FEFEFE;
+    -fx-background-color: #303030;
+    -fx-background-radius: 0px;
+    -fx-effect: null;
 }
 
 

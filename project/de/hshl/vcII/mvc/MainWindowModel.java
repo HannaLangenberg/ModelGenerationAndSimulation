@@ -1,6 +1,7 @@
 package project.de.hshl.vcII.mvc;
 
 
+import javafx.scene.control.Tooltip;
 import project.de.hshl.vcII.KeyManager;
 import project.de.hshl.vcII.drawing.visuals.Grid;
 import project.de.hshl.vcII.drawing.visuals.Mode;
@@ -36,6 +37,7 @@ public class MainWindowModel {
     private Stage stage;
     private AnchorPane aDrawingPane;
     private AnchorPane aSettingsPane;
+    private Tooltip tooltip;
 
     // Variables to maintain the window
     private boolean fullscreen = false, choiceEnabled = false, choiceMade = false, arrowsActive = false;
@@ -56,6 +58,7 @@ public class MainWindowModel {
 
     // To initialise all Objects
     public void init(AnchorPane aDrawingPane){
+        tooltip = new Tooltip();
         ballManager = new BallManager();
         wallManager = new WallManager();
         scissorsManager = new ScissorsManager();
@@ -66,6 +69,7 @@ public class MainWindowModel {
         mode = new Mode();
         spin = new Rotation();
         this.aDrawingPane = aDrawingPane;
+        Tooltip.install(aDrawingPane, tooltip);
     }
     public void initSettings(AnchorPane aSettingsPane){
         this.aSettingsPane = aSettingsPane;
@@ -165,6 +169,15 @@ public class MainWindowModel {
 
     public double getScissorsSpeed() {
         return scissorsSpeed;
+    }
+
+    public void setTooltip(Tooltip tooltip) {
+        this.tooltip = tooltip;
+        Tooltip.install(aDrawingPane, tooltip);
+    }
+
+    public void setTooltipText(String text) {
+        this.tooltip.setText(text);
     }
 
     public boolean isFullscreen() {
