@@ -2,6 +2,7 @@ package project.de.hshl.vcII.mvc;
 
 
 import javafx.scene.control.Tooltip;
+import javafx.util.Duration;
 import project.de.hshl.vcII.KeyManager;
 import project.de.hshl.vcII.drawing.visuals.Grid;
 import project.de.hshl.vcII.drawing.visuals.Mode;
@@ -69,6 +70,8 @@ public class MainWindowModel {
         mode = new Mode();
         spin = new Rotation();
         this.aDrawingPane = aDrawingPane;
+        tooltip.setShowDelay(Duration.INDEFINITE);
+        tooltip.setHideDelay(Duration.INDEFINITE);
         Tooltip.install(aDrawingPane, tooltip);
     }
     public void initSettings(AnchorPane aSettingsPane){
@@ -172,8 +175,15 @@ public class MainWindowModel {
     }
 
     public void setTooltip(Tooltip tooltip) {
-        this.tooltip = tooltip;
-        Tooltip.install(aDrawingPane, tooltip);
+        if(tooltip != null) {
+            tooltip.setShowDuration(Duration.INDEFINITE);
+            tooltip.setShowDelay(Duration.ZERO);
+            tooltip.setHideDelay(Duration.ZERO);
+            this.tooltip = tooltip;
+            Tooltip.install(aDrawingPane, this.tooltip);
+        } else {
+            Tooltip.uninstall(aDrawingPane, this.tooltip);
+        }
     }
 
     public void setTooltipText(String text) {
