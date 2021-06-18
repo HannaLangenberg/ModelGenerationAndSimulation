@@ -183,8 +183,6 @@ public class ScissorsCollisions {
         b.setVelVec(MyVector.add(vOrthogonal, Collision.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5)));
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
 
-
-
     }
 
     private static void reset() {

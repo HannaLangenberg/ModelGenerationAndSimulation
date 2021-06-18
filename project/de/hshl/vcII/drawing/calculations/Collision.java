@@ -6,6 +6,8 @@ import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
 public class Collision {
+    static int side;
+    static MyVector dp;
 
     public static void checkScreen(Ball b, double e)
     {
@@ -26,25 +28,51 @@ public class Collision {
             // Gegen "Decke" → einfach nur abstoßen
             // Gegen Boden → Bouncen irgendwann verbieten
             // Beides mit Energieverlust
-            if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)
+
+
+
+            /*if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)
                 || (b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
                 b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), b.getVelVec().y)); // Energieverlust
+            }*/
+
+            if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
+//                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), b.getVelVec().y)); // Energieverlust
+                dp = new MyVector(MainWindowModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
+                side = 3;
+            }
+            if((b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
+//                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), b.getVelVec().y)); // Energieverlust
+                dp = new MyVector(0, b.getPosVec().y);
+                side = 1;
             }
 
+
             if((b.getPosVec().y < b.getRadius() + e) & (b.getVelVec().y < 0)) {
-                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
+//                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
+                dp = new MyVector(b.getPosVec().x, 0);
+                side = 2;
             }
 
             if((b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
+                dp = new MyVector(b.getPosVec().x, MainWindowModel.get().getADrawingPane().getHeight());
+                side = 0;
+                /*
                 b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
                 if(Math.abs(b.getVelVec().y) < Utils.CONSTANT_OF_GRAVITATION/3)
                 {
                     b.setVelVec(new MyVector(b.getVelVec().x, 0));
                     b.setColliding_Orthogonal_F(true);
-                }
+                }*/
             }
-            if(b.getVelVec().y == 0 & b.isColliding_Parallel_B()) {
+            /*if(b.getVelVec().y == 0 & b.isColliding_Parallel_B()) {
                 b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+            }*/
+
+            CollisionHandling.bounceVelocity(b, side, dp);
+
+            if(side == 0 & !b.isColliding_Orthogonal_F()) {
+                CollisionHandling.stopBouncing(b);
             }
 
             b.setColliding_Parallel_B(false);
@@ -67,6 +95,10 @@ public class Collision {
         }
     }
 
+    public static void reset() {
+        dp = new MyVector(0,0);
+        side = 0;
+    }
 
     // Used in BallCollisions and ScissorsCollisions
     static MyVector centerShock(MyVector v1, double m1, MyVector v2, double m2){

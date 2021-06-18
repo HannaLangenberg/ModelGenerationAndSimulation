@@ -85,8 +85,13 @@ public class WallCollision {
         if (collision_onEdge || collision_onCorner)
         {
             if(collision_onEdge)
-                WallCalculations.bounceVelocity(b);
-            else bounceVelocity(b);
+            {
+                CollisionHandling.bounceVelocity(b, WallCalculations.side, WallCalculations.droppedPerpendicular);
+                if(WallCalculations.side == 0) {
+                    CollisionHandling.stopBouncing(b);
+                }
+            }
+            else CollisionHandling.bounceVelocity(b, corner, possibleCorner);
 
             if (w.getOrientation() == 0) {                            // Rotation nach LINKS
                 WallCalculations.initializeForces(w, b, 0);
@@ -97,6 +102,8 @@ public class WallCollision {
 
             reset();
             WallCalculations.reset();
+            CollisionHandling.reset();
+            Collision.reset();
         }
     }
 
@@ -131,23 +138,19 @@ public class WallCollision {
 
         if(s_onPosCorner & t_onPosCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(1, 1));
-            corner = 5;
-            System.out.println("5");
+            corner = 1;
         }
         else if(s_onPosCorner & t_onNegCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(1,-1));
-            corner = 4;
-            System.out.println("4");
+            corner = 1;
         }
         else if(s_onNegCorner & t_onNegCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(-1,-1));
-            corner = 7;
-            System.out.println("7");
+            corner = 3;
         }
         else if(s_onNegCorner & t_onPosCorner) {
             possibleCorner = WallCalculations.calcCoord_onEdge(w, new MyVector(-1,1));
-            corner = 6;
-            System.out.println("6");
+            corner = 3;
         }
         collision_onCorner = Calculator.checkDistance(b, possibleCorner, e);
         b.setColliding_Parallel_B(collision_onCorner);

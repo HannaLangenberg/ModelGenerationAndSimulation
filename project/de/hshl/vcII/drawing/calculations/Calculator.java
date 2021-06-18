@@ -5,12 +5,52 @@ import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
+/**
+ * This class is responsible for general calculations.
+ *
+ * The declaration who wrote which part can be found in the method comments.
+ * */
 public class Calculator {
     private static double initial_TotE, totE, potE, kinE, lostE = 0;
 
+    /**
+     * This method is used in the bounce... (Wall/Scissors) / and ...shock (Ball) methods.
+     * It returnes the parallel component of the transferred ball's velocity vector.
+     * To do so orthogonal projection is used.
+     * @param normedCenterLine normed line → shock normal
+     * @param b                current ball
+     * @return                 parallel component of current ball's velVec
+     * @author Hanna Langenberg
+     */
+    static MyVector calc_P_component(MyVector normedCenterLine, Ball b) {
+        return MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+    }
+    /**
+     * This method is used in the bounce... (Wall/Scissors) / and ...shock (Ball) methods.
+     * It returnes the orthogonal component of the transferred ball's velocity vector.
+     * To do so orthogonal projection is used and subtracted from the velVec.
+     * @param normedCenterLine normed line → shock normal
+     * @param b                current ball
+     * @return                 orthogonal component of current ball's velVec
+     * @author Hanna Langenberg
+     */
+    static MyVector calc_O_component(MyVector normedCenterLine, Ball b) {
+        return  MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
+    }
+
+    /**
+     * This method is used for wall and scissors collisions to check if a collision happend with/at the calculated
+     * dropped perpendicular.
+     * @param b          current ball
+     * @param dp_Coord   dropped perpendicular of the ball
+     * @param epsilon    safety distance for checking for collisions. [5px]
+     * @return           true if collision happened
+     * @author Jan-Gustav Liedtke
+     */
     public static boolean checkDistance(Ball b, MyVector dp_Coord, double epsilon) {
         return MyVector.distance(b.getPosVec(), dp_Coord) <= b.getRadius() + epsilon;
     }
+
 
     public static void calcInitial_TotalEnergy() {
         // initial_TotE = potE + kinE
