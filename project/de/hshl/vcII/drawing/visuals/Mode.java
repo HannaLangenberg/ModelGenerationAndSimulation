@@ -13,6 +13,7 @@ public class Mode {
      * @param mode
      */
     public void toggleMode(boolean mode) {
+        this.mode = mode;
         MainWindowModel mainWindowModel = MainWindowModel.get();
         if(mode){
             mainWindowModel.getStage().getScene().getStylesheets().remove(Utils.darkMode);
@@ -22,7 +23,6 @@ public class Mode {
             mainWindowModel.getStage().getScene().getStylesheets().remove(Utils.lightMode);
             mainWindowModel.getStage().getScene().getStylesheets().add(Utils.darkMode);
         }
-        mode = !mode;
     }
 
     public boolean isMode() {
