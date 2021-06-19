@@ -96,6 +96,7 @@ public class MainController implements Initializable {
     // A second controller for better overview
     private CurrentParamsController currentParamsController = new CurrentParamsController();
     private SettingsController settingsController = new SettingsController();
+    private CustonHeaderController custonHeaderController = new CustonHeaderController();
     // Declaration of original model.
     private MainModel mainWindowModel;
 
@@ -109,6 +110,11 @@ public class MainController implements Initializable {
     // Used for resizing.
     private ResizePane resizePane;
 
+    /**
+     * Used to initialize everything
+     * @param url used for background processes in the big blackbox that is JavaFx but unused by us
+     * @param resourceBundle used for background processes in the big blackbox that is JavaFx but unused by us
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
@@ -121,6 +127,8 @@ public class MainController implements Initializable {
                 lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
         currentParamsController.initialize(lWind, lDt, lGravity, tv_ball_params, tc_Radius, tc_Mass, tc_V, tc_PotE, tc_KinE,
                 tc_LostE, tc_TotE, tc_Elasticity, tc_Pos, tc_No);
+        custonHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane, sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
+                mousePressedInHeader, windowCursorPosX, windowCursorPosY);
         mainWindowModel.setSettingsController(settingsController);
         mainWindowModel.setCurrentParamsController(currentParamsController);
 
@@ -141,22 +149,13 @@ public class MainController implements Initializable {
             mainWindowModel.initSettings(aSettingsPane);
             resizePane.initResizeLines();
             resizePane.alignResizeLines();
-            draggablePrimaryStage();
+            custonHeaderController.draggablePrimaryStage();
             mainWindowModel.getMode().toggleMode(lightMode);
         });
     }
 
-    // Save
-    @FXML
-    private void save(){
-        IO.save();
-    }
+    //_MENU_____________________________________________________________________________________________________________
 
-    // Load
-    @FXML
-    private void load(){
-        IO.load();
-    }
     // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
@@ -183,82 +182,13 @@ public class MainController implements Initializable {
         }
     }
 
-
-
-    //_PARAMETER_SETTING________________________________________________________________________________________________
-    //_textfield__
-    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
-    }
-
-    //_choicebox__
-    public void chb_Wind_OnAction(ActionEvent actionEvent) {
-        gp_Wind.setDisable(!chb_Wind.isSelected());
-
-        if(!chb_Wind.isSelected())
-        {
-            Utils.setWind(new MyVector(0,0));
-        }
-    }
-    public void chb_Choice_OnAction(ActionEvent actionEvent) {
-        cb_choose.setDisable(!cb_choice_active.isSelected());
-        if (cb_choose.isDisabled()) {
-            mainWindowModel.getKeyManager().unMarkAll();
-        }
-        else {
-            cb_choose.setPromptText("wähle...");
-            cb_choose.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> oV, String oldValue, String newValue) {
-                    cb_choose(newValue);
-
-                }
-            });
-        }
-    }
-
-    //_slider__
-    public void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
-        settingsController.sl_Weight_OnDragDetected();
-    }
-    public void sl_Radius_OnDragDetected(){
-        settingsController.sl_Radius_OnDragDetected();
-    }
-    public void sl_Elasticity_OnDragDetected(MouseEvent mouseEvent) {
-        settingsController.sl_Elasticity_OnDragDetected();
-    }
-    public void sl_ScissorsSpeed_OnDragDetected(){
-        settingsController.sl_ScissorsSpeed_OnDragDetected();
-    }
-
-    //_button__
-    public void btn_showCurrentParams_OnAction() throws IOException {
-        settingsController.btn_showCurrentParams_OnAction();
-    }
-    public void d_play_changeSimSpd(){
-
-    }
-
-    //_Menu__
+    //TODO: Was schlaues dazu schreiben.
     @FXML
-    public void switch_mode() {
-        mainWindowModel.getMode().toggleMode(!lightMode);
-        lightMode = !lightMode;
-        if (!lightMode) {
-            lMode.setText("Dark");
-        }
-        else {
-            lMode.setText("Light");
-        }
-        System.out.println(lightMode);
+    private void d_play_changeSimSpd(){
+
     }
-    //-Menu-Controls----------------------------------------------------------------------------------------------------
-    // Is called whenever 'Clear Screen' is clicked in the 'File' menu
+
+    // Is called whenever 'clear screen' is clicked in the 'File' menu.
     @FXML
     private void clearScreen() {
         mainWindowModel.getBallManager().getBalls().removeAll(mainWindowModel.getBallManager().getBalls());
@@ -273,6 +203,17 @@ public class MainController implements Initializable {
         mainWindowModel.getCurrentParamsController().reset();
         firstTime = true;
     }
+    // Is called whenever 'save' is clicked in the 'File' menu.
+    @FXML
+    private void save(){
+        IO.save();
+    }
+    // Is called whenever 'load' is clicked in the 'File' menu.
+    @FXML
+    private void load(){
+        IO.load();
+    }
+
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
     @FXML
     private void choiceBall() {
@@ -284,7 +225,7 @@ public class MainController implements Initializable {
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
-    private void choiceBlock(){
+    private void choiceWall(){
         Wall w = new Wall();
         mainWindowModel.setCurrentlySelected(w);
         mainWindowModel.getWallManager().setW(w);
@@ -299,6 +240,7 @@ public class MainController implements Initializable {
         mainWindowModel.getBallManager().setB(null);
         mainWindowModel.getWallManager().setW(null);
     }
+
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
     @FXML
     private void toggleGrid() {
@@ -319,39 +261,77 @@ public class MainController implements Initializable {
         }
     }
 
-    private void activateLists(){
-        // Add change listener for cb_choose to always keep it updated
-        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
-            cb_update();
-        });
-        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
-            cb_update();
-        });
-        if(mainWindowModel.getScissorsManager().getS() != null)
-            cb_update();
-
+    // Is called when ever 'Light' / 'Dark' is clicked
+    @FXML
+    private void switch_mode() {
+        mainWindowModel.getMode().toggleMode(!lightMode);
+        lightMode = !lightMode;
+        if (!lightMode) {
+            lMode.setText("Dark");
+        }
+        else {
+            lMode.setText("Light");
+        }
+        System.out.println(lightMode);
     }
-    public void cb_update() {
-        cb_choose.getItems().clear();
-        for (Ball b : mainWindowModel.getBallManager().getBalls())
-            cb_choose.getItems().add("Ball Nummer " + b.getNumber());
-
-        for (Wall w : mainWindowModel.getWallManager().getWalls())
-            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
-
-        if(mainWindowModel.getScissorsManager().getS() != null)
-            cb_choose.getItems().add("Schere");
+    //_PARAMETER_SETTING________________________________________________________________________________________________
+    //_textfield__
+    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
     }
-
-    public void cb_choose(String s) {
-        if(cb_choose.getValue() == null) return;
-
-        mainWindowModel.getKeyManager().choose(s);
+    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
+    }
+    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
     }
 
+    //_choicebox__
+    @FXML
+    private void chb_Wind_OnAction(ActionEvent actionEvent) {
+        gp_Wind.setDisable(!chb_Wind.isSelected());
+
+        if(!chb_Wind.isSelected())
+        {
+            Utils.setWind(new MyVector(0,0));
+        }
+    }
+    @FXML
+    private void chb_Choice_OnAction(ActionEvent actionEvent) {
+        cb_choose.setDisable(!cb_choice_active.isSelected());
+        if (cb_choose.isDisabled()) {
+            mainWindowModel.getKeyManager().unMarkAll();
+        }
+        else {
+            cb_choose.setPromptText("wähle...");
+            cb_choose.getSelectionModel().selectedItemProperty().addListener((oV, oldValue, newValue) -> cb_choose(newValue));
+        }
+    }
+
+    //_slider__
+    @FXML
+    private void sl_Weight_OnDragDetected(MouseEvent mouseEvent) {
+        settingsController.sl_Weight_OnDragDetected();
+    }
+    @FXML
+    private void sl_Radius_OnDragDetected(){
+        settingsController.sl_Radius_OnDragDetected();
+    }
+    @FXML
+    private void sl_Elasticity_OnDragDetected(MouseEvent mouseEvent) {
+        settingsController.sl_Elasticity_OnDragDetected();
+    }
+    @FXML
+    private void sl_ScissorsSpeed_OnDragDetected(){
+        settingsController.sl_ScissorsSpeed_OnDragDetected();
+    }
+
+    //_button__
+    @FXML
+    private void btn_showCurrentParams_OnAction() throws IOException {
+        settingsController.btn_showCurrentParams_OnAction();
+    }
 
     //_MOUSE_EVENTS_____________________________________________________________________________________________________
-    //-Mouse-&-Key-Listener---------------------------------------------------------------------------------------------
     // Is called whenever the mouse is clicked.
     @FXML
     private void onMouse(MouseEvent e){
@@ -397,184 +377,94 @@ public class MainController implements Initializable {
         }
     }
 
+    // For CustomHeaderController
+    @FXML
+    private void minimize() {
+        custonHeaderController.minimize();
+    }
+
+    @FXML
+    private void mouseEnteredMinimize(MouseEvent mouseEvent) {
+        custonHeaderController.mouseEnteredMinimize();
+    }
+
+    @FXML
+    private void mouseExitedMinimize(MouseEvent mouseEvent) {
+        custonHeaderController.mouseExitedMinimize();
+    }
+
+
+    @FXML
+    private void minMax(MouseEvent mouseEvent) {
+        custonHeaderController.minMax();
+    }
+
+    @FXML
+    private void mouseEnteredMinMax(MouseEvent mouseEvent) {
+        custonHeaderController.mouseEnteredMinMax();
+    }
+
+    @FXML
+    private void mouseExitedMinMax(MouseEvent mouseEvent) {
+        custonHeaderController.mouseExitedMinMax();
+    }
+
+
+    @FXML
+    private void exit(MouseEvent mouseEvent) {
+        custonHeaderController.exit();
+    }
+
+
+    @FXML
+    private void mouseEnteredExit(MouseEvent mouseEvent) {
+        custonHeaderController.mouseEnteredExit();
+    }
+
+    @FXML
+    private void mouseExitedExit(MouseEvent mouseEvent) {
+        custonHeaderController.mouseExitedExit();
+    }
+
     //_KEY_EVENTS_______________________________________________________________________________________________________
-    // Is called whenever a key is pressed.
     @FXML
     private void onKey(KeyEvent e) {
         mainWindowModel.getKeyManager().manageInputs(e.getCode());
     }
 
-    public void arrows() {
+    @FXML
+    private void arrows() {
         mainWindowModel.setArrowsActive(!mainWindowModel.isArrowsActive());
     }
 
-    // - Custom header -------------------------------------------------------------------------------------------------
-    // - No need for comments as it is of no interest for mod. sim. but if the authors are asked they explain it. ------
-    private void draggablePrimaryStage() {
+    //_MISC_____________________________________________________________________________________________________________
+    private void activateLists(){
+        // Add change listener for cb_choose to always keep it updated
+        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
+            cb_update();
+        });
+        if(mainWindowModel.getScissorsManager().getS() != null)
+            cb_update();
 
-        EventHandler<MouseEvent> onMousePressed =
-                event -> {
-                    if (event.getSceneX() < mainWindowModel.getStage().getWidth() - 105) {
-                        mousePressedInHeader = true;
-                        windowCursorPosX = event.getScreenX();
-                        windowCursorPosY = event.getScreenY();
-                        sceneOnWindowPosX = mainWindowModel.getStage().getX();
-                        sceneOnWindowPosY = mainWindowModel.getStage().getY();
-                    }
-                };
-
-        EventHandler<MouseEvent> onMouseDragged =
-                event -> {
-                    if (mousePressedInHeader) {
-                        double offsetX = event.getScreenX() - windowCursorPosX;
-                        double offsetY = event.getScreenY() - windowCursorPosY;
-                        double newPosX = sceneOnWindowPosX + offsetX;
-                        double newPosY = sceneOnWindowPosY + offsetY;
-                        if (mainWindowModel.isFullscreen()) {
-                            toggleDraggedFullScreen(); //Wenn das Fenster im Vollbildmodus gedragged wird, wird es verkleinert
-                            sceneOnWindowPosX = mainWindowModel.getStage().getX();
-                        } else {
-                            mainWindowModel.getStage().setX(newPosX);
-                            mainWindowModel.getStage().setY(newPosY);
-                        }
-                    }
-                };
-
-        EventHandler<MouseEvent> onMouseReleased =
-                event -> {
-                    if (mousePressedInHeader) {
-                        mousePressedInHeader = false;
-                        if (MouseInfo.getPointerInfo().getLocation().y == 0) toggleFullScreen(); //Wenn das Fenster oben losgelassen wird, wird es in den Vollbildmodus gesetzt
-                        else if (mainWindowModel.getStage().getY() < 0) mainWindowModel.getStage().setY(0); //Wenn das Fenster höher als 0 losgelassen wird, wird die Höhe auf 0 gesetzt
-                        else if (mainWindowModel.getStage().getY() + 30 > mainWindowModel.getScreenHeight() - 40) mainWindowModel.getStage().setY(mainWindowModel.getScreenHeight() - 70); //Wenn das Fenster in der Taskbar losgelassen wird, wird es drüber gesetzt
-                    }
-                };
-
-        EventHandler<MouseEvent> onMouseDoubleClicked =
-                event -> {
-
-                    if(event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY){
-                        toggleFullScreen();
-                    }
-                };
-
-        hHeader.setOnMousePressed(onMousePressed);
-        hHeader.setOnMouseDragged(onMouseDragged);
-        hHeader.setOnMouseReleased(onMouseReleased);
-        hHeader.setOnMouseClicked(onMouseDoubleClicked);
     }
 
-    private void toggleFullScreen() {
-        Stage stage = mainWindowModel.getStage();
-        if (mainWindowModel.isFullscreen()) {
-            stage.setX(mainWindowModel.getSavedSceneX());
-            stage.setY(mainWindowModel.getSavedSceneY());
-            stage.setWidth(mainWindowModel.getSavedSceneWidth());
-            stage.setHeight(mainWindowModel.getSavedSceneHeight());
-            mainWindowModel.setFullscreen(false);
-        }
-        else {
-            mainWindowModel.setSavedSceneX(stage.getX());
-            mainWindowModel.setSavedSceneY(stage.getY());
-            mainWindowModel.setSavedSceneWidth(stage.getWidth());
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-            stage.setX(0);
-            stage.setY(0);
-            stage.setWidth(mainWindowModel.getScreenWidth());
-            stage.setHeight(mainWindowModel.getScreenHeight() - mainWindowModel.getTaskbarHeight());
-            mainWindowModel.setFullscreen(true);
-        }
-        aDrawingPane.setPrefSize(stage.getWidth()-aSettingsPane.getWidth(), stage.getHeight());
-        resizePane.setDisable(mainWindowModel.isFullscreen());
-        mainWindowModel.getGrid().updateGrid(mainWindowModel.getADrawingPane());
+    public void cb_update() {
+        cb_choose.getItems().clear();
+        for (Ball b : mainWindowModel.getBallManager().getBalls())
+            cb_choose.getItems().add("Ball Nummer " + b.getNumber());
+
+        for (Wall w : mainWindowModel.getWallManager().getWalls())
+            cb_choose.getItems().add("Wand Nummer " + w.getNumber());
+
+        if(mainWindowModel.getScissorsManager().getS() != null)
+            cb_choose.getItems().add("Schere");
     }
 
-    private void toggleDraggedFullScreen() {
-        Stage stage = mainWindowModel.getStage();
-        if (mainWindowModel.isFullscreen()) {
-            double mousePosX = MouseInfo.getPointerInfo().getLocation().x;
-            double screenWidthThird = mainWindowModel.getScreenWidth() / 3;
-            if (mousePosX <= screenWidthThird)
-                stage.setX(1);
-            else if (mousePosX > screenWidthThird & mousePosX < screenWidthThird * 2)
-                stage.setX(mainWindowModel.getScreenWidth() / 2 - mainWindowModel.getSavedSceneWidth() / 2);
-            else
-                stage.setX(mainWindowModel.getScreenWidth() - mainWindowModel.getSavedSceneWidth());
-            stage.setWidth(mainWindowModel.getSavedSceneWidth());
-            stage.setHeight(mainWindowModel.getSavedSceneHeight());
-            mainWindowModel.setFullscreen(false);
-        } else {
-            mainWindowModel.setSavedSceneWidth(stage.getWidth());
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-            stage.setX(0);
-            stage.setY(0);
-            stage.setWidth(mainWindowModel.getScreenWidth());
-            stage.setHeight(mainWindowModel.getScreenHeight() - mainWindowModel.getTaskbarHeight());
-            mainWindowModel.setFullscreen(true);
-        }
-        aDrawingPane.setPrefSize(stage.getWidth()-aSettingsPane.getWidth(), stage.getHeight());
-        resizePane.setDisable(mainWindowModel.isFullscreen());
-        mainWindowModel.getGrid().updateGrid(mainWindowModel.getADrawingPane());
-    }
-
-    @FXML
-    private void mouseEnteredMinimize() {
-        hoverFrameControls(sMinPane, true);
-    }
-
-    @FXML
-    private void mouseExitedMinimize() {
-        hoverFrameControls(sMinPane, false);
-    }
-
-    @FXML
-    private void mouseEnteredMinMax() {
-        hoverFrameControls(sMinMaxPane, true);
-    }
-
-    @FXML
-    private void mouseExitedMinMax() {
-        hoverFrameControls(sMinMaxPane, false);
-    }
-
-    @FXML
-    private void mouseEnteredExit() {
-        hoverFrameControls(sExitPane, true);
-    }
-
-    @FXML
-    private void mouseExitedExit() {
-        hoverFrameControls(sExitPane, false);
-    }
-
-    private void hoverFrameControls(StackPane stackPane, boolean hovered) {
-        if (hovered) {
-            for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                if (stackPane.equals(sExitPane))
-                    stackPane.getChildren().get(i).setStyle("-fx-stroke: #cc2b2b");
-                else
-                    stackPane.getChildren().get(i).setStyle("-fx-stroke: #2bccbd");
-            }
-            stackPane.setEffect(new Glow(1));
-        }
-        else {
-            for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                stackPane.getChildren().get(i).setStyle("-fx-stroke: #c9c9c9");
-                stackPane.getChildren().get(i).setEffect(null);
-            }
-            stackPane.setEffect(null);
-        }
-    }
-    @FXML
-    private void minimize() {
-        mainWindowModel.getStage().setIconified(true);
-    }
-    @FXML
-    private void minMax() {
-        toggleFullScreen();
-    }
-    @FXML
-    private void exit() {
-        System.exit(0);
+    public void cb_choose(String s) {
+        if(cb_choose.getValue() == null) return;
+        mainWindowModel.getKeyManager().choose(s);
     }
 }

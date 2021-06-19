@@ -33,7 +33,7 @@
                               <Menu mnemonicParsing="false" text="Bearbeiten">
                                  <items>
                                     <MenuItem mnemonicParsing="false" onAction="#choiceBall" text="Ball" />
-                                    <MenuItem mnemonicParsing="false" onAction="#choiceBlock" text="Wand" />
+                                    <MenuItem mnemonicParsing="false" onAction="#choiceWall" text="Wand" />
                                     <MenuItem mnemonicParsing="false" onAction="#choiceSchere" text="Schere" />
                                  </items>
                               </Menu>
