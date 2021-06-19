@@ -5,9 +5,7 @@ import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class IO {
     public static void save(){
@@ -20,14 +18,14 @@ public class IO {
 
             if(!mainWindowModel.getBallManager().getBalls().isEmpty()) {
                 for (Ball b : mainWindowModel.getBallManager().getBalls())
-                    balls = balls.concat("\n" + b.save());
+                    balls = balls.concat(b.save());
             }
             if(!mainWindowModel.getWallManager().getWalls().isEmpty()){
                 for (Wall w : mainWindowModel.getWallManager().getWalls())
-                    walls = walls.concat("\n" + w.save());
+                    walls = walls.concat(w.save());
             }
             if(mainWindowModel.getScissorsManager().getS() != null){
-                scissors = "\n" + mainWindowModel.getScissorsManager().getS().save();
+                scissors = mainWindowModel.getScissorsManager().getS().save();
             }
             bW.write(balls);
             bW.write(walls);
@@ -42,7 +40,7 @@ public class IO {
     public static void load(){
         MainWindowModel mainWindowModel1 = MainWindowModel.get();
         try {
-            //_Load_in_the_saved_file___________________________________________________________________________________
+            //_Load_from_the_saved_file___________________________________________________________________________________
             BufferedReader bR = new BufferedReader(new FileReader("TESTSAVE.txt"));
             String currentLine;
             String csv = "";
@@ -51,9 +49,13 @@ public class IO {
                     scissorsCount = mainWindowModel1.getScissorsManager().getS() == null ? 0 : 1,
                     offset = 1;
             while ((currentLine = bR.readLine()) != null) {
-                csv = csv.concat(currentLine);
+                if(!currentLine.equals("")) {
+                    csv = csv.concat(currentLine);
+                }
             }
+            //TODO: Exception handling
             String[] splitCsv = csv.split(";"); //first element has to begone
+            System.out.println(Arrays.toString(splitCsv));
 
             String[] ballsCsv = new String[ballCount];
             if(splitCsv[offset] != null) {
@@ -62,6 +64,8 @@ public class IO {
                 }
             }
 
+            System.out.println(Arrays.toString(ballsCsv));
+
             String[] wallsCsv = new String[wallCount];
             if(splitCsv[ballCount+offset] != null) {
                 for (int i = 0; i < wallCount; i++) {
@@ -69,10 +73,10 @@ public class IO {
                 }
             }
 
-            //TODO: Scissors
-
-            System.out.println(Arrays.toString(ballsCsv));
-            System.out.println(Arrays.toString(wallsCsv));
+            String scissorsCsv= "";
+            if(splitCsv[wallCount+offset] != null) {
+                scissorsCsv = splitCsv[wallCount + ballCount + offset];
+            }
 
             for(String ballCsv: ballsCsv){
                 int paramCount = 18;
@@ -81,11 +85,13 @@ public class IO {
                 for(int i = 0; i < paramCount; i++){
                     rawData[i] = params[i].split(": ")[1];
                 }
-                System.out.println(Arrays.toString(rawData));
-                //TODO: Make constructor for Arrow
+                //TODO: Remove Arrow, number
                 Ball b = new Ball(rawData[0], rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6],
                         rawData[7], rawData[8], rawData[9], rawData[10], rawData[11] /*Arrow*/, rawData[12], rawData[13],
                         rawData[14] /*Arrow*/, rawData[15], rawData[16], rawData[17]);
+                mainWindowModel1.setCurrentlySelected(b);
+                mainWindowModel1.getPlacer().place(b.getPosVec());
+                System.out.println(Arrays.toString(rawData));
             }
 
             for(String wallCsv: wallsCsv){
@@ -95,56 +101,23 @@ public class IO {
                 for(int i = 0; i < paramCount; i++){
                     rawData[i] = params[i].split(": ")[1];
                 }
+                //TODO: Remove number
+                Wall w = new Wall("/img/blocks/BlockNormal.png", rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6]);
+                mainWindowModel1.setCurrentlySelected(w);
+                mainWindowModel1.getPlacer().place(w.getPosVec());
                 System.out.println(Arrays.toString(rawData));
-                //TODO: Remove Errors
-                Wall w = new Wall(rawData[0], rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6]);
             }
-            /*List<String> splitOffBalls = new ArrayList<>(),
-                    splitOffWalls = new ArrayList<>();
-            for(int i = 0; i < ballCount; i++){
-                int paramCount = 18;
-                int ballParams = i * paramCount;
-                splitOffBalls.add(splitTextFile[ballParams + 0]);
-                splitOffBalls.add(splitTextFile[ballParams + 1]);
-                splitOffBalls.add(splitTextFile[ballParams + 2]);
-                splitOffBalls.add(splitTextFile[ballParams + 3]);
-                splitOffBalls.add(splitTextFile[ballParams + 4]);
-                splitOffBalls.add(splitTextFile[ballParams + 5]);
-                splitOffBalls.add(splitTextFile[ballParams + 6]);
-                splitOffBalls.add(splitTextFile[ballParams + 7]);
-                splitOffBalls.add(splitTextFile[ballParams + 8]);
-                splitOffBalls.add(splitTextFile[ballParams + 9]);
-                splitOffBalls.add(splitTextFile[ballParams + 10]);
-                splitOffBalls.add(splitTextFile[ballParams + 11]);
-                splitOffBalls.add(splitTextFile[ballParams + 12]);
-                splitOffBalls.add(splitTextFile[ballParams + 13]);
-                splitOffBalls.add(splitTextFile[ballParams + 14]);
-                splitOffBalls.add(splitTextFile[ballParams + 15]);
-                splitOffBalls.add(splitTextFile[ballParams + 16]);
-                splitOffBalls.add(splitTextFile[ballParams + 17]);
-            }
-            System.out.println(splitOffBalls);
-            // Split off the balls
 
-            String tFWithOutBalls = splitOffBalls[splitOffBalls.length-1];
-            String[] balls = new String[splitOffBalls.length-2];
-            for(int i = 0; i < splitOffBalls.length-2; i++){
-                balls[i] = splitOffBalls[i]; // TEST //
+            /*
+            int paramCount = 6;
+            String[] params = scissorsCsv.split(",,");
+            String[] rawData = new String[paramCount];
+            for(int i = 0; i < paramCount; i++){
+                rawData[i] = params[i].split(": ")[1];
             }
-            String[] splitOffWalls = tFWithOutBalls.split("texture:");
-            String scissors = splitOffWalls[splitOffWalls.length-1];
-            String[] walls = new String[splitOffWalls.length-1];
-            for(int i = 0; i < splitOffBalls.length-2; i++){
-                walls[i] = splitOffWalls[i];
-            }
-            // Now all the Data is in balls[], walls[], and scissors
-            String singleBalls = Arrays.toString(balls);
-            singleBalls = singleBalls. replace("[", "");
-            singleBalls = singleBalls. replace("]", "");
-            System.out.println(singleBalls);
-
+            //TODO: Make constructor for Sissors
+            System.out.println(Arrays.toString(rawData));
              */
-            //_Create_game_objects______________________________________________________________________________________
         } catch (IOException e) {
             e.printStackTrace();
         }

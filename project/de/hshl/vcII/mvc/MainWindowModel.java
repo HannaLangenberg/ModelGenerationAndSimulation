@@ -176,26 +176,9 @@ public class MainWindowModel {
         return scissorsSpeed;
     }
 
-    public void setTooltip(Tooltip tooltip) {
-        if(tooltip != null) {
-            tooltip.setShowDuration(Duration.INDEFINITE);
-            tooltip.setShowDelay(Duration.ZERO);
-            tooltip.setHideDelay(Duration.ZERO);
-            this.tooltip = tooltip;
-            Tooltip.install(aDrawingPane, this.tooltip);
-        } else {
-            Tooltip.uninstall(aDrawingPane, this.tooltip);
-        }
-    }
-
     public void setTooltipText(String text) {
         this.tooltip.setText(text);
     }
-
-    public void save(){
-        IO.save();
-    }
-
     public boolean isFullscreen() {
         return fullscreen;
     }

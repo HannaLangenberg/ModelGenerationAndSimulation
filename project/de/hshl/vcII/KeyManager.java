@@ -32,27 +32,6 @@ public class KeyManager {
         mainWindowModel = MainWindowModel.get();
     }
 
-    /**
-     * Is called only if the simulation is not running and 'W' was not pressed.
-     * @param e just for good measure
-     */
-    public void manageHover(MouseEvent e){
-        mainWindowModel.setCurrentlySelected(null);
-        Rectangle hoverHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
-        for(Ball b : mainWindowModel.getBallManager().getBalls()){
-            if(hoverHitBox.intersects(b.getPosVec().x - 25, b.getPosVec().y - 25, 50, 50)){
-                mainWindowModel.setTooltip(new Tooltip(b.toString()));
-                String tooltip = b.toString();
-                tooltip = tooltip.replace(".", "");
-                tooltip = tooltip.replace(" -- ", "\n");
-                System.out.println(tooltip);
-                mainWindowModel.setTooltipText(tooltip);
-                return;
-            } else {
-                mainWindowModel.setTooltip(null);
-            }
-        }
-    }
 
     /**
      * Toggles only if the 'W' key is pushed.

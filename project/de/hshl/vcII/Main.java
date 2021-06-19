@@ -20,7 +20,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         MainWindowModel.get().setStage(primaryStage);
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mvc/view/mainWindow.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mvc/view/combined.fxml")));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         Scene s = new Scene(root);
         primaryStage.setScene(s);

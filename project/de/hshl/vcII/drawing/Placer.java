@@ -121,6 +121,43 @@ public class Placer {
         }
     }
 
+    /**
+     * Ussed for the load function
+     * @param posVec
+     */
+    public void place(MyVector posVec) {
+        x = posVec.x;;
+        y = posVec.y;
+
+        if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
+            ball = (Ball) mainWindowModel.getCurrentlySelected();
+            if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
+                ball.setCenterX(x);
+                ball.setCenterY(y);
+                ball.setPosVec(new MyVector(x, y));
+                ball.setNumber(mainWindowModel.getBallManager().getBalls().size() + 1);
+                mainWindowModel.getBallManager().addBall(ball);
+                mainWindowModel.getADrawingPane().getChildren().add(ball);
+                mainWindowModel.setCurrentlySelected(ball);
+            } else {
+                ball.setCenterX(x);
+                ball.setCenterY(y);
+                ball.setPosVec(new MyVector(x, snapBallOnWall(null, ball, new MyVector(x,y))));
+            }
+        } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
+            wall = (Wall) mainWindowModel.getCurrentlySelected();
+            if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
+                wall.setPosVec(new MyVector(x, y));
+                wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
+                mainWindowModel.getWallManager().addWall(wall);
+                mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
+                mainWindowModel.setCurrentlySelected(wall);
+            } else {
+                wall.setPosVec(new MyVector(x, y));
+            }
+        }
+    }
+
     public void onMousePressed(MouseEvent e) {
         if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
             xStart =  xEnd = e.getX();

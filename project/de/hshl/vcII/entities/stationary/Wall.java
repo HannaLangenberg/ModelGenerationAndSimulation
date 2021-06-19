@@ -3,6 +3,7 @@ package project.de.hshl.vcII.entities.stationary;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+
 import project.de.hshl.vcII.utils.MyVector;
 
 import java.util.Objects;
@@ -34,13 +35,30 @@ public class Wall {
     }
 
     public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String number, String orientation) {
-        //this.texture = texture;
-        //this.collision = new Rectangle(collision);
+        System.out.println(texture);
+        this.texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream(texture)));
+        this.collision = constructRectFromString(collision);
         this.posVec = new MyVector(posVec);
         this.e_alpha = Double.parseDouble(e_alpha);
         this.spin = Double.parseDouble(spin);
         this.number = Integer.parseInt(number);
         this.orientation = Integer.parseInt(orientation);
+    }
+
+    private Rectangle constructRectFromString(String stringRect) {
+        Rectangle rect;
+
+        String sRect = stringRect.replace("Rectangle", "");
+        sRect = sRect.replace("[", "");
+        sRect = sRect.replace("]", "");
+        String[] params = sRect.split(", ");
+        double[] rawRect = new double[params.length];
+        for(int i = 0; i < params.length-1; i++){
+            rawRect[i] = Double.parseDouble(params[i].split("=")[1]);
+        }
+        rect = new Rectangle(rawRect[0], rawRect[1], rawRect[2], rawRect[3]);
+
+        return rect;
     }
 
     //_GETTER_ AND_SETTER_______________________________________________________________________________________________
@@ -100,7 +118,7 @@ public class Wall {
     }*/
 
     public String save(){
-        return ";texture: " + texture.toString()
+        return ";texture: " + texture.getUrl()
                 + ",,collision: " + collision.toString()
                 + ",,posVec: " + posVec.toString()
                 + ",,e_alpha: " + e_alpha

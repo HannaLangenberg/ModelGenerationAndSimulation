@@ -3,15 +3,18 @@ package project.de.hshl.vcII.entities.moving;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.util.Duration;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
 import project.de.hshl.vcII.mvc.MainWindowModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Ball extends Ellipse {
     private static final double RADIUS = 25, MASS = 2.75, DEFAULT_ELASTICITY = 0.5;
+    private Tooltip tooltip = new Tooltip();
 
     private DoubleProperty mass;
     private DoubleProperty radius;
@@ -60,6 +63,7 @@ public class Ball extends Ellipse {
         this.setStrokeWidth(5);
         this.colliding_Orthogonal_F = false;
         this.toBack();
+        addMouseMoved();
     }
 
     public Ball(int number, MyVector posVec, MyVector velVec, MyVector vel0Vec, MyVector accVec, MyVector frcVec, double radius, double mass, double elasticity, double totE, double potE, double kinE, double lostE) {
@@ -87,6 +91,7 @@ public class Ball extends Ellipse {
         this.setStroke(strokeColor);
         this.colliding_Orthogonal_F = false;
         this.toBack();
+        addMouseMoved();
     }
 
     public Ball(String initialTotE_c, String totE_c, String potE_c, String kinE_c, String lostE_c, String posVec,
@@ -111,6 +116,27 @@ public class Ball extends Ellipse {
         this.randomCol = Color.valueOf(randomCol);
         this.randomSeed = Double.parseDouble(randomSeed);
         this.strokeColor = Color.valueOf(strokeColor);
+        addMouseMoved();
+    }
+
+    /**
+     * Is called any time but only shows the Tooltip if the simulation is not running and 'W' was not pressed.
+     */
+    private void addMouseMoved(){
+        this.setOnMouseMoved((e) -> {
+            if (MainWindowModel.get().getSimulator().isRunning()) {
+                Tooltip.uninstall(this, tooltip);
+                return;
+            }
+            String sTooltip = this.toString();
+            sTooltip = sTooltip.replace(".", "");
+            sTooltip = sTooltip.replace(" -- ", "\n");
+            System.out.println(sTooltip);
+            tooltip.setText(sTooltip);
+            tooltip.setShowDelay(Duration.ZERO);
+            tooltip.setHideDelay(Duration.ZERO);
+            Tooltip.install(this, tooltip);
+        });
     }
 
     /**
@@ -352,22 +378,22 @@ public class Ball extends Ellipse {
     //_SAVE_____________________________________________________________________________________________________________
     public String save(){
         return ";initialTotE_c: " + initialTotE_c
-                 + ",totE_c: " + totE_c
-                 + ",potE_c: " + potE_c
-                 + ",kinE_c: " + kinE_c
-                 + ",lostE_c: " + lostE_c
-                 + ",posVec: " + posVec.toString()
-                 + ",velVec: " + velVec.toString()
-                 + ",vel0Vec: " + vel0Vec.toString()
-                 + ",accVec: " + accVec.toString()
-                 + ",frcVec: " + frcVec.toString()
-                 + ",rolVec: " + rolVec.toString()
-                 + ",arrow: " + arrow.toString()
-                 + ",colliding_Orthogonal_F: " + colliding_Orthogonal_F
-                 + ",colliding_Parallel_B: " + colliding_Parallel_B
-                 + ",a: " + a.toString()
-                 + ",randomCol: " + randomCol.toString()
-                 + ",randomSeed: " + randomSeed
-                 + ",strokeColor: " + strokeColor.toString();
+                 + ",,totE_c: " + totE_c
+                 + ",,potE_c: " + potE_c
+                 + ",,kinE_c: " + kinE_c
+                 + ",,lostE_c: " + lostE_c
+                 + ",,posVec: " + posVec.toString()
+                 + ",,velVec: " + velVec.toString()
+                 + ",,vel0Vec: " + vel0Vec.toString()
+                 + ",,accVec: " + accVec.toString()
+                 + ",,frcVec: " + frcVec.toString()
+                 + ",,rolVec: " + rolVec.toString()
+                 + ",,arrow: " + arrow.toString()
+                 + ",,colliding_Orthogonal_F: " + colliding_Orthogonal_F
+                 + ",,colliding_Parallel_B: " + colliding_Parallel_B
+                 + ",,a: " + a.toString()
+                 + ",,randomCol: " + randomCol.toString()
+                 + ",,randomSeed: " + randomSeed
+                 + ",,strokeColor: " + strokeColor.toString();
     }
 }

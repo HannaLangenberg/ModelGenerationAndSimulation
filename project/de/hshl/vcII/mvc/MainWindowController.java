@@ -121,10 +121,14 @@ public class MainWindowController implements Initializable {
     // Save
     @FXML
     private void save(){
-        mainWindowModel.save();
-        IO.load();
+        IO.save();
     }
 
+    // Load
+    @FXML
+    private void load(){
+        IO.load();
+    }
     // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
@@ -336,10 +340,6 @@ public class MainWindowController implements Initializable {
                         aSettingsPane.setDisable(false);
                     }
                 }
-                if(!mainWindowModel.getSimulator().isRunning() & !mainWindowModel.isChoiceEnabled())
-                    mainWindowModel.getKeyManager().manageHover(e);
-                else
-                    mainWindowModel.setTooltip(null);
 
 
                 break;

@@ -26,7 +26,8 @@
                               <Menu mnemonicParsing="false" text="Datei">
                                  <items>
                                     <MenuItem mnemonicParsing="false" onAction="#clearScreen" text="Bildschirm frei machen" />
-                                    <MenuItem onAction="#save" mnemonicParsing="false" text="Speichern" />
+                                    <MenuItem mnemonicParsing="false" onAction="#save" text="Speichern" />
+                                    <MenuItem mnemonicParsing="false" onAction="#load" text="Laden" />
                                  </items>
                               </Menu>
                               <Menu mnemonicParsing="false" text="Bearbeiten">
