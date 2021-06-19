@@ -27,6 +27,9 @@ public class IO {
             if(mainWindowModel.getScissorsManager().getS() != null){
                 scissors = mainWindowModel.getScissorsManager().getS().save();
             }
+            System.out.println("balls: " + balls);
+            System.out.println("walls: " + walls);
+            System.out.println("scissors: " + scissors);
             bW.write(balls);
             bW.write(walls);
             bW.write(scissors);
@@ -53,34 +56,36 @@ public class IO {
                     csv = csv.concat(currentLine);
                 }
             }
+            // Separate values (at ';')
+            System.out.println(csv);
             //TODO: Exception handling
             String[] splitCsv = csv.split(";"); //first element has to begone
             System.out.println(Arrays.toString(splitCsv));
 
+            // Stitch the correct values together
             String[] ballsCsv = new String[ballCount];
-            if(splitCsv[offset] != null) {
-                for (int i = 0; i < ballCount; i++) {
-                    ballsCsv[i] = splitCsv[i + offset];
-                }
+            for (int i = 0; i < ballCount; i++) {
+                ballsCsv[i] = splitCsv[i + offset];
             }
 
             System.out.println(Arrays.toString(ballsCsv));
 
             String[] wallsCsv = new String[wallCount];
-            if(splitCsv[ballCount+offset] != null) {
-                for (int i = 0; i < wallCount; i++) {
-                    wallsCsv[i] = splitCsv[i + ballCount + offset];
-                }
+            for (int i = 0; i < wallCount; i++) {
+                wallsCsv[i] = splitCsv[i + ballCount + offset];
             }
 
+            System.out.println(Arrays.toString(wallsCsv));
+
+            /*
             String scissorsCsv= "";
             if(splitCsv[wallCount+offset] != null) {
                 scissorsCsv = splitCsv[wallCount + ballCount + offset];
             }
-
+            */
             for(String ballCsv: ballsCsv){
                 int paramCount = 18;
-                String[] params = ballCsv.split(",");
+                String[] params = ballCsv.split(",,");
                 String[] rawData = new String[paramCount];
                 for(int i = 0; i < paramCount; i++){
                     rawData[i] = params[i].split(": ")[1];
@@ -103,8 +108,6 @@ public class IO {
                 }
                 //TODO: Remove number
                 Wall w = new Wall("/img/blocks/BlockNormal.png", rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6]);
-                mainWindowModel1.setCurrentlySelected(w);
-                mainWindowModel1.getPlacer().place(w.getPosVec());
                 System.out.println(Arrays.toString(rawData));
             }
 

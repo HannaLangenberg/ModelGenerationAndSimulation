@@ -131,7 +131,6 @@ public class Ball extends Ellipse {
             String sTooltip = this.toString();
             sTooltip = sTooltip.replace(".", "");
             sTooltip = sTooltip.replace(" -- ", "\n");
-            System.out.println(sTooltip);
             tooltip.setText(sTooltip);
             tooltip.setShowDelay(Duration.ZERO);
             tooltip.setHideDelay(Duration.ZERO);

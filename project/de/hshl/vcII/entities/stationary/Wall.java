@@ -35,7 +35,6 @@ public class Wall {
     }
 
     public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String number, String orientation) {
-        System.out.println(texture);
         this.texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream(texture)));
         this.collision = constructRectFromString(collision);
         this.posVec = new MyVector(posVec);
