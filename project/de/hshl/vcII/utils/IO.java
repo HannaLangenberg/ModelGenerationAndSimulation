@@ -2,14 +2,14 @@ package project.de.hshl.vcII.utils;
 
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 
 import java.io.*;
 import java.util.Arrays;
 
 public class IO {
     public static void save(){
-        MainWindowModel mainWindowModel = MainWindowModel.get();
+        MainModel mainWindowModel = MainModel.get();
         try {
             BufferedWriter bW = new BufferedWriter(new FileWriter("TESTSAVE.txt"));
             String balls = "";
@@ -38,7 +38,7 @@ public class IO {
     }
 
     public static void load(){
-        MainWindowModel mainWindowModel1 = MainWindowModel.get();
+        MainModel mainWindowModel1 = MainModel.get();
         try {
             //_Load_from_the_saved_file___________________________________________________________________________________
             BufferedReader bR = new BufferedReader(new FileReader("TESTSAVE.txt"));

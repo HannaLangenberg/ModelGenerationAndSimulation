@@ -6,7 +6,7 @@ import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.drawing.calculations.ScissorsCollisions;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -17,7 +17,7 @@ public class Simulator {
     private ScheduledExecutorService timer;
 
     // MWM for getting the model (and all it's saves).
-    private MainWindowModel mainWindowModel = MainWindowModel.get();
+    private MainModel mainWindowModel = MainModel.get();
 
     // Variable to maintain the simulation.
     private boolean running = false;

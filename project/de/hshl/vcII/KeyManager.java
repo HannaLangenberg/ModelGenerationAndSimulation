@@ -2,19 +2,15 @@ package project.de.hshl.vcII;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -26,10 +22,10 @@ import project.de.hshl.vcII.utils.MyVector;
  * Also handles mouse inputs.
  */
 public class KeyManager {
-    private MainWindowModel mainWindowModel;
+    private MainModel mainWindowModel;
 
     public KeyManager(){
-        mainWindowModel = MainWindowModel.get();
+        mainWindowModel = MainModel.get();
     }
 
 
@@ -92,13 +88,13 @@ public class KeyManager {
                 break;
             case E:
                 // The chosen block is rotated left
-                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateRight((Wall) mainWindowModel.getCurrentlySelected());
-                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainWindowModel.get().getSpin().rotateRight((Scissors) mainWindowModel.getCurrentlySelected());
+                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainModel.get().getSpin().rotateRight((Wall) mainWindowModel.getCurrentlySelected());
+                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainModel.get().getSpin().rotateRight((Scissors) mainWindowModel.getCurrentlySelected());
                 break;
             case Q:
                 // The chosen block is rotated right
-                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainWindowModel.get().getSpin().rotateLeft((Wall) mainWindowModel.getCurrentlySelected());
-                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainWindowModel.get().getSpin().rotateLeft((Scissors) mainWindowModel.getCurrentlySelected());
+                if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Wall) MainModel.get().getSpin().rotateLeft((Wall) mainWindowModel.getCurrentlySelected());
+                else if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Scissors) MainModel.get().getSpin().rotateLeft((Scissors) mainWindowModel.getCurrentlySelected());
                 break;
             case S:
                 //close scissors

@@ -1,6 +1,6 @@
 package project.de.hshl.vcII.mvc.view;
 
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.layout.AnchorPane;
@@ -18,7 +18,7 @@ public class ResizePane extends AnchorPane {
     private double scenePosX, scenePosY;
     private double sceneWidth, sceneHeight;
     private double offsetX, offsetY;
-    private final MainWindowModel mainWindowModel;
+    private final MainModel mainWindowModel;
 
 
     public ResizePane() {
@@ -26,7 +26,7 @@ public class ResizePane extends AnchorPane {
         lines = new Line[12];
         this.setPickOnBounds(false);
 
-        mainWindowModel = MainWindowModel.get();
+        mainWindowModel = MainModel.get();
     }
 
     public void initResizeLines() {

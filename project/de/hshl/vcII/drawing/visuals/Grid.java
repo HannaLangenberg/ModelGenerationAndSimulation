@@ -3,7 +3,6 @@ package project.de.hshl.vcII.drawing.visuals;
 import project.de.hshl.vcII.drawing.Placer;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
-import project.de.hshl.vcII.mvc.MainWindowModel;
 
 import java.util.ArrayList;
 import java.util.List;

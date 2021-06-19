@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing.visuals;
 
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.Utils;
-import project.de.hshl.vcII.mvc.MainWindowModel;
 
 
 public class Mode {
@@ -14,7 +14,7 @@ public class Mode {
      */
     public void toggleMode(boolean mode) {
         this.mode = mode;
-        MainWindowModel mainWindowModel = MainWindowModel.get();
+        MainModel mainWindowModel = MainModel.get();
         if(mode){
             mainWindowModel.getStage().getScene().getStylesheets().remove(Utils.darkMode);
             mainWindowModel.getStage().getScene().getStylesheets().add(Utils.lightMode);

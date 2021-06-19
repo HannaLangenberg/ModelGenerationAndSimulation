@@ -2,7 +2,7 @@ package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCollisions {
@@ -24,8 +24,8 @@ public class ScissorsCollisions {
      * @param e epsilon value (~speed of the Ball)
      */
     public static void checkScissors(Ball b, double e) {
-        if(MainWindowModel.get().getScissorsManager().getS() != null) {
-            s = MainWindowModel.get().getScissorsManager().getS();
+        if(MainModel.get().getScissorsManager().getS() != null) {
+            s = MainModel.get().getScissorsManager().getS();
             lambda_rho_Parameters = ScissorsCalculations.calc_lambda_rho_Parameters(s, b, s.getLlStart(), s.getRlStart());
 
             checkBlades(b, e);

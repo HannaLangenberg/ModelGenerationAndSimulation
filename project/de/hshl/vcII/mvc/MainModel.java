@@ -14,15 +14,14 @@ import project.de.hshl.vcII.drawing.Rotation;
 import project.de.hshl.vcII.drawing.Simulator;
 import project.de.hshl.vcII.entities.stationary.ScissorsManager;
 import project.de.hshl.vcII.entities.stationary.WallManager;
-import project.de.hshl.vcII.utils.IO;
 
 /**
- * MainWindowModel is a class used as a model for a mvc-pattern-styled class structure, it is also a representative of a singleton-class.
+ * MainModel is a class used as a model for a mvc-pattern-styled class structure, it is also a representative of a singleton-class.
  * It has many variables and they are accessible via the getters.
  */
-public class MainWindowModel {
+public class MainModel {
     // Singleton
-    private static MainWindowModel mainWindowModel;
+    private static MainModel mainWindowModel;
 
     // Objects programed by the Authors
     private Rotation spin;
@@ -34,12 +33,12 @@ public class MainWindowModel {
     private Placer placer;
     private Grid grid;
     private Simulator simulator;
+    private CurrentParamsController currentParamsController;
+    private SettingsController settingsController;
     // Objects used from JFX
     private Stage stage;
     private AnchorPane aDrawingPane;
     private AnchorPane aSettingsPane;
-    private Tooltip tooltip;
-
     private Object currentlySelected;
 
     // Variables to maintain the window
@@ -50,18 +49,17 @@ public class MainWindowModel {
     private final int taskbarHeight = 36;
 
     // Private to make it a Singleton-class.
-    private MainWindowModel(){
+    private MainModel(){
     }
 
     // To create or, if the class has been called before, get the class.
-    public static MainWindowModel get(){
-        if(MainWindowModel.mainWindowModel == null) mainWindowModel = new MainWindowModel();
-        return MainWindowModel.mainWindowModel;
+    public static MainModel get(){
+        if(MainModel.mainWindowModel == null) mainWindowModel = new MainModel();
+        return MainModel.mainWindowModel;
     }
 
     // To initialise all Objects
     public void init(AnchorPane aDrawingPane){
-        tooltip = new Tooltip();
         ballManager = new BallManager();
         wallManager = new WallManager();
         scissorsManager = new ScissorsManager();
@@ -72,9 +70,6 @@ public class MainWindowModel {
         mode = new Mode();
         spin = new Rotation();
         this.aDrawingPane = aDrawingPane;
-        tooltip.setShowDelay(Duration.INDEFINITE);
-        tooltip.setHideDelay(Duration.INDEFINITE);
-        Tooltip.install(aDrawingPane, tooltip);
     }
     public void initSettings(AnchorPane aSettingsPane){
         this.aSettingsPane = aSettingsPane;
@@ -176,9 +171,22 @@ public class MainWindowModel {
         return scissorsSpeed;
     }
 
-    public void setTooltipText(String text) {
-        this.tooltip.setText(text);
+    public CurrentParamsController getCurrentParamsController() {
+        return currentParamsController;
     }
+
+    public void setCurrentParamsController(CurrentParamsController currentParamsController) {
+        this.currentParamsController = currentParamsController;
+    }
+
+    public SettingsController getSettingsController() {
+        return settingsController;
+    }
+
+    public void setSettingsController(SettingsController settingsController) {
+        this.settingsController = settingsController;
+    }
+
     public boolean isFullscreen() {
         return fullscreen;
     }

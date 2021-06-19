@@ -2,60 +2,61 @@ package project.de.hshl.vcII.mvc;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.Utils;
 
 public class CurrentParamsController {
-    @FXML
-    public AnchorPane cRootPane;
-    @FXML
-    public Label l_current_Wind;
-    @FXML
-    public Label l_current_Delta_T;
-    @FXML
-    public Label l_current_Gravitation;
-    @FXML
+    public Label lWind;
+    public Label lDt;
+    public Label lGravitation;
     public TableView<Ball> tv_ball_params;
-    @FXML
     public TableColumn<Ball, Integer> tc_No;
-    @FXML
     public TableColumn<Ball, String> tc_Pos;
-    @FXML
     public TableColumn<Ball, String> tc_V;
-    @FXML
     public TableColumn<Ball, Integer> tc_Radius;
-    @FXML
     public TableColumn<Ball, Integer> tc_Mass;
-    @FXML
     public TableColumn<Ball, String> tc_PotE;
-    @FXML
     public TableColumn<Ball, String> tc_KinE;
-    @FXML
     public TableColumn<Ball, String> tc_LostE;
-    @FXML
     public TableColumn<Ball, String> tc_TotE;
-    @FXML
     public TableColumn<Ball, String> tc_Elasticity;
 
     private ObservableList<Ball> ballObservableList;
 
-    MainWindowModel mainWindowModel = MainWindowModel.get();
+    MainModel mainWindowModel = MainModel.get();
 
-    @FXML
-    void initialize() {
-        l_current_Gravitation.setText("(" + Utils.GRAVITY.x + "/" + Utils.GRAVITY.y + ")");
-        l_current_Delta_T.setText(String.valueOf(Utils.DELTA_T));
+    public void initialize(Label lWind, Label lDt, Label lGravitation, TableView<Ball> tv_ball_params,
+                           TableColumn<Ball, Integer> tc_Radius, TableColumn<Ball, Integer> tc_Mass,
+                           TableColumn<Ball, String> tc_V, TableColumn<Ball, String> tc_PotE,
+                           TableColumn<Ball, String> tc_KinE, TableColumn<Ball, String> tc_LostE,
+                           TableColumn<Ball, String> tc_TotE, TableColumn<Ball, String> tc_Elasticity,
+                           TableColumn<Ball, String> tc_Pos, TableColumn<Ball, Integer> tc_No) {
+        this.lWind = lWind;
+        this.lGravitation = lGravitation;
+        this.lDt = lDt;
+        this.tv_ball_params = tv_ball_params;
+        this.tc_Radius = tc_Radius;
+        this.tc_Mass = tc_Mass;
+        this.tc_V = tc_V;
+        this.tc_PotE = tc_PotE;
+        this.tc_KinE = tc_KinE;
+        this.tc_LostE = tc_LostE;
+        this.tc_TotE = tc_TotE;
+        this.tc_Elasticity = tc_Elasticity;
+        this.tc_Pos = tc_Pos;
+        this.tc_No = tc_No;
+        lGravitation.setText("(" + Utils.GRAVITY.x + "/" + Utils.GRAVITY.y + ")");
+        lDt.setText(String.valueOf(Utils.DELTA_T));
+        lWind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
         ballObservableList = FXCollections.observableArrayList();
     }
 
     public void update() {
-        l_current_Wind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
+        lWind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
 
         if(ballObservableList.size() != 0) {
             ballObservableList.clear();
@@ -77,6 +78,12 @@ public class CurrentParamsController {
     }
 
     public void reset() {
+        MainModel.get().getSettingsController().reset();
         ballObservableList.clear();
+        lWind.setText("(" +  0 + "/" + 0 + ")");
+    }
+
+    public Label getlWind() {
+        return lWind;
     }
 }

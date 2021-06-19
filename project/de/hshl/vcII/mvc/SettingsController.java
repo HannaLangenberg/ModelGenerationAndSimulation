@@ -1,6 +1,5 @@
 package project.de.hshl.vcII.mvc;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -11,12 +10,10 @@ import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
-import java.io.IOException;
-
 import static project.de.hshl.vcII.utils.Utils.isDouble;
 
 public class SettingsController {
-    private MainWindowModel mainWindowModel = MainWindowModel.get();
+    private MainModel mainWindowModel = MainModel.get();
 
     private Slider sl_Radius, sl_Weight, sl_Elasticity, sl_ScissorsSpeed;
     private Label lCurrentRadius, lCurrentWeight, lCurrentElasticity;
@@ -50,20 +47,12 @@ public class SettingsController {
 
         initWindFields(tf_Wind_X);
         initWindFields(tf_Wind_Y);
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/currentParams.fxml"));
-            this.cRootPane = loader.load();
-            currentParamsController = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
-    //-Parameter-Display------------------------------------------------------------------------------------------------
-    public void UpdateParams() {
-        currentParamsController.update();
+    //_Parameter_Display________________________________________________________________________________________________
+    public void updateParams() {
+        MainModel.get().getCurrentParamsController().update();
     }
 
     public void btn_showCurrentParams_OnAction(){
@@ -81,9 +70,6 @@ public class SettingsController {
 
             stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
 
-            // check all TextFields for values
-            fillVariables();
-            UpdateParams();
             vb_displayCurrentParams.getChildren().add(cRootPane);
             currentParamsOpen = true;
         }
@@ -93,14 +79,13 @@ public class SettingsController {
             stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
 
             // check all TextFields for values
-            UpdateParams();
             vb_displayCurrentParams.getChildren().add(cRootPane);
             currentParamsOpen = true;
         }
     }
 
 
-    //-Parameter-Setting------------------------------------------------------------------------------------------------
+    //_Parameter_Setting________________________________________________________________________________________________
     //_slider__
     public void sl_Radius_OnDragDetected(){
         if(mainWindowModel.getCurrentlySelected() instanceof Ball){
@@ -130,24 +115,25 @@ public class SettingsController {
         mainWindowModel.setScissorsSpeed(sl_ScissorsSpeed.getValue());
     }
 
-    //------Helpers,-Getter-&-Setter------------------------------------------------------------------------------------
-    public void fillVariables() {
-        Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-    }
+    //_Helpers,_Getter_&_Setter_________________________________________________________________________________________
 
     private void initWindFields(TextField tf) {
         tf.textProperty().addListener((observableValue, s, t1) -> {
             Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
+            MainModel.get().getCurrentParamsController().getlWind().setText("(" + tf_Wind_X.getText() + "/" + tf_Wind_Y.getText() + ")");
         });
+    }
+
+    public void reset(){
+        tf_Wind_Y.setText("0");
+        tf_Wind_X.setText("0");
+        tf_v0_Y.setText("0");
+        tf_v0_X.setText("0");
     }
 
     public void setV0() {
         for(Ball b: mainWindowModel.getBallManager().getBalls()){
             b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
         }
-    }
-
-    public CurrentParamsController getCurrentParamsController() {
-        return currentParamsController;
     }
 }

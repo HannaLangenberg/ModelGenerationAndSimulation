@@ -1,6 +1,6 @@
 package project.de.hshl.vcII;
 
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        MainWindowModel.get().setStage(primaryStage);
+        MainModel.get().setStage(primaryStage);
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("mvc/view/combined.fxml")));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         Scene s = new Scene(root);

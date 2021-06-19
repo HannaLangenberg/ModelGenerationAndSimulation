@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.util.Duration;
 import project.de.hshl.vcII.drawing.visuals.Arrow;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 public class Ball extends Ellipse {
@@ -41,9 +41,9 @@ public class Ball extends Ellipse {
     private double pickColor() {
         double r = Math.random();
 
-        while(r < 0.5 && MainWindowModel.get().getMode().isMode())
+        while(r < 0.5 && MainModel.get().getMode().isMode())
             r = Math.random();
-        while(r > 0.5 && !MainWindowModel.get().getMode().isMode())
+        while(r > 0.5 && !MainModel.get().getMode().isMode())
             r = Math.random();
 
         return r;
@@ -124,7 +124,7 @@ public class Ball extends Ellipse {
      */
     private void addMouseMoved(){
         this.setOnMouseMoved((e) -> {
-            if (MainWindowModel.get().getSimulator().isRunning()) {
+            if (MainModel.get().getSimulator().isRunning()) {
                 Tooltip.uninstall(this, tooltip);
                 return;
             }
@@ -149,7 +149,7 @@ public class Ball extends Ellipse {
             aDrawingPane.getChildren().remove(this);
             aDrawingPane.getChildren().add(this);
             aDrawingPane.getChildren().remove(a);
-            if (MainWindowModel.get().isArrowsActive())
+            if (MainModel.get().isArrowsActive())
             {
                 a = this.giveArrow();
                 aDrawingPane.getChildren().add(a);

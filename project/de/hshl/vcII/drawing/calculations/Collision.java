@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -16,9 +16,9 @@ public class Collision {
         * Ist colliding_Friction true muss die (Roll-) Reibung auf die orthogonale Komponente angewendet werden
         * */
 
-        if(b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e
+        if(b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e
                 || b.getPosVec().y < b.getRadius() + e
-                || b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e
+                || b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e
                 || b.getPosVec().x < b.getRadius() + e) {
             b.setColliding_Parallel_B(true);
         }
@@ -30,8 +30,8 @@ public class Collision {
             // Beides mit Energieverlust
 
 
-            if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
-                dp = new MyVector(MainWindowModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
+            if((b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
+                dp = new MyVector(MainModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
                 side = 3;
             }
             if((b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
@@ -45,8 +45,8 @@ public class Collision {
                 side = 2;
             }
 
-            if((b.getPosVec().y > MainWindowModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
-                dp = new MyVector(b.getPosVec().x, MainWindowModel.get().getADrawingPane().getHeight());
+            if((b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
+                dp = new MyVector(b.getPosVec().x, MainModel.get().getADrawingPane().getHeight());
                 side = 0;
 
             }

@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class BallCollisions {
      * @author Jan-Gustav Liedtke
      */
     public static void checkBalls(Ball b, double epsilon){
-        List<Ball> balls = new ArrayList<>(MainWindowModel.get().getBallManager().getBalls()); // deep copy of ball list
+        List<Ball> balls = new ArrayList<>(MainModel.get().getBallManager().getBalls()); // deep copy of ball list
         balls.remove(b);                                               // Don't copy the Ball given as a parameter
 
         for (Ball b2 : balls)                                          // Iterate though every ball except the one given

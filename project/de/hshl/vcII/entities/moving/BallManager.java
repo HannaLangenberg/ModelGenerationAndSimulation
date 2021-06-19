@@ -2,7 +2,7 @@ package project.de.hshl.vcII.entities.moving;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 
 /**
  * BallManager class for saving all balls on screen.
@@ -14,7 +14,7 @@ public class BallManager {
 
     public void removeArrows() {
         for (Ball b : balls) {
-            MainWindowModel.get().getADrawingPane().getChildren().remove(b.getArrow());
+            MainModel.get().getADrawingPane().getChildren().remove(b.getArrow());
         }
     }
 

@@ -2,7 +2,7 @@ package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -26,7 +26,7 @@ public class Movement {
         Collision.checkScreen(b, epsilon);
 
         // Check if ball hits wall
-        List<Wall> walls = MainWindowModel.get().getWallManager().getWalls();
+        List<Wall> walls = MainModel.get().getWallManager().getWalls();
 
         // Iterate through the balls and walls and check for collisions
         for (Wall w : walls)

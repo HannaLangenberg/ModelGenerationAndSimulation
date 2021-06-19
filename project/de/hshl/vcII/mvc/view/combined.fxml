@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="850.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainWindowController">
+<AnchorPane fx:id="aRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onKey" prefHeight="850.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.de.hshl.vcII.mvc.MainController">
     <children>
         <VBox fx:id="vb_displayCurrentParams" minHeight="400.0" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -117,10 +117,6 @@
                             </children>
                         </HBox>
                     </top>
-                    <left>
-                        <AnchorPane fx:id="aDrawingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMouse" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" onMouseReleased="#onMouseReleased" prefHeight="615.0" prefWidth="826.0" BorderPane.alignment="TOP_LEFT">
-                        </AnchorPane>
-                    </left>
                     <right>
                         <AnchorPane fx:id="aSettingsPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="364.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                             <children>
@@ -312,14 +308,6 @@
                                                     <VBox.margin>
                                                         <Insets left="10.0" top="10.0" />
                                                     </VBox.margin></CheckBox>
-                                                <Region VBox.vgrow="ALWAYS" />
-                                                <HBox prefHeight="28.0" prefWidth="239.0">
-                                                    <children>
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                        <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" onAction="#btn_showCurrentParams_OnAction" text="Zeige aktuelle Parameter" />
-                                                        <Region HBox.hgrow="ALWAYS" />
-                                                    </children>
-                                                </HBox>
                                             </children>
                                         </VBox>
                                     </children>
@@ -379,9 +367,9 @@
                                                    <Label text="Wind:" />
                                                    <Label layoutX="10.0" layoutY="107.0" prefHeight="17.0" prefWidth="73.0" text="Gravitation:" GridPane.rowIndex="1" />
                                                    <Label text="delta_t:" GridPane.rowIndex="2" />
-                                                   <Label fx:id="l_current_Wind" text="_ph_" GridPane.columnIndex="1" />
-                                                   <Label fx:id="l_current_Gravitation" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                   <Label fx:id="l_current_Delta_T" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                   <Label fx:id="lWind" text="_ph_" GridPane.columnIndex="1" />
+                                                   <Label fx:id="lGravity" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                   <Label fx:id="lDt" text="_ph_" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                </children>
                                            </GridPane>
                                        </children>
@@ -394,6 +382,10 @@
                        </children>
                    </AnchorPane>
                </bottom>
+               <left>
+                        <AnchorPane fx:id="aDrawingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMouse" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" onMouseReleased="#onMouseReleased" prefHeight="615.0" prefWidth="826.0" BorderPane.alignment="CENTER">
+                        </AnchorPane>
+               </left>
                 </BorderPane>
             </children>
         </VBox>

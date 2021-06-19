@@ -1,7 +1,7 @@
 package project.de.hshl.vcII.drawing.calculations;
 
 import project.de.hshl.vcII.entities.moving.Ball;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -55,7 +55,7 @@ public class Calculator {
      * Calculates the total Energy at the start using the formula: totE0 = potE + kinE.
      */
     public static void calcInitial_TotalEnergy() {
-        for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
+        for (Ball b : MainModel.get().getBallManager().getBalls()) {
             calcPotentialEnergy(b);
             calcKineticEnergy(b);
             initial_TotE = totE = potE + kinE;
@@ -70,7 +70,7 @@ public class Calculator {
      * Calculates the total energy using the formula: totE = potE + kinE + lossE.
      */
     public static void calcTotalEnergy() {
-        for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
+        for (Ball b : MainModel.get().getBallManager().getBalls()) {
             calcPotentialEnergy(b);
             calcKineticEnergy(b);
             calcLostEnergy(b);
@@ -87,7 +87,7 @@ public class Calculator {
      */
     private static void calcPotentialEnergy(Ball b) {
         // potE = m * g * h
-        potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainWindowModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
+        potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
         b.setPotE(Math.round(potE));
         b.setPotE_c(potE);
     }

@@ -6,7 +6,7 @@ import project.de.hshl.vcII.drawing.calculations.WallCollision;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
-import project.de.hshl.vcII.mvc.MainWindowModel;
+import project.de.hshl.vcII.mvc.MainModel;
 import javafx.scene.input.MouseEvent;
 import project.de.hshl.vcII.utils.MyVector;
 
@@ -19,7 +19,7 @@ public class Placer {
     private Ball ball;
     private Wall wall;
     private Scissors scissors;
-    private MainWindowModel mainWindowModel = MainWindowModel.get();
+    private MainModel mainWindowModel = MainModel.get();
     private double epsilon = 5;
     private MyVector s_t_parameters;
 

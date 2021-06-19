@@ -35,16 +35,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * MainWindowController is used an a controller for the mvc-pattern.
+ * MainController is used an a controller for the mvc-pattern.
  */
 
-public class MainWindowController implements Initializable {
+public class MainController implements Initializable {
     @FXML
-    public CheckBox cb_choice_active;
+    private CheckBox cb_choice_active;
     @FXML
-    public Slider sl_Elasticity;
+    private Slider sl_Elasticity;
     @FXML
-    public Label lCurrentElasticity;
+    private Label lCurrentElasticity;
     @FXML
     private CheckBox chb_Wind;
     @FXML
@@ -52,7 +52,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     @FXML
-    private Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius;
+    private Label lMode, lGridSnapActive, lCurrentWeight, lCurrentRadius, lWind, lGravity, lDt;
     @FXML
     private Button btn_start_stop;
     @FXML
@@ -71,10 +71,33 @@ public class MainWindowController implements Initializable {
     private StackPane sMinPane, sMinMaxPane, sExitPane;
     @FXML
     private AnchorPane aRootPane, aDrawingPane, aSettingsPane;
+    @FXML
+    public TableView<Ball> tv_ball_params;
+    @FXML
+    public TableColumn<Ball, Integer> tc_No;
+    @FXML
+    public TableColumn<Ball, String> tc_Pos;
+    @FXML
+    public TableColumn<Ball, String> tc_V;
+    @FXML
+    public TableColumn<Ball, Integer> tc_Radius;
+    @FXML
+    public TableColumn<Ball, Integer> tc_Mass;
+    @FXML
+    public TableColumn<Ball, String> tc_PotE;
+    @FXML
+    public TableColumn<Ball, String> tc_KinE;
+    @FXML
+    public TableColumn<Ball, String> tc_LostE;
+    @FXML
+    public TableColumn<Ball, String> tc_TotE;
+    @FXML
+    public TableColumn<Ball, String> tc_Elasticity;
     // A second controller for better overview
+    private CurrentParamsController currentParamsController = new CurrentParamsController();
     private SettingsController settingsController = new SettingsController();
     // Declaration of original model.
-    private MainWindowModel mainWindowModel;
+    private MainModel mainWindowModel;
 
     // Variables to maintain the screen.
     private double windowCursorPosX, windowCursorPosY;
@@ -90,11 +113,16 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-        settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity, lCurrentElasticity, tf_Wind_X, tf_Wind_Y,
-        tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
 
-        // Get the original MainWindowModel
-        mainWindowModel = MainWindowModel.get();
+        // Get the original MainModel
+        mainWindowModel = MainModel.get();
+
+        settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
+                lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
+        currentParamsController.initialize(lWind, lDt, lGravity, tv_ball_params, tc_Radius, tc_Mass, tc_V, tc_PotE, tc_KinE,
+                tc_LostE, tc_TotE, tc_Elasticity, tc_Pos, tc_No);
+        mainWindowModel.setSettingsController(settingsController);
+        mainWindowModel.setCurrentParamsController(currentParamsController);
 
         aDrawingPane.getStyleClass().add("anchor-drawing-pane");
 
@@ -134,7 +162,8 @@ public class MainWindowController implements Initializable {
     @FXML
     private void run(){
         // check all TextFields for values
-        settingsController.fillVariables();
+        settingsController.updateParams();
+        //settingsController.fillVariables();
         if (firstTime) {
             settingsController.setV0();
             Calculator.calcInitial_TotalEnergy();
@@ -241,7 +270,7 @@ public class MainWindowController implements Initializable {
         d_play.setVisible(false);
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
-        settingsController.getCurrentParamsController().reset();
+        mainWindowModel.getCurrentParamsController().reset();
         firstTime = true;
     }
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.
