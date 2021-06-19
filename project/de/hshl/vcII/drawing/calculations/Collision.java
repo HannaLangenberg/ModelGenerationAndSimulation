@@ -79,7 +79,9 @@ public class Collision {
         side = 0;
     }
 
-    // Used in BallCollisions and ScissorsCollisions
+    /**
+     * This method is used in both BallCollisions and ScissorsCollisions .
+     */
     static MyVector centerShock(MyVector v1, double m1, MyVector v2, double m2){
         //-------Calculate-values---------------------------------------------------------------------------------------
 

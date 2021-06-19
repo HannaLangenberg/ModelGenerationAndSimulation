@@ -23,7 +23,7 @@ import project.de.hshl.vcII.utils.MyVector;
 
 /**
  * Manages Key inputs.
- * If 'W' key is pressed it also handles mouse input
+ * Also handles mouse inputs.
  */
 public class KeyManager {
     private MainWindowModel mainWindowModel;
@@ -32,6 +32,10 @@ public class KeyManager {
         mainWindowModel = MainWindowModel.get();
     }
 
+    /**
+     * Is called only if the simulation is not running and 'W' was not pressed.
+     * @param e just for good measure
+     */
     public void manageHover(MouseEvent e){
         mainWindowModel.setCurrentlySelected(null);
         Rectangle hoverHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
@@ -39,8 +43,8 @@ public class KeyManager {
             if(hoverHitBox.intersects(b.getPosVec().x - 25, b.getPosVec().y - 25, 50, 50)){
                 mainWindowModel.setTooltip(new Tooltip(b.toString()));
                 String tooltip = b.toString();
-                tooltip =tooltip.replace(".", "");
-                tooltip =tooltip.replace(" -- ", "\n\t");
+                tooltip = tooltip.replace(".", "");
+                tooltip = tooltip.replace(" -- ", "\n");
                 System.out.println(tooltip);
                 mainWindowModel.setTooltipText(tooltip);
                 return;
@@ -52,7 +56,7 @@ public class KeyManager {
 
     /**
      * Toggles only if the 'W' key is pushed.
-     * chooses a Wall and highlights it green,
+     * chooses a Ball, Wall or Scissors and highlights it green,
      * @param e to know where the cursor currently is
      */
     public void manageMouse(MouseEvent e){
@@ -232,6 +236,12 @@ public class KeyManager {
             mainWindowModel.setChoiceMade(false);
     }
 
+    /**
+     * Just an old artifact left in because it man be needed.
+     * @param b     the Ball focused
+     * @param posX  cursor position (on X)
+     * @param posY  cursor position (on Y)
+     */
     private void hoverBox(Ball b, double posX, double posY){
         AnchorPane aRoot = new AnchorPane();
         VBox vbParams = new VBox();

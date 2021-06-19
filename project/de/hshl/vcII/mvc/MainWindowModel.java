@@ -14,6 +14,7 @@ import project.de.hshl.vcII.drawing.Rotation;
 import project.de.hshl.vcII.drawing.Simulator;
 import project.de.hshl.vcII.entities.stationary.ScissorsManager;
 import project.de.hshl.vcII.entities.stationary.WallManager;
+import project.de.hshl.vcII.utils.IO;
 
 /**
  * MainWindowModel is a class used as a model for a mvc-pattern-styled class structure, it is also a representative of a singleton-class.
@@ -33,12 +34,13 @@ public class MainWindowModel {
     private Placer placer;
     private Grid grid;
     private Simulator simulator;
-    private Object currentlySelected;
-    // Objects used in JFX
+    // Objects used from JFX
     private Stage stage;
     private AnchorPane aDrawingPane;
     private AnchorPane aSettingsPane;
     private Tooltip tooltip;
+
+    private Object currentlySelected;
 
     // Variables to maintain the window
     private boolean fullscreen = false, choiceEnabled = false, choiceMade = false, arrowsActive = false;
@@ -188,6 +190,10 @@ public class MainWindowModel {
 
     public void setTooltipText(String text) {
         this.tooltip.setText(text);
+    }
+
+    public void save(){
+        IO.save();
     }
 
     public boolean isFullscreen() {

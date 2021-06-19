@@ -117,8 +117,11 @@ public class MainWindowController implements Initializable {
         });
     }
 
-
-
+    // Save
+    @FXML
+    private void save(){
+        mainWindowModel.save();
+    }
 
     // Start the simulation
     // Is called whenever the 'Start/Stop' button is clicked.

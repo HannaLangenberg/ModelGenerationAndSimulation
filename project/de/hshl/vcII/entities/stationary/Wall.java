@@ -88,4 +88,14 @@ public class Wall {
                 + ") -- image view: (" + Math.round(Float.parseFloat(this.viewTexture.toString()))
                 + ") -- rotation: " + this.spin + " -- bounding box: " + this.collision.toString();
     }*/
+
+    public String save(){
+        return "texture: " + texture.toString()
+                + " collision: " + collision.toString()
+                + " posVec: " + posVec.toString()
+                + " e_alpha: " + e_alpha
+                + " spin: " + spin
+                + " number: " + number
+                + " orientation: " + orientation;
+    }
 }

@@ -11,6 +11,13 @@ public class ScissorsCalculations {
     static double lambda_velocity, rho_velocity, average_velocity;
     static MyVector cp, rv, bp, hv;
 
+    /**
+     * Method for checking if the Ball is colliding with the top-bit of the Scissors.
+     * (Could be expanded to check collision with the whole Scissors.)
+     * @param s check this Scissors
+     * @param b check this Ball
+     * @return true if the Scissors collides, false if not
+     */
     public static boolean checkPosition(Scissors s, Ball b) {
         //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llstart
          calcCommonPoint(s, b);
@@ -42,6 +49,7 @@ public class ScissorsCalculations {
             /(-(rv.y) * hv.x + (rv.x) * hv.y);
     }
 
+    //_HELPER___________________________________________________________________________________________________________
     public static void reset() {
         lambda = rho = a = o = f = 0 ;
         lambda_velocity = rho_velocity = average_velocity = 0;
@@ -62,7 +70,6 @@ public class ScissorsCalculations {
         return new MyVector(x, b.getPosVec().y);
     }
 
-    // calc dp
     public static MyVector calcDroppedPerpendicular(Scissors s, double omega, MyVector line) {
         return MyVector.add(s.getCrossingPoint(), MyVector.multiply(MyVector.subtract(s.getCrossingPoint(), line), omega));
     }
@@ -76,6 +83,4 @@ public class ScissorsCalculations {
         calcDeflectVelocity(s, lambda_dp, rho_dp);
         average_velocity = (lambda_velocity + rho_velocity) / 2;
     }
-
-
 }

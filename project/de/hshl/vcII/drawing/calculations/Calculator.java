@@ -51,9 +51,10 @@ public class Calculator {
         return MyVector.distance(b.getPosVec(), dp_Coord) <= b.getRadius() + epsilon;
     }
 
-
+    /**
+     * Calculates the total Energy at the start using the formula: totE0 = potE + kinE.
+     */
     public static void calcInitial_TotalEnergy() {
-        // initial_TotE = potE + kinE
         for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
             calcPotentialEnergy(b);
             calcKineticEnergy(b);
@@ -65,8 +66,10 @@ public class Calculator {
         }
     }
 
+    /**
+     * Calculates the total energy using the formula: totE = potE + kinE + lossE.
+     */
     public static void calcTotalEnergy() {
-        // totE = potE + kinE + lossE
         for (Ball b : MainWindowModel.get().getBallManager().getBalls()) {
             calcPotentialEnergy(b);
             calcKineticEnergy(b);
@@ -78,6 +81,10 @@ public class Calculator {
         }
     }
 
+    /**
+     * Calculates the potential energy for the Ball b using the formula: potE = m * g * h.
+     * @param b specifies for which ball the energy should be calculated for
+     */
     private static void calcPotentialEnergy(Ball b) {
         // potE = m * g * h
         potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainWindowModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
@@ -85,15 +92,21 @@ public class Calculator {
         b.setPotE_c(potE);
     }
 
+    /**
+     * Calculates the kinetic energy for the Ball b using the formula: potE = m/2 * v^2.
+     * @param b specifies for which ball the energy should be calculated for
+     */
     private static void calcKineticEnergy(Ball b) {
-        // kinE = 1/2 * m * v^2
         kinE = (b.getMass() * Math.pow(MyVector.length(b.getVelVec()), 2))/2;
         b.setKinE(Math.round(kinE));
         b.setKinE_c(kinE);
     }
 
+    /**
+     * Calculates the lost energy for the Ball b using the formula: lostE = totE - kinE - potE.
+     * @param b specifies for which ball the energy should be calculated for
+     */
     private static void calcLostEnergy(Ball b) {
-        // lossE = totE - kinE - potE
         lostE = b.getInitialTotE_c() - potE - kinE;
         b.setLostE(Math.round(lostE));
         b.setLostE_c(lostE);

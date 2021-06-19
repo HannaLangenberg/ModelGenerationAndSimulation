@@ -27,9 +27,9 @@ public class Ball extends Ellipse {
     private MyVector accVec;
     private MyVector frcVec;
     private MyVector rolVec;
-    private Arrow arrow;
+    private Arrow arrow = new Arrow();
     private boolean colliding_Orthogonal_F, colliding_Parallel_B;
-    private Arrow a;
+    private Arrow a = new Arrow();
 
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private int number;
@@ -101,13 +101,19 @@ public class Ball extends Ellipse {
             aDrawingPane.getChildren().remove(a);
             if (MainWindowModel.get().isArrowsActive())
             {
-                a = this.drawArrow();
+                a = this.giveArrow();
                 aDrawingPane.getChildren().add(a);
             }
         });
     }
 
-    public Arrow drawArrow() {
+    /**
+     * The Arrow class was taken fro stackoverflow.com: ___LINK___
+     * but modified ;)
+     * Sets the position of the arrow according to the direction, which is calculated by adding the Position Vector to the Velocity Vector
+     * @return an Arrow which can be drawn to any JavaFx Pane
+     */
+    public Arrow giveArrow() {
         arrow = new Arrow();
         MyVector direction = MyVector.add(posVec, velVec);
         arrow.getLine().setStroke(Color.RED);
@@ -309,7 +315,7 @@ public class Ball extends Ellipse {
     //_toString()_______________________________________________________________________________________________________
     @Override
     public String toString() {
-        return "No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
+        return "Ball No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
                 + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
                 + ") -- a: (" + Math.round(this.accVec.x) +"/"+ accVec.y
                 + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius()
@@ -319,4 +325,25 @@ public class Ball extends Ellipse {
                 + " -- Verlust: " + this.lostE_c;
     }
 
+    //_SAVE_____________________________________________________________________________________________________________
+    public String save(){
+        return "initialTotE_c: " + initialTotE_c
+                 + " totE_c: " + totE_c
+                 + " potE_c: " + potE_c
+                 + " kinE_c: " + kinE_c
+                 + " lostE_c: " + lostE_c
+                 + " posVec: " + posVec.toString()
+                 + " velVec: " + velVec.toString()
+                 + " vel0Vec: " + vel0Vec.toString()
+                 + " accVec: " + accVec.toString()
+                 + " frcVec: " + frcVec.toString()
+                 + " rolVec: " + rolVec.toString()
+                 + " arrow: " + arrow.toString()
+                 + " colliding_Orthogonal_F: " + colliding_Orthogonal_F
+                 + " colliding_Parallel_B: " + colliding_Parallel_B
+                 + " a: " + a.toString()
+                 + " randomCol: " + randomCol.toString()
+                 + " randomSeed: " + randomSeed
+                 + " strokeColor: " + strokeColor.toString();
+    }
 }

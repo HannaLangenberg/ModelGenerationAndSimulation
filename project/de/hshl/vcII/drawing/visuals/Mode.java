@@ -8,6 +8,10 @@ public class Mode {
 
     private boolean mode = false;
 
+    /**
+     * Turn the darkmode on/off.
+     * @param mode
+     */
     public void toggleMode(boolean mode) {
         MainWindowModel mainWindowModel = MainWindowModel.get();
         if(mode){
@@ -23,9 +27,5 @@ public class Mode {
 
     public boolean isMode() {
         return mode;
-    }
-
-    public void setMode(boolean mode) {
-        this.mode = mode;
     }
 }

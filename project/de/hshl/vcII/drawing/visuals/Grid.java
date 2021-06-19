@@ -15,10 +15,10 @@ public class Grid {
     private boolean snapOn = false;
     private double gridSpacingX = 100, gridSpacingY = 100;
 
-    //- Grid -----------------------------------------------------------------------------------------------------------
+    //_GRID_____________________________________________________________________________________________________________
 
     /**
-     * turn the Grin on/off
+     * Turn the Grin on/off.
      * @param aDrawingPane draws the grid on the specified Pane
      */
     public void toggleGrid(AnchorPane aDrawingPane){
@@ -69,7 +69,7 @@ public class Grid {
         return gridOn;
     }
 
-    //---Snap-----------------------------------------------------------------------------------------------------------
+    //_SNAP_____________________________________________________________________________________________________________
     public void toggleSnapToGrid(){
         snapOn = !snapOn;
     }

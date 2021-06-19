@@ -282,4 +282,37 @@ public class Scissors {
     public MyVector getRlEnd() {
         return rlEnd;
     }
+
+    public String save(){
+        /*
+    private final Group g;
+    public Group getG() {
+        return g;
+    }
+    private MyVector posVec; //upper left corner
+    private MyVector centerPoint, crossingPoint, llStart, llStart_angle, llEnd, rlStart, rlStart_angle, rlEnd; //middle of rectangle
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llVector, rlVector;
+    private static double angle;
+         */
+        String stringSave = "outline: " + rectangle.toString()
+                + " leftline: " + leftLine.toString()
+                + " rightline: " + rightLine.toString()
+                + " group: " + g.toString()
+                + " pos: " + posVec.toString()
+                + " centerpoint: " + centerPoint.toString()
+                + " crossingPoint: " + crossingPoint.toString()
+                + " llStart: " + llStart.toString()
+                + " llStart_angle: " + llStart_angle.toString()
+                + " llEnd: " + llEnd.toString()
+                + " rlStart: " + rlStart.toString()
+                + " rlStart_angle: " + rlStart_angle.toString()
+                + " rlEnd: " + rlEnd.toString()
+                + " upperLeft: " + upperLeft.toString()
+                + " lowerLeft: " + lowerLeft.toString()
+                + " upperRight: " + upperRight.toString()
+                + " lowerRight: " + lowerRight.toString()
+                + " angle: " + angle;
+
+        return stringSave;
+    }
 }

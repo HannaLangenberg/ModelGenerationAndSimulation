@@ -18,6 +18,11 @@ public class ScissorsCollisions {
     private static MyVector possibleTip = new MyVector(0,0);
     private static Scissors s;
 
+    /**
+     * Checks for any blade collision with the ball specified (also takes the epsilon value into account).
+     * @param b Ball which hits the blade
+     * @param e epsilon value (~speed of the Ball)
+     */
     public static void checkScissors(Ball b, double e) {
         if(MainWindowModel.get().getScissorsManager().getS() != null) {
             s = MainWindowModel.get().getScissorsManager().getS();
@@ -31,6 +36,7 @@ public class ScissorsCollisions {
         }
     }
 
+    //_HELPER___________________________________________________________________________________________________________
     private static void checkBlades(Ball b, double e) {
         lambda = lambda_rho_Parameters.x; // Wo befinden wir uns auf dem von der Klinge aufgespannten Vektor
         rho    = lambda_rho_Parameters.y;

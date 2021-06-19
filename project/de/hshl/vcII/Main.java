@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  * Main class.
- * Load the main stage, sets the title, sets the style, and starts the Application
+ * Load the main stage, set the model, the title and the style, and start the Application.
  */
 
 public class Main extends Application {

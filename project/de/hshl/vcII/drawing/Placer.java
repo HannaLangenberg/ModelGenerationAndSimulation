@@ -26,6 +26,13 @@ public class Placer {
 
     private double x, y, xStart, yStart, xEnd, yEnd;
 
+    /**
+     * If close enough snap the currently placed Wall to the Ball, or vice versa.
+     * @param w the instance of Wall to be placed
+     * @param b the instance of Ball to be placed
+     * @param mouse where the cursor is located currently
+     * @return where the Wall/Ball should be placed (gust Y tho because only the Y-Position should snap)
+     */
     private double snapBallOnWall(Wall w, Ball b, MyVector mouse){
         //-Snap Ball to wall's surface if close enough
         if (w == null && b != null) {
@@ -73,6 +80,10 @@ public class Placer {
         return mouse.y;
     }
 
+    /**
+     * Place the currently selected Item (Ball, Wall or Scissors) at the X/Y Location of the cursor.
+     * @param e MouseEvent to get the cursor position
+     */
     public void place(MouseEvent e){
         x = e.getX();
         y = e.getY();
