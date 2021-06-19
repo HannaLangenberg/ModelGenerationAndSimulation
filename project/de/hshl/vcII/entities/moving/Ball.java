@@ -89,6 +89,30 @@ public class Ball extends Ellipse {
         this.toBack();
     }
 
+    public Ball(String initialTotE_c, String totE_c, String potE_c, String kinE_c, String lostE_c, String posVec,
+                String velVec, String vel0Vec, String accVec, String frcVec, String rolVec, String arrow,
+                String colliding_Orthogonal_F, String colliding_Parallel_B, String a, String randomCol, String randomSeed,
+                String strokeColor){
+        this.initialTotE_c = Double.parseDouble(initialTotE_c);
+        this.totE_c = Double.parseDouble(totE_c);
+        this.potE_c = Double.parseDouble(potE_c);
+        this.kinE_c = Double.parseDouble(kinE_c);
+        this.lostE_c = Double.parseDouble(lostE_c);
+        this.posVec = new MyVector(posVec);
+        this.vel0Vec = new MyVector(vel0Vec);
+        this.velVec = new MyVector(velVec);
+        this.accVec = new MyVector(accVec);
+        this.frcVec = new MyVector(frcVec);
+        this.rolVec = new MyVector(rolVec);
+        //this.arrow = new Arrow(arrow);
+        this.colliding_Orthogonal_F = Boolean.parseBoolean(colliding_Orthogonal_F);
+        this.colliding_Parallel_B = Boolean.parseBoolean(colliding_Parallel_B);
+        //this.a = new Arrow(a);
+        this.randomCol = Color.valueOf(randomCol);
+        this.randomSeed = Double.parseDouble(randomSeed);
+        this.strokeColor = Color.valueOf(strokeColor);
+    }
+
     /**
      * Draws the ball on the specified AnchorPane. Plattform.runLater is called to unify the thread the simulation
      * is currently running on and the drawing thread of javafx.
@@ -327,23 +351,23 @@ public class Ball extends Ellipse {
 
     //_SAVE_____________________________________________________________________________________________________________
     public String save(){
-        return "initialTotE_c: " + initialTotE_c
-                 + " totE_c: " + totE_c
-                 + " potE_c: " + potE_c
-                 + " kinE_c: " + kinE_c
-                 + " lostE_c: " + lostE_c
-                 + " posVec: " + posVec.toString()
-                 + " velVec: " + velVec.toString()
-                 + " vel0Vec: " + vel0Vec.toString()
-                 + " accVec: " + accVec.toString()
-                 + " frcVec: " + frcVec.toString()
-                 + " rolVec: " + rolVec.toString()
-                 + " arrow: " + arrow.toString()
-                 + " colliding_Orthogonal_F: " + colliding_Orthogonal_F
-                 + " colliding_Parallel_B: " + colliding_Parallel_B
-                 + " a: " + a.toString()
-                 + " randomCol: " + randomCol.toString()
-                 + " randomSeed: " + randomSeed
-                 + " strokeColor: " + strokeColor.toString();
+        return ";initialTotE_c: " + initialTotE_c
+                 + ",totE_c: " + totE_c
+                 + ",potE_c: " + potE_c
+                 + ",kinE_c: " + kinE_c
+                 + ",lostE_c: " + lostE_c
+                 + ",posVec: " + posVec.toString()
+                 + ",velVec: " + velVec.toString()
+                 + ",vel0Vec: " + vel0Vec.toString()
+                 + ",accVec: " + accVec.toString()
+                 + ",frcVec: " + frcVec.toString()
+                 + ",rolVec: " + rolVec.toString()
+                 + ",arrow: " + arrow.toString()
+                 + ",colliding_Orthogonal_F: " + colliding_Orthogonal_F
+                 + ",colliding_Parallel_B: " + colliding_Parallel_B
+                 + ",a: " + a.toString()
+                 + ",randomCol: " + randomCol.toString()
+                 + ",randomSeed: " + randomSeed
+                 + ",strokeColor: " + strokeColor.toString();
     }
 }

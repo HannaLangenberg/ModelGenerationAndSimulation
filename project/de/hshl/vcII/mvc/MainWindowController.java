@@ -25,6 +25,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import project.de.hshl.vcII.utils.IO;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -121,6 +122,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private void save(){
         mainWindowModel.save();
+        IO.load();
     }
 
     // Start the simulation

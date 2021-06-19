@@ -20,8 +20,7 @@
          xy = xy.replace(")", "");
          String[] arrXY = xy.split("/");
          this.x = Double.parseDouble(arrXY[0]);
-         this.y = Double.parseDouble(arrXY[0]);
-         System.out.println(x + " " + y);
+         this.y = Double.parseDouble(arrXY[1]);
      }
 
      /*

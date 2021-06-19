@@ -5,6 +5,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import project.de.hshl.vcII.utils.MyVector;
 
+import java.util.Objects;
+
 /**
  * Wall is an abstract class.
  * It is a Framework for all non-moving (wall-/floor-like) entities that should be a Wall.
@@ -23,7 +25,7 @@ public class Wall {
     private int orientation; //repräsentiert die Orientierung der Wand: 0 → level; 1 → rotateLeft; 2 → rotateRight
 
     public Wall(){
-        texture = new Image(getClass().getResourceAsStream("/img/blocks/BlockNormal.png"));
+        texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/blocks/BlockNormal.png")));
         collision = new Rectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         viewTexture = new ImageView(texture);
         posVec = new MyVector(0, 0);
@@ -31,9 +33,17 @@ public class Wall {
         orientation = 2;
     }
 
+    public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String number, String orientation) {
+        //this.texture = texture;
+        //this.collision = new Rectangle(collision);
+        this.posVec = new MyVector(posVec);
+        this.e_alpha = Double.parseDouble(e_alpha);
+        this.spin = Double.parseDouble(spin);
+        this.number = Integer.parseInt(number);
+        this.orientation = Integer.parseInt(orientation);
+    }
 
-
-    //----Getter-&-Setter-----------------------------------------------------------------------------------------------
+    //_GETTER_ AND_SETTER_______________________________________________________________________________________________
     public Rectangle getCollision(){
         return collision;
     }
@@ -90,12 +100,12 @@ public class Wall {
     }*/
 
     public String save(){
-        return "texture: " + texture.toString()
-                + " collision: " + collision.toString()
-                + " posVec: " + posVec.toString()
-                + " e_alpha: " + e_alpha
-                + " spin: " + spin
-                + " number: " + number
-                + " orientation: " + orientation;
+        return ";texture: " + texture.toString()
+                + ",,collision: " + collision.toString()
+                + ",,posVec: " + posVec.toString()
+                + ",,e_alpha: " + e_alpha
+                + ",,spin: " + spin
+                + ",,number: " + number
+                + ",,orientation: " + orientation;
     }
 }
