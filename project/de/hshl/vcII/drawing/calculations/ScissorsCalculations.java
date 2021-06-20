@@ -19,7 +19,7 @@ public class ScissorsCalculations {
      * @return true if the Scissors collides, false if not
      */
     public static boolean checkPosition(Scissors s, Ball b) {
-        //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llstart
+        //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llStart
          calcCommonPoint(s, b);
         // lambda (a) auch für rho verwenden und Punkte für Vektoren berechnen
          a_onLambdaBlade = calcDroppedPerpendicular(s, a, s.getLlStart());

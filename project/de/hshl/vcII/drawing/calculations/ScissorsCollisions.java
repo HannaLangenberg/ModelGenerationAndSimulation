@@ -17,6 +17,7 @@ public class ScissorsCollisions {
     private static MyVector lambda_rho_Parameters;
     private static MyVector possibleTip = new MyVector(0,0);
     private static Scissors s;
+    private static int side = 0;
 
     /**
      * Checks for any blade collision with the ball specified (also takes the epsilon value into account).
@@ -81,12 +82,9 @@ public class ScissorsCollisions {
                         deflect_Static(b, 1);
                 }
                 break;
-
-            case 2: // both blades
-                if (collision_LambdaOnBlade & collision_RhoOnBlade & s.isClosing())
-                    shoot(b, s);
-                break;
         }
+        if (collision_LambdaOnBlade & collision_RhoOnBlade & s.isClosing())
+            shoot(b, s);
     }
 
     private static void checkTips(Ball b, double e) {
@@ -125,23 +123,19 @@ public class ScissorsCollisions {
     }
 
     private static int checkClosest(Ball b) {
-        if(ScissorsCalculations.f == 0.5)
-            return 2;                               // Collision on both blades
-        else if (ScissorsCalculations.f < 0.5)
+        if (ScissorsCalculations.f < 0.5)
             return 0;                               // Collision on left blade
         else
             return 1;                               // collision on right blade
     }
 
+    /*
+    * directional vector ist immer die parallele Komponente und auch nur die wird mit der Elastizität skaliert
+    * */
     public static void shoot(Ball b, Scissors s) {
         s.calcDirectionalVector();
         ScissorsCalculations.calcAverageDeflectVelocity(s, lambda_dp, rho_dp);
-//        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector()), b.getVelVec());
-//        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), s.getDirectionalVector());
-
-        b.setVelVec(MyVector.add(b.getVelVec(), s.getDirectionalVector()));
-//        b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity)));
-//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.add(vParallel, s.getDirectionalVector())));
+        b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity), b.getElasticity())));
 
     }
 
@@ -150,10 +144,22 @@ public class ScissorsCollisions {
         switch (decision) {
             case 0: // lambda
                 normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
+                if (inside_Blades) {
+                    side = 0;
+                }
+                else
+                    side = 2;
+                CollisionHandling.bounceVelocity(b, side, lambda_dp);
                 lambda_dp = new MyVector(0,0);
                 break;
             case 1: // rho
                 normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
+                if (inside_Blades) {
+                    side = 3;
+                }
+                else
+                    side = 1;
+                CollisionHandling.bounceVelocity(b, side, rho_dp);
                 rho_dp = new MyVector(0,0);
                 break;
             case 2:
@@ -163,7 +169,8 @@ public class ScissorsCollisions {
         vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
         vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
+
+        //b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
     }
     public static void deflect_Kinetic(Ball b, Scissors s, int decision) {
         MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel;
@@ -185,7 +192,9 @@ public class ScissorsCollisions {
         vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
         vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-        b.setVelVec(MyVector.add(vOrthogonal, Collisions.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5)));
+        if (vParallel.y > 0 || vParallel.x > 0) {
+            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(Collisions.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5), b.getElasticity())));
+        }
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
 
     }
@@ -193,6 +202,6 @@ public class ScissorsCollisions {
     private static void reset() {
         collision_LambdaOnBlade = collision_LambdaOnTip = collision_RhoOnBlade = collision_RhoOnTip = inside_Blades = false;
         lambda_onBlade = lambda_onPosTip = lambda_onNegTip = rho_onBlade = rho_onPosTip = rho_onNegTip = false;
-        lambda = rho = 0;
+        lambda = rho = side = 0;
     }
 }
