@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
+import javafx.stage.FileChooser;
 import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
@@ -30,6 +31,7 @@ import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -123,6 +125,8 @@ public class MainController implements Initializable {
         // Get the original MainModel
         mainWindowModel = MainModel.get();
 
+        mainWindowModel.setMainController(this);
+
         settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
                 lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
         currentParamsController.initialize(lWind, lDt, lGravity, tv_ball_params, tc_Radius, tc_Mass, tc_V, tc_PotE, tc_KinE,
@@ -203,13 +207,21 @@ public class MainController implements Initializable {
     // Is called whenever 'save' is clicked in the 'File' menu.
     @FXML
     private void save(){
-        IO.save();
+        FileChooser fileChooser = new FileChooser() ;
+        System.out.println((getClass().getResource("/res")));
+        fileChooser.setInitialDirectory(new File(String.valueOf(getClass().getResource("/res"))));
+        File save = fileChooser.showSaveDialog(aRootPane.getScene().getWindow());
+        IO.save(save);
     }
     // Is called whenever 'load' is clicked in the 'File' menu.
     @FXML
     private void load(){
-        IO.load();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wähle eine zuvor gespeicherte Datein aus:");
+        File file = fileChooser.showOpenDialog(aRootPane.getScene().getWindow());
+        IO.load(file);
         settingsController.updateParams();
+        aSettingsPane.setDisable(false);
         btn_start_stop.setDisable(false);
     }
 
@@ -274,16 +286,6 @@ public class MainController implements Initializable {
         System.out.println(lightMode);
     }
     //_PARAMETER_SETTING________________________________________________________________________________________________
-    //_textfield__
-    public void tf_v0_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_v0_Y_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_X_OnChange(ActionEvent actionEvent) {
-    }
-    public void tf_Wind_Y_OnChange(ActionEvent actionEvent) {
-    }
-
     //_choicebox__
     @FXML
     private void chb_Wind_OnAction(ActionEvent actionEvent) {
@@ -413,7 +415,6 @@ public class MainController implements Initializable {
         custonHeaderController.exit();
     }
 
-
     @FXML
     private void mouseEnteredExit(MouseEvent mouseEvent) {
         custonHeaderController.mouseEnteredExit();
@@ -436,7 +437,7 @@ public class MainController implements Initializable {
     }
 
     //_MISC_____________________________________________________________________________________________________________
-    private void activateLists(){
+    public void activateLists(){
         // Add change listener for cb_choose to always keep it updated
         mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
             cb_update();

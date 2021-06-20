@@ -149,8 +149,8 @@
                                                                     <children>
                                                                         <Label text="x-Richtung:" />
                                                                         <Label text="y-Richtung:" GridPane.rowIndex="1" />
-                                                                        <TextField fx:id="tf_v0_X" onInputMethodTextChanged="#tf_v0_X_OnChange" text="0" GridPane.columnIndex="1" />
-                                                                        <TextField fx:id="tf_v0_Y" onInputMethodTextChanged="#tf_v0_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                        <TextField fx:id="tf_v0_X"  text="0" GridPane.columnIndex="1" />
+                                                                        <TextField fx:id="tf_v0_Y"  text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                         <Slider fx:id="sl_ScissorsSpeed" blockIncrement="0.1" max="1.0" min="0.1" onMouseReleased="#sl_ScissorsSpeed_OnDragDetected" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                         <Label text="Schießg. Schere" GridPane.rowIndex="2" />
                                                                     </children>
@@ -185,8 +185,8 @@
                                                                             <children>
                                                                                 <Label text="x-Richtung:" />
                                                                                 <Label text="y-Richtung:" GridPane.rowIndex="1" />
-                                                                                <TextField fx:id="tf_Wind_X" onAction="#tf_Wind_X_OnChange" text="0" GridPane.columnIndex="1" />
-                                                                                <TextField fx:id="tf_Wind_Y" onInputMethodTextChanged="#tf_Wind_Y_OnChange" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                                <TextField fx:id="tf_Wind_X" text="0" GridPane.columnIndex="1" />
+                                                                                <TextField fx:id="tf_Wind_Y" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                             </children>
                                                                             <padding>
                                                                                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />

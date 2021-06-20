@@ -8,10 +8,10 @@ import project.de.hshl.vcII.mvc.MainModel;
 import java.io.*;
 
 public class IO {
-    public static void save(){
+    public static void save(File file){
         MainModel mainWindowModel = MainModel.get();
         try {
-            BufferedWriter bW = new BufferedWriter(new FileWriter("TESTSAVE.txt"));
+            BufferedWriter bW = new BufferedWriter(new FileWriter(file));
             String balls = "";
             String walls = "";
             String scissors = "";
@@ -37,11 +37,11 @@ public class IO {
 
     }
 
-    public static void load(){
+    public static void load(File file){
         MainModel mainWindowModel1 = MainModel.get();
         try {
-            //_Load_from_the_saved_file___________________________________________________________________________________
-            BufferedReader bR = new BufferedReader(new FileReader("TESTSAVE.txt"));
+            //_LOAD_GAME_FROM_FILE______________________________________________________________________________________
+            BufferedReader bR = new BufferedReader(new FileReader(file));
             String currentLine;
             String csv = "";
             int ballCount = 0,
@@ -53,18 +53,24 @@ public class IO {
                     csv = csv.concat(currentLine);
                 }
             }
+            // eg: csv = Ball;Ball;Ball;Wall;Wall;Wall;Wall;Scissors
             //TODO: Exception handling
 
             // Separate values (at ';')
             String[] splitCsv = csv.split(";"); //first element has to begone
 
+            //eg: splitCsv: [Ball, Ball, Ball, Wall, Wall, Wall, Wall, Scissors]
+
             // count the number of ball, walls, and scissors
             for(String count : splitCsv){
-                if(count.contains("ball "))
+                if(count.contains("ball "))// 80 Ap
+                    // eg: ballCount = 3
                     ballCount++;
                 if (count.contains("wall "))
+                    // eg: wallCount = 4
                     wallCount++;
-                if(count.contains("scissors"))
+                if(count.contains("scissors "))
+                    // eg: scissorsCount = 1
                     scissorsCount++;
             }
 
@@ -88,7 +94,9 @@ public class IO {
                 scissorsCsv = splitCsv[wallCount + ballCount + offset];
             }
 
-            //_Create_THE_GAMEOBJECTS___________________________________________________________________________________
+            //_CREATE_THE_GAME-OBJECTS__________________________________________________________________________________
+            // Split each one at ',,'
+            // Split again at ': '  and always save the 2nd value in the rawData String[]
             for(String ballCsv: ballsCsv){
                 int paramCount = 21;
                 String[] params = ballCsv.split(",,");
@@ -103,6 +111,7 @@ public class IO {
                         rawData[14] /*Arrow*/, rawData[15], rawData[16], rawData[17], rawData[18], rawData[19], rawData[20]);
                 mainWindowModel1.setCurrentlySelected(b);
                 mainWindowModel1.getPlacer().place(b, b.getPosVec());
+                mainWindowModel1.getBallManager().getBalls().add(b);
             }
 
             for(String wallCsv: wallsCsv){
@@ -113,9 +122,9 @@ public class IO {
                     rawData[i] = params[i].split(": ")[1];
                 }
                 //System.out.println(Arrays.toString(rawData));
-                //TODO: Remove number
                 Wall w = new Wall("/img/blocks/BlockNormal.png", rawData[1], rawData[2], rawData[3], rawData[4], rawData[5]);
                 mainWindowModel1.getPlacer().place(w, w.getPosVec());
+                mainWindowModel1.getWallManager().getWalls().add(w);
             }
 
             int paramCount = 18;
@@ -128,10 +137,12 @@ public class IO {
             Scissors s = new Scissors(rawData[0], rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6],
                     rawData[7], rawData[8], rawData[9], rawData[10], rawData[11], rawData[12], rawData[13], rawData[14],
                     rawData[15], rawData[16], rawData[17]);
-            mainWindowModel1.getPlacer().place(s, s.getPosVec());
+            mainWindowModel1.getADrawingPane().getChildren().add(s.getG());
+            mainWindowModel1.getScissorsManager().setS(s);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        mainWindowModel1.getMainController().activateLists();
     }
 }

@@ -24,6 +24,7 @@ public class MainModel {
     private static MainModel mainWindowModel;
 
     // Objects programed by the Authors
+    private MainController mainController;
     private Rotation spin;
     private KeyManager keyManager;
     private WallManager wallManager;
@@ -169,6 +170,14 @@ public class MainModel {
 
     public double getScissorsSpeed() {
         return scissorsSpeed;
+    }
+
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
     public CurrentParamsController getCurrentParamsController() {

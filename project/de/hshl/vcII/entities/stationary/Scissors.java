@@ -33,13 +33,13 @@ public class Scissors {
     public Scissors(String outline, String leftline, String rightline, String group, String pos, String centerPoint,
                     String crossingPoint, String llStart, String llStart_angle, String llEnd, String rlStart, String rlStart_angle,
                     String rlEnd, String upperLeft, String lowerLeft, String upperRight, String lowerRight, String angle) {
-
         this.rectangle = Utils.constructRectFromString(outline);
+        setUnmarkedStroke();
         this.leftLine = Utils.constructLineFromString(leftline);
         this.rightLine = Utils.constructLineFromString(rightline);
         this.g = new Group();
         g.getChildren().addAll(this.rectangle, this.leftLine, this.rightLine);
-        this.posVec = new MyVector(pos);
+        setPosVec(new MyVector(pos));
         this.centerPoint = new MyVector(centerPoint);
         this.crossingPoint = new MyVector(crossingPoint);
         this.llStart = new MyVector(llStart);
@@ -53,6 +53,7 @@ public class Scissors {
         Scissors.upperRight = new MyVector(upperRight);
         Scissors.upperLeft = new MyVector(upperLeft);
         Scissors.angle = Double.parseDouble(angle);
+        initializeLines();
     }
 
     public Scissors() {
@@ -64,6 +65,7 @@ public class Scissors {
         orientation = 2;
         setUnmarkedStroke();
         initializeLines();
+        updateLines();
         calcCrossingPoint();
         g.getChildren().addAll(rectangle, leftLine, rightLine);
         closing = false;
@@ -73,7 +75,6 @@ public class Scissors {
         leftLine.setStrokeWidth(3);
         rightLine.setStroke(Color.GREEN);
         rightLine.setStrokeWidth(3);
-        updateLines();
     }
     public void updateLines() {
         applyRotation(0);
