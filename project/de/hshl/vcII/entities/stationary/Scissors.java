@@ -21,8 +21,8 @@ public class Scissors {
         return g;
     }
     private MyVector posVec; //upper left corner
-    private MyVector centerPoint, crossingPoint, llStart, llStart_angle, llEnd, rlStart, rlStart_angle, rlEnd; //middle of rectangle
-    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, directionalVector, llVector, rlVector;
+    private MyVector directionalVector, centerPoint, crossingPoint, llStart, llStart_angle, llEnd, rlStart, rlStart_angle, rlEnd; //middle of rectangle
+    private static MyVector upperLeft, lowerLeft, upperRight, lowerRight, llVector, rlVector;
     private static double angle;
 
     private double e_alpha;
@@ -212,10 +212,10 @@ public class Scissors {
         this.closing = closing;
     }
 
-    public static void setDirectionalVector(MyVector directionalVector) {
-        Scissors.directionalVector = directionalVector;
+    public void setDirectionalVector(MyVector directionalVector) {
+        this.directionalVector = directionalVector;
     }
-    public static MyVector getDirectionalVector() {
+    public MyVector getDirectionalVector() {
         return directionalVector;
     }
 
