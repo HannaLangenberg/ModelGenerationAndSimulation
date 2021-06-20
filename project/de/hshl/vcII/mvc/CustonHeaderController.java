@@ -145,6 +145,47 @@ public class CustonHeaderController {
         mainModel.getGrid().updateGrid(mainModel.getADrawingPane());
     }
 
+    private void hoverFrameControls(StackPane stackPane, boolean hovered) {
+        if (hovered) {
+            for (int i = 0; i < stackPane.getChildren().size(); i++) {
+                if (stackPane.equals(sExitPane))
+                    stackPane.setStyle("-fx-background-color: #cc2b2b");
+                else
+                    stackPane.setStyle("-fx-background-color: #a6a6a6");
+            }
+            stackPane.setEffect(new Glow(1));
+        }
+        else {
+            for (int i = 0; i < stackPane.getChildren().size(); i++) {
+                stackPane.setStyle("-fx--background-color: #c9c9c9");
+                stackPane.getChildren().get(i).setEffect(null);
+            }
+            stackPane.setEffect(null);
+        }
+    }
+
+
+    public void minMax() {
+        toggleFullScreen();
+    }
+
+    public void exit() {
+        System.exit(0);
+    }
+
+    public void minimize() {
+        mainModel.getStage().setIconified(true);
+    }
+
+
+    public void mouseEnteredExit() {
+        hoverFrameControls(sExitPane, true);
+    }
+
+    public void mouseExitedExit() {
+        hoverFrameControls(sExitPane, false);
+    }
+
     public void mouseEnteredMinimize() {
         hoverFrameControls(sMinPane, true);
     }
@@ -160,44 +201,4 @@ public class CustonHeaderController {
     public void mouseExitedMinMax() {
         hoverFrameControls(sMinMaxPane, false);
     }
-
-    public void mouseEnteredExit() {
-        hoverFrameControls(sExitPane, true);
-    }
-
-    public void mouseExitedExit() {
-        hoverFrameControls(sExitPane, false);
-    }
-
-    private void hoverFrameControls(StackPane stackPane, boolean hovered) {
-        if (hovered) {
-            for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                if (stackPane.equals(sExitPane))
-                    stackPane.getChildren().get(i).setStyle("-fx-stroke: #cc2b2b");
-                else
-                    stackPane.getChildren().get(i).setStyle("-fx-stroke: #2bccbd");
-            }
-            stackPane.setEffect(new Glow(1));
-        }
-        else {
-            for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                stackPane.getChildren().get(i).setStyle("-fx-stroke: #c9c9c9");
-                stackPane.getChildren().get(i).setEffect(null);
-            }
-            stackPane.setEffect(null);
-        }
-    }
-
-    public void minimize() {
-        mainModel.getStage().setIconified(true);
-    }
-
-    public void minMax() {
-        toggleFullScreen();
-    }
-
-    public void exit() {
-        System.exit(0);
-    }
-
 }

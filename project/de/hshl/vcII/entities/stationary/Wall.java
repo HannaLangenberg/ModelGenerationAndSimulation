@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 import project.de.hshl.vcII.utils.MyVector;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -40,8 +41,10 @@ public class Wall {
         this.posVec = new MyVector(posVec);
         this.e_alpha = Double.parseDouble(e_alpha);
         this.spin = Double.parseDouble(spin);
+        System.out.println("spin (String): " + spin + " spin (double): " + getSpin());
         this.number = Integer.parseInt(number);
         this.orientation = Integer.parseInt(orientation);
+        viewTexture = new ImageView(texture);
     }
 
     private Rectangle constructRectFromString(String stringRect) {
@@ -51,8 +54,8 @@ public class Wall {
         sRect = sRect.replace("[", "");
         sRect = sRect.replace("]", "");
         String[] params = sRect.split(", ");
-        double[] rawRect = new double[params.length];
-        for(int i = 0; i < params.length-1; i++){
+        double[] rawRect = new double[4];
+        for(int i = 0; i < 4; i++){
             rawRect[i] = Double.parseDouble(params[i].split("=")[1]);
         }
         rect = new Rectangle(rawRect[0], rawRect[1], rawRect[2], rawRect[3]);
@@ -122,7 +125,7 @@ public class Wall {
                 + ",,posVec: " + posVec.toString()
                 + ",,e_alpha: " + e_alpha
                 + ",,spin: " + spin
-                + ",,number: " + number
+                + ",,wall : " + number
                 + ",,orientation: " + orientation;
     }
 }

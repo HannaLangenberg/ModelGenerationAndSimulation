@@ -295,6 +295,7 @@ public class MainController implements Initializable {
             Utils.setWind(new MyVector(0,0));
         }
     }
+
     @FXML
     private void chb_Choice_OnAction(ActionEvent actionEvent) {
         cb_choose.setDisable(!cb_choice_active.isSelected());
@@ -325,11 +326,6 @@ public class MainController implements Initializable {
         settingsController.sl_ScissorsSpeed_OnDragDetected();
     }
 
-    //_button__
-    @FXML
-    private void btn_showCurrentParams_OnAction() throws IOException {
-        settingsController.btn_showCurrentParams_OnAction();
-    }
 
     //_MOUSE_EVENTS_____________________________________________________________________________________________________
     // Is called whenever the mouse is clicked.
@@ -359,16 +355,19 @@ public class MainController implements Initializable {
                 break;
         }
     }
+
     @FXML
     private void onMousePressed(MouseEvent e){
         if(mainWindowModel.getScissorsManager().getS() == null)
             mainWindowModel.getPlacer().onMousePressed(e);
     }
+
     @FXML
     private void onMouseDragged(MouseEvent e) {
         if(mainWindowModel.getScissorsManager().getS() == null)
             mainWindowModel.getPlacer().onMouseDragged(e);
     }
+
     @FXML
     private void onMouseReleased(MouseEvent e) {
         if(mainWindowModel.getScissorsManager().getS() == null) {

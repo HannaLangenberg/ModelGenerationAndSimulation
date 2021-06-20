@@ -94,6 +94,27 @@ public class Ball extends Ellipse {
         addMouseMoved();
     }
 
+    /**
+     * Used by the load function
+     * @param initialTotE_c parsed to double
+     * @param totE_c parsed to double
+     * @param potE_c parsed to double
+     * @param kinE_c parsed to double
+     * @param lostE_c parsed to double
+     * @param posVec parsed to MYVector
+     * @param velVec parsed to MYVector
+     * @param vel0Vec parsed to MYVector
+     * @param accVec parsed to MYVector
+     * @param frcVec parsed to MYVector
+     * @param rolVec parsed to MYVector
+     * @param arrow DELETE THIS
+     * @param colliding_Orthogonal_F parsed to boolean
+     * @param colliding_Parallel_B parsed to boolean
+     * @param a DELETE THIS
+     * @param randomCol Color.valueOf
+     * @param randomSeed  parsed to double
+     * @param strokeColor Color.valueOf
+     */
     public Ball(String initialTotE_c, String totE_c, String potE_c, String kinE_c, String lostE_c, String posVec,
                 String velVec, String vel0Vec, String accVec, String frcVec, String rolVec, String arrow,
                 String colliding_Orthogonal_F, String colliding_Parallel_B, String a, String randomCol, String randomSeed,
@@ -116,7 +137,18 @@ public class Ball extends Ellipse {
         this.randomCol = Color.valueOf(randomCol);
         this.randomSeed = Double.parseDouble(randomSeed);
         this.strokeColor = Color.valueOf(strokeColor);
-        addMouseMoved();
+        this.mass = new SimpleDoubleProperty(MASS);
+        this.radius = new SimpleDoubleProperty(RADIUS);
+        this.elasticity = new SimpleDoubleProperty(DEFAULT_ELASTICITY);
+        this.totE = new SimpleDoubleProperty();
+        this.potE = new SimpleDoubleProperty();
+        this.kinE = new SimpleDoubleProperty();
+        this.lostE = new SimpleDoubleProperty();
+        this.setFill(this.randomCol);
+        this.setStroke(this.strokeColor);
+        this.setStrokeWidth(5);
+        this.colliding_Orthogonal_F = false;
+        this.toBack();
     }
 
     /**
@@ -393,6 +425,7 @@ public class Ball extends Ellipse {
                  + ",,a: " + a.toString()
                  + ",,randomCol: " + randomCol.toString()
                  + ",,randomSeed: " + randomSeed
-                 + ",,strokeColor: " + strokeColor.toString();
+                 + ",,strokeColor: " + strokeColor.toString()
+                 + ",,ball :" + number;
     }
 }
