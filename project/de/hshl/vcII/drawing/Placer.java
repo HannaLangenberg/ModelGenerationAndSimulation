@@ -8,6 +8,7 @@ import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.mvc.MainModel;
 import javafx.scene.input.MouseEvent;
+import project.de.hshl.vcII.mvc.SettingsController;
 import project.de.hshl.vcII.utils.MyVector;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class Placer {
     private MainModel mainWindowModel = MainModel.get();
     private double epsilon = 5;
     private MyVector s_t_parameters;
+    SettingsController settingsController = new SettingsController();
 
 
     private double x, y, xStart, yStart, xEnd, yEnd;
@@ -102,10 +104,14 @@ public class Placer {
                 mainWindowModel.getBallManager().addBall(ball);
                 mainWindowModel.getADrawingPane().getChildren().add(ball);
                 mainWindowModel.setCurrentlySelected(ball);
+                Calculator.calcInitial_TotalEnergy(ball);
+                settingsController.updateParams();
             } else {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, snapBallOnWall(null, ball, new MyVector(x,y))));
+                Calculator.calcInitial_TotalEnergy(ball);
+                settingsController.updateParams();
             }
         } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
             wall = (Wall) mainWindowModel.getCurrentlySelected();

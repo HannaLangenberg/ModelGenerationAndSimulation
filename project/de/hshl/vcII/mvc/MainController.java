@@ -160,12 +160,9 @@ public class MainController implements Initializable {
     // Is called whenever the 'Start/Stop' button is clicked.
     @FXML
     private void run(){
-        // check all TextFields for values
-        settingsController.updateParams();
         //settingsController.fillVariables();
         if (firstTime) {
             settingsController.setV0();
-            Calculator.calcInitial_TotalEnergy();
             firstTime = false;
         }
         if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();

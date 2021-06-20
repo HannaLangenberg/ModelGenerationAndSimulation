@@ -19,7 +19,8 @@ public class Collision {
         if(b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e
                 || b.getPosVec().y < b.getRadius() + e
                 || b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e
-                || b.getPosVec().x < b.getRadius() + e) {
+                || b.getPosVec().x < b.getRadius() + e)
+        {
             b.setColliding_Parallel_B(true);
         }
 
@@ -29,9 +30,33 @@ public class Collision {
             // Gegen Boden → Bouncen irgendwann verbieten
             // Beides mit Energieverlust
 
+            if ((b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)
+                    || (b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
+                b.setVelVec(new MyVector(-b.getVelVec().x * b.getElasticity(), b.getVelVec().y)); // Energieverlust
+            }
 
-            if((b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
-                dp = new MyVector(MainModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
+            if ((b.getPosVec().y < b.getRadius() + e) & (b.getVelVec().y < 0)) {
+                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
+            }
+
+            if ((b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
+                b.setVelVec(new MyVector(b.getVelVec().x, -b.getVelVec().y * b.getElasticity())); // Energieverlust
+                if (Math.abs(b.getVelVec().y) < Utils.CONSTANT_OF_GRAVITATION / 3) {
+                    b.setVelVec(new MyVector(b.getVelVec().x, 0));
+                    b.setColliding_Orthogonal_F(true);
+                }
+            }
+            if (b.getVelVec().y == 0 & b.isColliding_Parallel_B()) {
+                b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+            }
+
+            b.setColliding_Parallel_B(false);
+
+
+            /*if ((b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
+                dp = new MyVector(MainModel.get().getADrawingPane().getWidth(), b.getPosVec().y);}*/
+            /*if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
+                dp = new MyVector(MainWindowModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
                 side = 3;
             }
             if((b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
@@ -55,28 +80,30 @@ public class Collision {
             if(side == 0 & !b.isColliding_Orthogonal_F()) {
                 CollisionHandling.stopBouncing(b);
             }
-        }
+        }*/
 
-        if(b.isColliding_Orthogonal_F()) {
-            // Horizontale Ebene → F_G = F_N
-            // F_G = Utils.CONSTANT_OF_GRAVITATION
-            // f_R_R = R_R_K * F_N
-            // a_R = gespiegelte x-Komponente von bVelVec
-            // a_R_R = a_R * f_R_R
+                if (b.isColliding_Orthogonal_F()) {
+                    // Horizontale Ebene → F_G = F_N
+                    // F_G = Utils.CONSTANT_OF_GRAVITATION
+                    // f_R_R = R_R_K * F_N
+                    // a_R = gespiegelte x-Komponente von bVelVec
+                    // a_R_R = a_R * f_R_R
 
-            double f_R_R = b.getRolVec().x * Utils.CONSTANT_OF_GRAVITATION;
-            if(Math.abs(b.getVelVec().x) < 2.5)
-            {
-                b.setVelVec(new MyVector(0, b.getVelVec().y));
-                b.setColliding_Orthogonal_F(false);
+                    double f_R_R = b.getRolVec().x * Utils.CONSTANT_OF_GRAVITATION;
+                    if (Math.abs(b.getVelVec().x) < 2.5) {
+                        b.setVelVec(new MyVector(0, b.getVelVec().y));
+                        b.setColliding_Orthogonal_F(false);
+                    } else {
+                        b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(new MyVector(-b.getVelVec().x, 0), f_R_R)));
+                    }
+                }
             }
-            b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(new MyVector(-b.getVelVec().x, 0), f_R_R)));
-        }
+
     }
 
     public static void reset() {
         dp = new MyVector(0,0);
-        side = 0;
+        side = 4;
     }
 
     /**
