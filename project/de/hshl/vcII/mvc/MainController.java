@@ -1,8 +1,6 @@
 package project.de.hshl.vcII.mvc;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -17,15 +15,11 @@ import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 
 import project.de.hshl.vcII.mvc.view.ResizePane;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import project.de.hshl.vcII.utils.IO;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
@@ -98,7 +92,7 @@ public class MainController implements Initializable {
     // A second controller for better overview
     private CurrentParamsController currentParamsController = new CurrentParamsController();
     private SettingsController settingsController = new SettingsController();
-    private CustonHeaderController custonHeaderController = new CustonHeaderController();
+    private CustomHeaderController custonHeaderController = new CustomHeaderController();
     // Declaration of original model.
     private MainModel mainWindowModel;
 
@@ -465,5 +459,15 @@ public class MainController implements Initializable {
     public void cb_choose(String s) {
         if(cb_choose.getValue() == null) return;
         mainWindowModel.getKeyManager().choose(s);
+    }
+
+    @FXML
+    public void selectBall_onAction(ActionEvent actionEvent) {
+        Ball b = (Ball) tv_ball_params.getSelectionModel().getSelectedItem();
+        mainWindowModel.getKeyManager().unMarkAll();
+        mainWindowModel.setCurrentlySelected(b);
+        mainWindowModel.getKeyManager().mark(b);
+        mainWindowModel.getBallManager().setB(b);
+        mainWindowModel.setChoiceMade(true);
     }
 }

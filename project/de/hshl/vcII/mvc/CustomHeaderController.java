@@ -13,7 +13,7 @@ import project.de.hshl.vcII.mvc.view.ResizePane;
 
 import java.awt.*;
 
-public class CustonHeaderController {
+public class CustomHeaderController {
     private MainModel mainModel = MainModel.get();
 
     private AnchorPane aSettingsPane;
