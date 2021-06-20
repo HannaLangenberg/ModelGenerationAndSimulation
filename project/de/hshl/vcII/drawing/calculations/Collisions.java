@@ -5,7 +5,7 @@ import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
-public class Collision {
+public class Collisions {
     static int side;
     static MyVector dp;
 

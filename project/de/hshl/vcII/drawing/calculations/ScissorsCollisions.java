@@ -185,7 +185,7 @@ public class ScissorsCollisions {
         vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
         vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-        b.setVelVec(MyVector.add(vOrthogonal, Collision.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5)));
+        b.setVelVec(MyVector.add(vOrthogonal, Collisions.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5)));
 //        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
 
     }

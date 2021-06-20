@@ -3,7 +3,6 @@ package project.de.hshl.vcII.drawing.calculations;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.utils.MyVector;
-import project.de.hshl.vcII.utils.Utils;
 
 /**
  * Klasse für Ball gegen Wand Kollisionen
@@ -103,7 +102,7 @@ public class WallCollisions {
             reset();
             WallCalculations.reset();
             CollisionHandling.reset();
-            Collision.reset();
+            Collisions.reset();
         }
     }
 

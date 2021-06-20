@@ -23,7 +23,7 @@ public class Movement {
 
     public static void checkCollisions(Ball b, double epsilon) {
         // Check if ball hits screen bounds
-        Collision.checkScreen(b, epsilon);
+        Collisions.checkScreen(b, epsilon);
 
         // Check if ball hits wall
         List<Wall> walls = MainModel.get().getWallManager().getWalls();

@@ -64,7 +64,7 @@ public class BallCollisions {
      * This way we do not have to switch the parallel component's direction manually before adding them back up, as they
      * directly are pointed in the correct direction.
      *
-     * During setting of the new velVecs {@link Collision#centerShock(MyVector, double, MyVector, double)} is called.
+     * During setting of the new velVecs {@link Collisions#centerShock(MyVector, double, MyVector, double)} is called.
      * This method takes the balls' masses into account and returnes the updated parallel components.
      *
      * @param b1      current ball
@@ -92,8 +92,8 @@ public class BallCollisions {
 
         //-------Set-values---------------------------------------------------------------------------------------------
         if (MyVector.insertPintoEquation(b1.getPosVec(), MyVector.norm(v1Parallel), contactPoint) >= 0 || MyVector.insertPintoEquation( b2.getPosVec(), MyVector.norm(v2Parallel), contactPoint) >= 0 ) {
-            b1.setVelVec(MyVector.add(v1Orthogonal, MyVector.multiply(Collision.centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass()), b1.getElasticity())));
-            b2.setVelVec(MyVector.add(v2Orthogonal, MyVector.multiply(Collision.centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass()), b2.getElasticity())));
+            b1.setVelVec(MyVector.add(v1Orthogonal, MyVector.multiply(Collisions.centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass()), b1.getElasticity())));
+            b2.setVelVec(MyVector.add(v2Orthogonal, MyVector.multiply(Collisions.centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass()), b2.getElasticity())));
         }
         /*
         if (true) {
