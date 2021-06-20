@@ -1,8 +1,6 @@
 package project.de.hshl.vcII.mvc;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -10,28 +8,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
-import project.de.hshl.vcII.KeyManager;
-import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
 
 import project.de.hshl.vcII.mvc.view.ResizePane;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import project.de.hshl.vcII.utils.IO;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
 import java.awt.*;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -97,7 +88,7 @@ public class MainController implements Initializable {
     // A second controller for better overview
     private CurrentParamsController currentParamsController = new CurrentParamsController();
     private SettingsController settingsController = new SettingsController();
-    private CustonHeaderController custonHeaderController = new CustonHeaderController();
+    private CustomHeaderController custonHeaderController = new CustomHeaderController();
     // Declaration of original model.
     private MainModel mainWindowModel;
 
