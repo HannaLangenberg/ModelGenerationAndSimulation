@@ -15,7 +15,6 @@ public class Collision {
         * Ist colliding_Bounce true muss der Energieverlust auf die parallele Komponente angewendet werden
         * Ist colliding_Friction true muss die (Roll-) Reibung auf die orthogonale Komponente angewendet werden
         * */
-
         if(b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e
                 || b.getPosVec().y < b.getRadius() + e
                 || b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e

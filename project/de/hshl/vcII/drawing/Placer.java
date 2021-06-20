@@ -2,7 +2,7 @@ package project.de.hshl.vcII.drawing;
 
 import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.drawing.calculations.WallCalculations;
-import project.de.hshl.vcII.drawing.calculations.WallCollision;
+import project.de.hshl.vcII.drawing.calculations.WallCollisions;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -53,7 +53,7 @@ public class Placer {
                 }
                 else {
                     s_t_parameters = WallCalculations.calc_s_t_Parameters(wall, mouse);
-                    if(WallCollision.checkBallPlacement(wall, b, s_t_parameters, epsilon)) {
+                    if(WallCollisions.checkBallPlacement(wall, b, s_t_parameters, epsilon)) {
                         return Calculator.getDroppedPerpendicular().y - b.getRadius() - epsilon/2;
                     }
                     else

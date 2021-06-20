@@ -124,7 +124,6 @@ public class ScissorsCollisions {
             deflect_Static(b, 2);
     }
 
-
     private static int checkClosest(Ball b) {
         if(ScissorsCalculations.f == 0.5)
             return 2;                               // Collision on both blades

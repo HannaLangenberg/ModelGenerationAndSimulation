@@ -65,7 +65,7 @@ import project.de.hshl.vcII.utils.Utils;
  *          6) UL:          -1-r-e <= s <= -1      &         1 <= t <= 1+r+e
  *          7) UR:               1 <= s <= 1+r+e   &         1 <= t <= 1+r+e
  * */
-public class WallCollision {
+public class WallCollisions {
     static double s;
     static double t;
     private static boolean collision_onEdge;
