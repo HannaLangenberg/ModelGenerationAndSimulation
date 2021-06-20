@@ -96,10 +96,10 @@ public class Ball extends Ellipse {
 
     /**
      * Used by the load function
-     * @param initialTotE_c parsed to double
-     * @param totE_c parsed to double
-     * @param potE_c parsed to double
-     * @param kinE_c parsed to double
+     * @param initialTotE parsed to double
+     * @param totE parsed to double
+     * @param potE parsed to double
+     * @param kinE parsed to double
      * @param lostE_c parsed to double
      * @param posVec parsed to MYVector
      * @param velVec parsed to MYVector
@@ -115,15 +115,19 @@ public class Ball extends Ellipse {
      * @param randomSeed  parsed to double
      * @param strokeColor Color.valueOf
      */
-    public Ball(String initialTotE_c, String totE_c, String potE_c, String kinE_c, String lostE_c, String posVec,
+    public Ball(String initialTotE, String totE, String potE, String kinE, String lostE, String posVec,
                 String velVec, String vel0Vec, String accVec, String frcVec, String rolVec, String arrow,
                 String colliding_Orthogonal_F, String colliding_Parallel_B, String a, String randomCol, String randomSeed,
-                String strokeColor){
-        this.initialTotE_c = Double.parseDouble(initialTotE_c);
-        this.totE_c = Double.parseDouble(totE_c);
-        this.potE_c = Double.parseDouble(potE_c);
-        this.kinE_c = Double.parseDouble(kinE_c);
-        this.lostE_c = Double.parseDouble(lostE_c);
+                String strokeColor, String radius, String mass, String elasticity){
+        this.totE = new SimpleDoubleProperty(Double.parseDouble(totE));
+        this.potE = new SimpleDoubleProperty(Double.parseDouble(potE));
+        this.kinE = new SimpleDoubleProperty(Double.parseDouble(kinE));
+        this.lostE = new SimpleDoubleProperty(Double.parseDouble(lostE));
+        this.initialTotE_c = Double.parseDouble(initialTotE);
+        this.totE_c = Double.parseDouble(totE);
+        this.potE_c = Double.parseDouble(potE);
+        this.kinE_c = Double.parseDouble(kinE);
+        this.lostE_c = Double.parseDouble(lostE);
         this.posVec = new MyVector(posVec);
         this.vel0Vec = new MyVector(vel0Vec);
         this.velVec = new MyVector(velVec);
@@ -138,12 +142,11 @@ public class Ball extends Ellipse {
         this.randomSeed = Double.parseDouble(randomSeed);
         this.strokeColor = Color.valueOf(strokeColor);
         this.mass = new SimpleDoubleProperty(MASS);
+        setMass(Double.parseDouble(mass));
         this.radius = new SimpleDoubleProperty(RADIUS);
+        setRadius(Double.parseDouble(radius));
         this.elasticity = new SimpleDoubleProperty(DEFAULT_ELASTICITY);
-        this.totE = new SimpleDoubleProperty();
-        this.potE = new SimpleDoubleProperty();
-        this.kinE = new SimpleDoubleProperty();
-        this.lostE = new SimpleDoubleProperty();
+        setElasticity(Double.parseDouble(elasticity));
         this.setFill(this.randomCol);
         this.setStroke(this.strokeColor);
         this.setStrokeWidth(5);
@@ -409,10 +412,10 @@ public class Ball extends Ellipse {
     //_SAVE_____________________________________________________________________________________________________________
     public String save(){
         return ";initialTotE_c: " + initialTotE_c
-                 + ",,totE_c: " + totE_c
-                 + ",,potE_c: " + potE_c
-                 + ",,kinE_c: " + kinE_c
-                 + ",,lostE_c: " + lostE_c
+                 + ",,totE: " + totE.getValue()
+                 + ",,potE: " + potE.getValue()
+                 + ",,kinE: " + kinE.getValue()
+                 + ",,lostE: " + lostE.getValue()
                  + ",,posVec: " + posVec.toString()
                  + ",,velVec: " + velVec.toString()
                  + ",,vel0Vec: " + vel0Vec.toString()
@@ -426,6 +429,9 @@ public class Ball extends Ellipse {
                  + ",,randomCol: " + randomCol.toString()
                  + ",,randomSeed: " + randomSeed
                  + ",,strokeColor: " + strokeColor.toString()
+                 + ",,radius: " + radius.getValue()
+                 + ",,mass: " + mass.getValue()
+                 + ",,elasticity: " + elasticity.getValue()
                  + ",,ball :" + number;
     }
 }

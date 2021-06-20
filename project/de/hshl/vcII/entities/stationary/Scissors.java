@@ -10,6 +10,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Rotate;
 import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
 
 public class Scissors {
     private Rectangle rectangle;
@@ -28,6 +29,31 @@ public class Scissors {
     private double spin;
     private int orientation;
     private boolean closing = false;
+
+    public Scissors(String outline, String leftline, String rightline, String group, String pos, String centerPoint,
+                    String crossingPoint, String llStart, String llStart_angle, String llEnd, String rlStart, String rlStart_angle,
+                    String rlEnd, String upperLeft, String lowerLeft, String upperRight, String lowerRight, String angle) {
+
+        this.rectangle = Utils.constructRectFromString(outline);
+        this.leftLine = Utils.constructLineFromString(leftline);
+        this.rightLine = Utils.constructLineFromString(rightline);
+        this.g = new Group();
+        g.getChildren().addAll(this.rectangle, this.leftLine, this.rightLine);
+        this.posVec = new MyVector(pos);
+        this.centerPoint = new MyVector(centerPoint);
+        this.crossingPoint = new MyVector(crossingPoint);
+        this.llStart = new MyVector(llStart);
+        this.llStart_angle = new MyVector(llStart_angle);
+        this.llEnd = new MyVector(llEnd);
+        this.rlStart = new MyVector(rlStart);
+        this.rlStart_angle = new MyVector(rlStart_angle);
+        this.rlEnd = new MyVector(rlEnd);
+        Scissors.lowerRight = new MyVector(lowerRight);
+        Scissors.lowerLeft = new MyVector(lowerLeft);
+        Scissors.upperRight = new MyVector(upperRight);
+        Scissors.upperLeft = new MyVector(upperLeft);
+        Scissors.angle = Double.parseDouble(angle);
+    }
 
     public Scissors() {
         rectangle = new Rectangle();
@@ -301,6 +327,6 @@ public class Scissors {
                 + ",,upperRight: " + upperRight.toString()
                 + ",,lowerRight: " + lowerRight.toString()
                 + ",,angle: " + angle
-                + ",,scissors ";
+                + ",,scissors :";
     }
 }

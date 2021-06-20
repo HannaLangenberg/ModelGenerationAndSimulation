@@ -209,6 +209,8 @@ public class MainController implements Initializable {
     @FXML
     private void load(){
         IO.load();
+        settingsController.updateParams();
+        btn_start_stop.setDisable(false);
     }
 
     // Is called whenever 'Ball' is clicked in the 'Edit' menu.

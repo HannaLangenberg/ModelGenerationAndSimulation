@@ -5,8 +5,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -35,35 +35,19 @@ public class Wall {
         orientation = 2;
     }
 
-    public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String number, String orientation) {
+    public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String orientation) {
         this.texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream(texture)));
-        this.collision = constructRectFromString(collision);
+        this.collision = Utils.constructRectFromString(collision);
         this.posVec = new MyVector(posVec);
         this.e_alpha = Double.parseDouble(e_alpha);
         this.spin = Double.parseDouble(spin);
-        System.out.println("spin (String): " + spin + " spin (double): " + getSpin());
-        this.number = Integer.parseInt(number);
         this.orientation = Integer.parseInt(orientation);
+        this.collision.setRotate(Double.parseDouble(spin));
         viewTexture = new ImageView(texture);
+        viewTexture.setRotate(Double.parseDouble(spin));
     }
 
-    private Rectangle constructRectFromString(String stringRect) {
-        Rectangle rect;
-
-        String sRect = stringRect.replace("Rectangle", "");
-        sRect = sRect.replace("[", "");
-        sRect = sRect.replace("]", "");
-        String[] params = sRect.split(", ");
-        double[] rawRect = new double[4];
-        for(int i = 0; i < 4; i++){
-            rawRect[i] = Double.parseDouble(params[i].split("=")[1]);
-        }
-        rect = new Rectangle(rawRect[0], rawRect[1], rawRect[2], rawRect[3]);
-
-        return rect;
-    }
-
-    //_GETTER_ AND_SETTER_______________________________________________________________________________________________
+    //_GETTER_AND_SETTER________________________________________________________________________________________________
     public Rectangle getCollision(){
         return collision;
     }
@@ -119,13 +103,14 @@ public class Wall {
                 + ") -- rotation: " + this.spin + " -- bounding box: " + this.collision.toString();
     }*/
 
+    //_SAVE_____________________________________________________________________________________________________________
     public String save(){
         return ";texture: " + texture.getUrl()
                 + ",,collision: " + collision.toString()
                 + ",,posVec: " + posVec.toString()
                 + ",,e_alpha: " + e_alpha
                 + ",,spin: " + spin
-                + ",,wall : " + number
-                + ",,orientation: " + orientation;
+                + ",,orientation: " + orientation
+                + ",,wall :";
     }
 }
