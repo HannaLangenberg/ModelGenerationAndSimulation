@@ -120,7 +120,6 @@ public class KeyManager {
             if (strings[0].equals("Ball")) {
                 for (Ball b : mainWindowModel.getBallManager().getBalls()) {
                     if ((b.getNumber() + "").equals(strings[2])) {
-                        unMark();
                         mainWindowModel.setCurrentlySelected(b);
                         mark(b);
                         mainWindowModel.getBallManager().setB(b);
@@ -129,7 +128,6 @@ public class KeyManager {
             } else if (strings[0].equals("Wand")) {
                 for (Wall w : mainWindowModel.getWallManager().getWalls()) {
                     if ((w.getNumber() + "").equals(strings[2])) {
-                        unMark();
                         mainWindowModel.setCurrentlySelected(w);
                         mark(w);
                         mainWindowModel.getWallManager().setW(w);
@@ -155,7 +153,7 @@ public class KeyManager {
     }
 
     // Helper
-    private void mark(Object o){
+    public void mark(Object o){
         if(o instanceof Ball) {
             ((Ball) o).setStrokeType(StrokeType.OUTSIDE);
             ((Ball) o).setStrokeWidth(2);

@@ -58,11 +58,10 @@ public class Calculator {
         calcPotentialEnergy(b);
         calcKineticEnergy(b);
         initial_TotE = totE = potE + kinE;
-        calcLostEnergy(b);
         b.setTotE(Math.round(initial_TotE));
         b.setTotE_c(initial_TotE);
         b.setInitialTotE_c(initial_TotE);
-
+        calcLostEnergy(b);
     }
 
     /**

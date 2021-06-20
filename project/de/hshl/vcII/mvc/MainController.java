@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
+import project.de.hshl.vcII.KeyManager;
 import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
@@ -464,5 +465,15 @@ public class MainController implements Initializable {
     public void cb_choose(String s) {
         if(cb_choose.getValue() == null) return;
         mainWindowModel.getKeyManager().choose(s);
+    }
+
+    @FXML
+    public void selectBall_onAction(ActionEvent actionEvent) {
+        Ball b = (Ball) tv_ball_params.getSelectionModel().getSelectedItem();
+        mainWindowModel.getKeyManager().unMarkAll();
+        mainWindowModel.setCurrentlySelected(b);
+        mainWindowModel.getKeyManager().mark(b);
+        mainWindowModel.getBallManager().setB(b);
+        mainWindowModel.setChoiceMade(true);
     }
 }
