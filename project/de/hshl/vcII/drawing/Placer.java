@@ -131,12 +131,12 @@ public class Placer {
      * Ussed for the load function
      * @param posVec
      */
-    public void place(MyVector posVec) {
+    public void place(Object o, MyVector posVec) {
         x = posVec.x;;
         y = posVec.y;
 
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
-            ball = (Ball) mainWindowModel.getCurrentlySelected();
+        if(o instanceof Ball) {
+            ball = (Ball) o;
             if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
@@ -150,8 +150,8 @@ public class Placer {
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, snapBallOnWall(null, ball, new MyVector(x,y))));
             }
-        } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
-            wall = (Wall) mainWindowModel.getCurrentlySelected();
+        } else if(o instanceof Wall) {
+            wall = (Wall) o;
             if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, y));
                 wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);

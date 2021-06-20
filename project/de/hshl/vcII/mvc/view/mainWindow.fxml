@@ -316,7 +316,7 @@
                                     <HBox prefHeight="28.0" prefWidth="239.0">
                                        <children>
                                           <Region HBox.hgrow="ALWAYS" />
-                                          <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" onAction="#btn_showCurrentParams_OnAction" text="Zeige aktuelle Parameter" />
+                                          <Button fx:id="btn_showCurrentParams" mnemonicParsing="false" text="Zeige aktuelle Parameter" />
                                           <Region HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
