@@ -76,16 +76,30 @@ public class BallCollisions {
         MyVector nCL = MyVector.norm(MyVector.subtract(b1.getPosVec(), b2.getPosVec()));
         // Find the orthogonal velocity vector of b1 and the parallel velocity vector of b2
         MyVector v1Orthogonal = Calculator.calc_O_component(nCL, b1);
-        MyVector v2Parallel   = Calculator.calc_P_component(nCL, b2);
-
-        // Switch nCL's orientation
-        nCL = MyVector.multiply(nCL, -1);
-
         MyVector v2Orthogonal = Calculator.calc_O_component(nCL, b2);
         MyVector v1Parallel   = Calculator.calc_P_component(nCL, b1);
+        MyVector v2Parallel   = Calculator.calc_P_component(nCL, b2);
+
+        MyVector contactPoint = MyVector.insertScalingFactorIntoEquation(b1.getPosVec(), MyVector.subtract(b1.getPosVec(), b2.getPosVec()), 1.0/2);
+
+        // Switch nCL's orientation
+        /*nCL = MyVector.multiply(nCL, -1);
+
+        v1Orthogonal = Calculator.calc_O_component(nCL, b1);
+        v2Orthogonal = Calculator.calc_O_component(nCL, b2);
+         v1Parallel   = Calculator.calc_P_component(nCL, b1);
+         v2Parallel   = Calculator.calc_P_component(nCL, b2);*/
 
         //-------Set-values---------------------------------------------------------------------------------------------
-        b1.setVelVec(MyVector.add(v1Orthogonal, Collision.centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass())));
-        b2.setVelVec(MyVector.add(v2Orthogonal, Collision.centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass())));
+        if (MyVector.insertPintoEquation(b1.getPosVec(), MyVector.norm(v1Parallel), contactPoint) >= 0 || MyVector.insertPintoEquation( b2.getPosVec(), MyVector.norm(v2Parallel), contactPoint) >= 0 ) {
+            b1.setVelVec(MyVector.add(v1Orthogonal, MyVector.multiply(Collision.centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass()), b1.getElasticity())));
+            b2.setVelVec(MyVector.add(v2Orthogonal, MyVector.multiply(Collision.centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass()), b2.getElasticity())));
+        }
+        /*
+        if (true) {
+            b1.setVelVec(MyVector.add(v1Orthogonal, Collision.centerShock(v1Parallel, b1.getMass(), v2Parallel, b2.getMass())));
+            b2.setVelVec(MyVector.add(v2Orthogonal, Collision.centerShock(v2Parallel, b2.getMass(), v1Parallel, b1.getMass())));
+        }
+        */
     }
 }

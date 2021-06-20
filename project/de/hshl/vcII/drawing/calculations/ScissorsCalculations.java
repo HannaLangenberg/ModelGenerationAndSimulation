@@ -25,7 +25,7 @@ public class ScissorsCalculations {
          a_onLambdaBlade = calcDroppedPerpendicular(s, a, s.getLlStart());
          a_onRhoBlade    = calcDroppedPerpendicular(s, a, s.getRlStart());
         // ball schnittpunkt zwischen 0 und 1 innen
-        f = MyVector.applyVectorEquation(a_onLambdaBlade, MyVector.subtract(a_onLambdaBlade, a_onRhoBlade), b.getPosVec());
+        f = MyVector.insertPintoEquation(a_onLambdaBlade, MyVector.subtract(a_onLambdaBlade, a_onRhoBlade), b.getPosVec());
 
         if(f >= 0 & f <= 1)
             return true;

@@ -54,16 +54,15 @@ public class Calculator {
     /**
      * Calculates the total Energy at the start using the formula: totE0 = potE + kinE.
      */
-    public static void calcInitial_TotalEnergy() {
-        for (Ball b : MainModel.get().getBallManager().getBalls()) {
-            calcPotentialEnergy(b);
-            calcKineticEnergy(b);
-            initial_TotE = totE = potE + kinE;
-            calcLostEnergy(b);
-            b.setTotE(Math.round(initial_TotE));
-            b.setTotE_c(initial_TotE);
-            b.setInitialTotE_c(initial_TotE);
-        }
+    public static void calcInitial_TotalEnergy(Ball b) {
+        calcPotentialEnergy(b);
+        calcKineticEnergy(b);
+        initial_TotE = totE = potE + kinE;
+        calcLostEnergy(b);
+        b.setTotE(Math.round(initial_TotE));
+        b.setTotE_c(initial_TotE);
+        b.setInitialTotE_c(initial_TotE);
+
     }
 
     /**

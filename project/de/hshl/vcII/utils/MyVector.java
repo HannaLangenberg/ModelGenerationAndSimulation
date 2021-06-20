@@ -12,7 +12,7 @@
      }
 
         /**
-         * used for the load funtion
+         * used for the load function
          * @param xy only accepted format: "(x/y)"
          */
      public MyVector(String xy){
@@ -58,7 +58,7 @@
     }
 
     // Construct and apply a variable Vector
-    public static double applyVectorEquation(MyVector ov, MyVector rv, MyVector p) {
+    public static double insertPintoEquation(MyVector ov, MyVector rv, MyVector p) {
         // ov + s * rv
         double s = (p.x - ov.x)/(rv.x);
 //        double sy = (p.y - ov.y)/(rv.y);
@@ -66,12 +66,11 @@
         {
             s = (p.y - ov.y)/(rv.y);
         }
-        /*if(Double.isNaN(sy))
-        {
-            sy = s;
-        }
-        if(s == sy)*/
         return s;
+    }
+
+    public static MyVector insertScalingFactorIntoEquation(MyVector ov, MyVector rv, double s) {
+        return MyVector.add(ov, MyVector.multiply(rv, s));
     }
 
     // Calculate the orthogonal projection between given vector and shock normal
@@ -103,6 +102,19 @@
         }
 
         return new MyVector(x,y);
+    }
+
+    public static int collinearity(MyVector v1, MyVector v2) {
+        int c = 0; // default not collinear dependent
+        double a = v2.x/v1.x;
+        double b = v2.y/v1.y;
+        if ((v2.x / v1.x) == (v2.y / v1.y)) {
+            if((v2.x / v1.x) >= 0)
+                c = 2; // scaling factor positive
+            if((v2.x / v1.x) <= 0)
+                c = 1; // scaling factor negative
+        }
+        return  c;
     }
 
     // Method for subtracting two 2D vectors from each other.
