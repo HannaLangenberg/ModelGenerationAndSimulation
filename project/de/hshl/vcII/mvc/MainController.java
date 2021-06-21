@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
@@ -28,6 +29,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -201,9 +203,9 @@ public class MainController implements Initializable {
     // Is called whenever 'save' is clicked in the 'File' menu.
     @FXML
     private void save(){
-        FileChooser fileChooser = new FileChooser() ;
-        System.out.println((getClass().getResource("/res")));
-        fileChooser.setInitialDirectory(new File(String.valueOf(getClass().getResource("/res"))));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("source/res/saves"));;
+        fileChooser.setTitle("Speichere die aktuelle Szene:");
         File save = fileChooser.showSaveDialog(aRootPane.getScene().getWindow());
         IO.save(save);
     }
@@ -211,6 +213,7 @@ public class MainController implements Initializable {
     @FXML
     private void load(){
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("source/res/saves"));
         fileChooser.setTitle("Wähle eine zuvor gespeicherte Datein aus:");
         File file = fileChooser.showOpenDialog(aRootPane.getScene().getWindow());
         IO.load(file);
