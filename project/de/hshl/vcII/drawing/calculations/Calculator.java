@@ -5,6 +5,7 @@ import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
+
 /**
  * This class is responsible for general calculations.
  *
@@ -58,7 +59,7 @@ public class Calculator {
         calcPotentialEnergy(b);
         calcKineticEnergy(b);
         initial_TotE = totE = potE + kinE;
-        b.setTotE(Math.round(initial_TotE));
+        b.setTotE(Math.round(initial_TotE* 100) / 100.0);
         b.setTotE_c(initial_TotE);
         b.setInitialTotE_c(initial_TotE);
         calcLostEnergy(b);
@@ -74,7 +75,7 @@ public class Calculator {
             calcLostEnergy(b);
 
             totE = potE + kinE + lostE;
-            b.setTotE(Math.round(totE));
+            b.setTotE(Math.round(totE* 100) / 100.0);
             b.setTotE_c(totE);
         }
     }
@@ -86,7 +87,7 @@ public class Calculator {
     private static void calcPotentialEnergy(Ball b) {
         // potE = m * g * h
         potE = b.getMass() * Utils.CONSTANT_OF_GRAVITATION * (MainModel.get().getADrawingPane().getHeight() - b.getPosVec().y);
-        b.setPotE(Math.round(potE));
+        b.setPotE(Math.round(potE* 100) / 100.0);
         b.setPotE_c(potE);
     }
 
@@ -96,7 +97,7 @@ public class Calculator {
      */
     private static void calcKineticEnergy(Ball b) {
         kinE = (b.getMass() * Math.pow(MyVector.length(b.getVelVec()), 2))/2;
-        b.setKinE(Math.round(kinE));
+        b.setKinE(Math.round(kinE* 100) / 100.0);
         b.setKinE_c(kinE);
     }
 
@@ -106,7 +107,7 @@ public class Calculator {
      */
     private static void calcLostEnergy(Ball b) {
         lostE = b.getInitialTotE_c() - potE - kinE;
-        b.setLostE(Math.round(lostE));
+        b.setLostE(Math.round(lostE * 100) / 100.0);
         b.setLostE_c(lostE);
     }
 

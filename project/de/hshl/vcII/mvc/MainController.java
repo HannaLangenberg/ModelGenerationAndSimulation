@@ -175,7 +175,7 @@ public class MainController implements Initializable {
         } else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
-//            settingsController.showCurrentParams();
+            //settingsController.updateParams();
         }
     }
 
@@ -214,7 +214,7 @@ public class MainController implements Initializable {
     private void load(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("source/res/saves"));
-        fileChooser.setTitle("Wähle eine zuvor gespeicherte Datein aus:");
+        fileChooser.setTitle("Wähle eine zuvor gespeicherte Datei aus: ");
         File file = fileChooser.showOpenDialog(aRootPane.getScene().getWindow());
         IO.load(file);
         settingsController.updateParams();

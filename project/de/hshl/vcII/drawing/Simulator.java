@@ -7,6 +7,7 @@ import project.de.hshl.vcII.drawing.calculations.ScissorsCollisions;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.mvc.MainModel;
+import project.de.hshl.vcII.mvc.SettingsController;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -18,6 +19,7 @@ public class Simulator {
 
     // MWM for getting the model (and all it's saves).
     private MainModel mainWindowModel = MainModel.get();
+    private SettingsController settingsController = new SettingsController();
 
     // Variable to maintain the simulation.
     private boolean running = false;
@@ -68,7 +70,8 @@ public class Simulator {
             b.draw(mainWindowModel.getADrawingPane());
         }
         if (runSim_called%10 == 0) {
-            Calculator.calcTotalEnergy();
+            //Calculator.calcTotalEnergy();
+            settingsController.updateParams();
         }
     }
 
