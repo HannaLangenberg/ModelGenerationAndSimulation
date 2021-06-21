@@ -8,9 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Polygon;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Scissors;
 import project.de.hshl.vcII.entities.stationary.Wall;
@@ -27,9 +25,7 @@ import project.de.hshl.vcII.utils.Utils;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -94,7 +90,7 @@ public class MainController implements Initializable {
     // A second controller for better overview
     private CurrentParamsController currentParamsController = new CurrentParamsController();
     private SettingsController settingsController = new SettingsController();
-    private CustomHeaderController custonHeaderController = new CustomHeaderController();
+    private CustomHeaderController customHeaderController = new CustomHeaderController();
     // Declaration of original model.
     private MainModel mainWindowModel;
 
@@ -123,14 +119,14 @@ public class MainController implements Initializable {
 
         mainWindowModel.setMainController(this);
 
-        settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
-                lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
         currentParamsController.initialize(lWind, lDt, lGravity, tv_ball_params, tc_Radius, tc_Mass, tc_V, tc_PotE, tc_KinE,
                 tc_LostE, tc_TotE, tc_Elasticity, tc_Pos, tc_No);
-        custonHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane, sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
-                mousePressedInHeader, windowCursorPosX, windowCursorPosY);
-        mainWindowModel.setSettingsController(settingsController);
         mainWindowModel.setCurrentParamsController(currentParamsController);
+        settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
+                lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
+        mainWindowModel.setSettingsController(settingsController);
+        customHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane, sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
+                mousePressedInHeader, windowCursorPosX, windowCursorPosY);
 
         aDrawingPane.getStyleClass().add("anchor-drawing-pane");
 
@@ -149,7 +145,7 @@ public class MainController implements Initializable {
             mainWindowModel.initSettings(aSettingsPane);
             resizePane.initResizeLines();
             resizePane.alignResizeLines();
-            custonHeaderController.draggablePrimaryStage();
+            customHeaderController.draggablePrimaryStage();
             mainWindowModel.getMode().toggleMode(lightMode);
         });
     }
@@ -162,7 +158,7 @@ public class MainController implements Initializable {
     private void run(){
         //settingsController.fillVariables();
         if (firstTime) {
-            settingsController.setV0();
+            //settingsController.setV0();
             tf_v0_X.setDisable(true);
             tf_v0_Y.setDisable(true);
             firstTime = false;
@@ -223,8 +219,6 @@ public class MainController implements Initializable {
         IO.load(file);
         settingsController.updateParams();
         aSettingsPane.setDisable(false);
-        tf_v0_X.setDisable(false);
-        tf_v0_Y.setDisable(false);
         
         btn_start_stop.setDisable(false);
     }
@@ -385,49 +379,49 @@ public class MainController implements Initializable {
     // For CustomHeaderController
     @FXML
     private void minimize() {
-        custonHeaderController.minimize();
+        customHeaderController.minimize();
     }
 
     @FXML
     private void mouseEnteredMinimize(MouseEvent mouseEvent) {
-        custonHeaderController.mouseEnteredMinimize();
+        customHeaderController.mouseEnteredMinimize();
     }
 
     @FXML
     private void mouseExitedMinimize(MouseEvent mouseEvent) {
-        custonHeaderController.mouseExitedMinimize();
+        customHeaderController.mouseExitedMinimize();
     }
 
 
     @FXML
     private void minMax(MouseEvent mouseEvent) {
-        custonHeaderController.minMax();
+        customHeaderController.minMax();
     }
 
     @FXML
     private void mouseEnteredMinMax(MouseEvent mouseEvent) {
-        custonHeaderController.mouseEnteredMinMax();
+        customHeaderController.mouseEnteredMinMax();
     }
 
     @FXML
     private void mouseExitedMinMax(MouseEvent mouseEvent) {
-        custonHeaderController.mouseExitedMinMax();
+        customHeaderController.mouseExitedMinMax();
     }
 
 
     @FXML
     private void exit(MouseEvent mouseEvent) {
-        custonHeaderController.exit();
+        customHeaderController.exit();
     }
 
     @FXML
     private void mouseEnteredExit(MouseEvent mouseEvent) {
-        custonHeaderController.mouseEnteredExit();
+        customHeaderController.mouseEnteredExit();
     }
 
     @FXML
     private void mouseExitedExit(MouseEvent mouseEvent) {
-        custonHeaderController.mouseExitedExit();
+        customHeaderController.mouseExitedExit();
     }
 
     //_KEY_EVENTS_______________________________________________________________________________________________________
@@ -480,5 +474,13 @@ public class MainController implements Initializable {
         mainWindowModel.getKeyManager().mark(b);
         mainWindowModel.getBallManager().setB(b);
         mainWindowModel.setChoiceMade(true);
+    }
+
+    public boolean isFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        this.firstTime = firstTime;
     }
 }

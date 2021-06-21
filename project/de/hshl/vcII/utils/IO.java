@@ -9,6 +9,8 @@ import java.io.*;
 
 public class IO {
     public static void save(File file){
+        if(file == null)
+            return;
         MainModel mainWindowModel = MainModel.get();
         try {
             BufferedWriter bW = new BufferedWriter(new FileWriter(file));
@@ -38,6 +40,8 @@ public class IO {
     }
 
     public static void load(File file){
+        if (file == null)
+            return;
         MainModel mainWindowModel1 = MainModel.get();
         try {
             //_LOAD_GAME_FROM_FILE______________________________________________________________________________________
