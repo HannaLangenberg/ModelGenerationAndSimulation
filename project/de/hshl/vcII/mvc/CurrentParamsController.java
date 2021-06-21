@@ -58,7 +58,6 @@ public class CurrentParamsController {
 
     public void update() {
         Calculator.calcTotalEnergy();
-        lWind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
 
         if(ballObservableList.size() != 0) {
             ballObservableList.clear();
