@@ -66,7 +66,7 @@ public class Calculator {
     }
 
     /**
-     * Calculates the total energy using the formula: totE = potE + kinE + lossE.
+     * Calculates the total energy using the formula: totE = potE + kinE + lostE.
      */
     public static void calcTotalEnergy() {
         for (Ball b : MainModel.get().getBallManager().getBalls()) {

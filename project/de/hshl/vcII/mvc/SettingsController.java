@@ -22,6 +22,8 @@ public class SettingsController {
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     private VBox vb_displayCurrentParams;
     private AnchorPane cRootPane;
+    private final List<Ball> changedBalls = new ArrayList<>();
+
 
     public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
                            Slider sl_Elasticity, Label lCurrentElasticity, TextField tf_Wind_X, TextField tf_Wind_Y,
@@ -107,7 +109,6 @@ public class SettingsController {
         });
     }
     private void initVelocityFields(TextField tf) {
-        List<Ball> changedBalls = new ArrayList<>();
         tf.textProperty().addListener((observableValue, s, t1) -> {
             if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Ball) {
                 if (tf.equals(tf_v0_X)) {
@@ -148,19 +149,7 @@ public class SettingsController {
         tf_v0_X.setText("0");
     }
 
-    public void setV0() {
-        if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Ball) {
-            ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(isDouble(tf_v0_X), isDouble(tf_v0_Y)));
-        }
-
-        if(!mainWindowModel.isChoiceMade()) {
-            for(Ball b : mainWindowModel.getBallManager().getBalls()) {
-                if(MyVector.length(b.getVelVec()) == 0) {
-                    b.setVelVec(new MyVector(isDouble(tf_v0_X), isDouble(tf_v0_Y)));
-                }
-            }
-        }
-
-        updateParams();
+    public List<Ball> getChangedBalls() {
+        return changedBalls;
     }
 }

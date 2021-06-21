@@ -31,7 +31,6 @@ public class CollisionHandling {
         if (Math.abs(vParallel.y) < Utils.CONSTANT_OF_GRAVITATION / 3) {
             b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, 0)));
             b.setColliding_Orthogonal_F(true);
-            //b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
         }
     }
 

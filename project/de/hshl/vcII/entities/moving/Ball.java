@@ -76,7 +76,7 @@ public class Ball extends Ellipse {
         // Haft- und Gleitreibung für Stein auf Holz (i.d.R.)
         // Der maximale Böschungswinkel wäre 41,98°, daher haben wir es skaliert mit 3.75, Bewegung bei ca 13.49°
         setFrcVec(new MyVector(0.24, 0.18));
-        // Rollreibung für Fahrradreifen auf Straße zwei Komponenten, da ein Breich angeben war. 0,002 - 0,004
+        // Rollreibung für Fahrradreifen auf Straße zwei Komponenten, da ein Bereich angeben war. 0,002 - 0,004
         setRolVec(new MyVector(0.002, 0.004));
         this.mass = new SimpleDoubleProperty(mass);
         this.radius = new SimpleDoubleProperty(radius);
@@ -164,7 +164,6 @@ public class Ball extends Ellipse {
                 return;
             }
             String sTooltip = this.toString();
-            //sTooltip = sTooltip.replace(".", "");
             sTooltip = sTooltip.replace(" -- ", "\n");
             tooltip.setText(sTooltip);
             tooltip.setShowDelay(Duration.ZERO);

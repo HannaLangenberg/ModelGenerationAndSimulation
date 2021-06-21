@@ -197,6 +197,7 @@ public class MainController implements Initializable {
         aSettingsPane.setDisable(true);
         tf_v0_X.setDisable(false);
         tf_v0_Y.setDisable(false);
+        mainWindowModel.getSettingsController().getChangedBalls().clear();
         mainWindowModel.getCurrentParamsController().reset();
         firstTime = true;
     }
