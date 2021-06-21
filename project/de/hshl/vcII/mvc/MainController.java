@@ -163,6 +163,8 @@ public class MainController implements Initializable {
         //settingsController.fillVariables();
         if (firstTime) {
             settingsController.setV0();
+            tf_v0_X.setDisable(true);
+            tf_v0_Y.setDisable(true);
             firstTime = false;
         }
         if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
@@ -197,6 +199,8 @@ public class MainController implements Initializable {
         d_play.setVisible(false);
         btn_start_stop.setDisable(true);
         aSettingsPane.setDisable(true);
+        tf_v0_X.setDisable(false);
+        tf_v0_Y.setDisable(false);
         mainWindowModel.getCurrentParamsController().reset();
         firstTime = true;
     }
@@ -219,6 +223,9 @@ public class MainController implements Initializable {
         IO.load(file);
         settingsController.updateParams();
         aSettingsPane.setDisable(false);
+        tf_v0_X.setDisable(false);
+        tf_v0_Y.setDisable(false);
+        
         btn_start_stop.setDisable(false);
     }
 
