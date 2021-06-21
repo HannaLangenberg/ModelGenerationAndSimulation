@@ -175,7 +175,7 @@ public class MainController implements Initializable {
         } else {
             d_play.setVisible(false);
             hb_pause.setVisible(true);
-            //settingsController.updateParams();
+            settingsController.updateParams();
         }
     }
 
