@@ -2,6 +2,7 @@ package project.de.hshl.vcII.mvc;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -148,22 +149,32 @@ public class CustomHeaderController {
     private void hoverFrameControls(StackPane stackPane, boolean hovered) {
         if (hovered) {
             for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                if (stackPane.equals(sExitPane))
+                if (stackPane.equals(sExitPane)) {
                     stackPane.setStyle("-fx-background-color: #cc2b2b");
-                else
-                    stackPane.setStyle("-fx-background-color: #a6a6a6");
+                    for (Node n : stackPane.getChildren()) {
+                        n.setStyle("-fx-stroke: #303030");
+                    }
+                }
+                else {
+                    stackPane.setStyle("-fx-background-color: #dcdcdc");
+                    for (Node n : stackPane.getChildren()) {
+                        n.setStyle("-fx-stroke: #303030");
+                    }
+                }
             }
-            stackPane.setEffect(new Glow(1));
+            stackPane.setEffect(new Glow(0.25));
         }
         else {
             for (int i = 0; i < stackPane.getChildren().size(); i++) {
-                stackPane.setStyle("-fx--background-color: #c9c9c9");
+                stackPane.setStyle("-fx-background-color: transparent");
                 stackPane.getChildren().get(i).setEffect(null);
+                for (Node n : stackPane.getChildren()) {
+                    n.setStyle("-fx-stroke: #a4a4a4");
+                }
             }
             stackPane.setEffect(null);
         }
     }
-
 
     public void minMax() {
         toggleFullScreen();

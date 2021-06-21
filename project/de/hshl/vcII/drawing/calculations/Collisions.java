@@ -51,36 +51,6 @@ public class Collisions {
 
             b.setColliding_Parallel_B(false);
 
-
-            /*if ((b.getPosVec().x > MainModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
-                dp = new MyVector(MainModel.get().getADrawingPane().getWidth(), b.getPosVec().y);}*/
-            /*if((b.getPosVec().x > MainWindowModel.get().getADrawingPane().getWidth() - b.getRadius() - e & b.getVelVec().x > 0)) {
-                dp = new MyVector(MainWindowModel.get().getADrawingPane().getWidth(), b.getPosVec().y);
-                side = 3;
-            }
-            if((b.getPosVec().x < b.getRadius() + e & b.getVelVec().x < 0)) {
-                dp = new MyVector(0, b.getPosVec().y);
-                side = 1;
-            }
-
-
-            if((b.getPosVec().y < b.getRadius() + e) & (b.getVelVec().y < 0)) {
-                dp = new MyVector(b.getPosVec().x, 0);
-                side = 2;
-            }
-
-            if((b.getPosVec().y > MainModel.get().getADrawingPane().getHeight() - b.getRadius() - e) & (b.getVelVec().y > 0)) {
-                dp = new MyVector(b.getPosVec().x, MainModel.get().getADrawingPane().getHeight());
-                side = 0;
-
-            }
-            CollisionHandling.bounceVelocity(b, side, dp);
-
-            if(side == 0 & !b.isColliding_Orthogonal_F()) {
-                CollisionHandling.stopBouncing(b);
-            }
-        }*/
-
                 if (b.isColliding_Orthogonal_F()) {
                     // Horizontale Ebene → F_G = F_N
                     // F_G = Utils.CONSTANT_OF_GRAVITATION

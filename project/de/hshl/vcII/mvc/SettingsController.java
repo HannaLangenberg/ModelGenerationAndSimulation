@@ -9,6 +9,9 @@ import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static project.de.hshl.vcII.utils.Utils.isDouble;
 
 public class SettingsController {
@@ -19,7 +22,6 @@ public class SettingsController {
     private TextField tf_Wind_Y, tf_Wind_X, tf_v0_Y, tf_v0_X;
     private VBox vb_displayCurrentParams;
     private AnchorPane cRootPane;
-    private CurrentParamsController currentParamsController;
 
     public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
                            Slider sl_Elasticity, Label lCurrentElasticity, TextField tf_Wind_X, TextField tf_Wind_Y,
@@ -44,6 +46,9 @@ public class SettingsController {
 
         initWindFields(tf_Wind_X);
         initWindFields(tf_Wind_Y);
+
+        initVelocityFields(tf_v0_X);
+        initVelocityFields(tf_v0_Y);
     }
 
 
@@ -51,9 +56,9 @@ public class SettingsController {
     public void updateParams() {
         if(tf_Wind_X != null & tf_Wind_Y != null) {
             tf_Wind_X.setText(String.valueOf(Math.round(Utils.getWind().x)));
-            tf_Wind_Y.setText(String.valueOf(Math.round(Utils.getWind().x)));
+            tf_Wind_Y.setText(String.valueOf(Math.round(Utils.getWind().y)));
         }
-        MainModel.get().getCurrentParamsController().update();
+        mainWindowModel.getCurrentParamsController().update();
     }
 
 
@@ -91,8 +96,48 @@ public class SettingsController {
 
     private void initWindFields(TextField tf) {
         tf.textProperty().addListener((observableValue, s, t1) -> {
-            Utils.setWind(new MyVector(isDouble(tf_Wind_X), isDouble(tf_Wind_Y)));
-            MainModel.get().getCurrentParamsController().getlWind().setText("(" + tf_Wind_X.getText() + "/" + tf_Wind_Y.getText() + ")");
+            if(tf.equals(tf_Wind_X)) {
+                Utils.setWind(new MyVector(isDouble(tf_Wind_X), Utils.getWind().y));
+                MainModel.get().getCurrentParamsController().getlWind().setText("(" + Utils.getWind().x + "/" + Utils.getWind().y + ")");
+            }
+            else if(tf.equals(tf_Wind_Y)) {
+                Utils.setWind(new MyVector(Utils.getWind().x, isDouble(tf_Wind_Y)));
+                MainModel.get().getCurrentParamsController().getlWind().setText("(" + Utils.getWind().x + "/" + Utils.getWind().y + ")");
+            }
+        });
+    }
+    private void initVelocityFields(TextField tf) {
+        List<Ball> changedBalls = new ArrayList<>();
+        tf.textProperty().addListener((observableValue, s, t1) -> {
+            if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Ball) {
+                if (tf.equals(tf_v0_X)) {
+                    ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(isDouble(tf_v0_X), ((Ball) mainWindowModel.getCurrentlySelected()).getVelVec().y));
+                    ((Ball) mainWindowModel.getCurrentlySelected()).setVel0Vec(new MyVector(isDouble(tf_v0_X), ((Ball) mainWindowModel.getCurrentlySelected()).getVel0Vec().y));
+                }
+                else if(tf.equals(tf_v0_Y)) {
+                    ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(((Ball) mainWindowModel.getCurrentlySelected()).getVelVec().x, isDouble(tf_v0_Y)));
+                    ((Ball) mainWindowModel.getCurrentlySelected()).setVel0Vec(new MyVector(((Ball) mainWindowModel.getCurrentlySelected()).getVel0Vec().x, isDouble(tf_v0_Y)));
+                }
+                    MainModel.get().getCurrentParamsController().update();
+                if (changedBalls.contains((Ball) mainWindowModel.getCurrentlySelected())) {
+                    changedBalls.add((Ball) mainWindowModel.getCurrentlySelected());
+                }
+            }
+            if(!mainWindowModel.isChoiceMade()) {
+                for(Ball b : mainWindowModel.getBallManager().getBalls()) {
+                    if (!changedBalls.contains(b)) {
+                        if (tf.equals(tf_v0_X)) {
+                            b.setVelVec(new MyVector(isDouble(tf_v0_X),  b.getVelVec().y));
+                            b.setVel0Vec(new MyVector(isDouble(tf_v0_X), b.getVel0Vec().y));
+                        }
+                        else if(tf.equals(tf_v0_Y)) {
+                            b.setVelVec(new MyVector( b.getVelVec().x, isDouble(tf_v0_Y)));
+                            b.setVel0Vec(new MyVector(b.getVel0Vec().x, isDouble(tf_v0_Y)));
+                        }
+                            MainModel.get().getCurrentParamsController().update();
+                    }
+                }
+            }
         });
     }
 
@@ -104,8 +149,18 @@ public class SettingsController {
     }
 
     public void setV0() {
-        for(Ball b: mainWindowModel.getBallManager().getBalls()){
-            b.setVelVec(new MyVector( isDouble(tf_v0_X), isDouble(tf_v0_Y)));
+        if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Ball) {
+            ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(isDouble(tf_v0_X), isDouble(tf_v0_Y)));
         }
+
+        if(!mainWindowModel.isChoiceMade()) {
+            for(Ball b : mainWindowModel.getBallManager().getBalls()) {
+                if(MyVector.length(b.getVelVec()) == 0) {
+                    b.setVelVec(new MyVector(isDouble(tf_v0_X), isDouble(tf_v0_Y)));
+                }
+            }
+        }
+
+        updateParams();
     }
 }

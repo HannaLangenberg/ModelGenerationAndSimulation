@@ -110,7 +110,7 @@
                                     <children>
                                         <StackPane fx:id="sMinPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#minimize" onMouseEntered="#mouseEnteredMinimize" onMouseExited="#mouseExitedMinimize" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
                                             <children>
-                                                <Line endX="5.0" startX="-5.0" stroke="#c9c9c9">
+                                                <Line endX="5.0" startX="-5.0" stroke="#a4a4a4">
                                                     <StackPane.margin>
                                                         <Insets top="4.0" />
                                                     </StackPane.margin>
@@ -119,17 +119,17 @@
                                         </StackPane>
                                         <StackPane fx:id="sMinMaxPane" layoutX="82.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#minMax" onMouseEntered="#mouseEnteredMinMax" onMouseExited="#mouseExitedMinMax" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
                                             <children>
-                                                <Rectangle fill="#ffffff00" height="8.0" stroke="#c9c9c9" strokeType="INSIDE" width="11.0" />
+                                                <Rectangle fill="#ffffff00" height="8.0" stroke="#a4a4a4" strokeType="INSIDE" width="11.0" />
                                             </children>
                                         </StackPane>
                                         <StackPane fx:id="sExitPane" layoutX="82.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#exit" onMouseEntered="#mouseEnteredExit" onMouseExited="#mouseExitedExit" prefHeight="36.0" prefWidth="33.0" style="-fx-background-color: TRANSPARENT;">
                                             <children>
-                                                <Line endX="4.0" endY="4.0" startX="-4.0" startY="-4.0" stroke="#c9c9c9">
+                                                <Line endX="4.0" endY="4.0" startX="-4.0" startY="-4.0" stroke="#a4a4a4">
                                                     <StackPane.margin>
                                                         <Insets />
                                                     </StackPane.margin>
                                                 </Line>
-                                                <Line endX="-4.0" endY="4.0" startX="4.0" startY="-4.0" stroke="#c9c9c9">
+                                                <Line endX="-4.0" endY="4.0" startX="4.0" startY="-4.0" stroke="#a4a4a4">
                                                     <StackPane.margin>
                                                         <Insets />
                                                     </StackPane.margin>
@@ -173,8 +173,8 @@
                                                                     <children>
                                                                         <Label text="x-Richtung:" />
                                                                         <Label text="y-Richtung:" GridPane.rowIndex="1" />
-                                                                        <TextField fx:id="tf_v0_X"  text="0" GridPane.columnIndex="1" />
-                                                                        <TextField fx:id="tf_v0_Y"  text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                        <TextField fx:id="tf_v0_X" text="0" GridPane.columnIndex="1" />
+                                                                        <TextField fx:id="tf_v0_Y" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                         <Slider fx:id="sl_ScissorsSpeed" blockIncrement="0.1" max="1.0" min="0.1" onMouseReleased="#sl_ScissorsSpeed_OnDragDetected" value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                         <Label text="Schießg. Schere" GridPane.rowIndex="2" />
                                                                     </children>

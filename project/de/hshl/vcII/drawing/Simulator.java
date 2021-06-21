@@ -70,7 +70,6 @@ public class Simulator {
             b.draw(mainWindowModel.getADrawingPane());
         }
         if (runSim_called%10 == 0) {
-            //Calculator.calcTotalEnergy();
             settingsController.updateParams();
         }
     }
