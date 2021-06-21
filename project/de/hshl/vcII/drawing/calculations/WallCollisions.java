@@ -3,6 +3,7 @@ package project.de.hshl.vcII.drawing.calculations;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.entities.stationary.Wall;
 import project.de.hshl.vcII.utils.MyVector;
+import project.de.hshl.vcII.utils.Utils;
 
 /**
  * Klasse für Ball gegen Wand Kollisionen
@@ -86,18 +87,22 @@ public class WallCollisions {
             if(collision_onEdge)
             {
                 CollisionHandling.bounceVelocity(b, WallCalculations.side, WallCalculations.droppedPerpendicular);
-                if(WallCalculations.side == 0) {
+                if(WallCalculations.side == 0 & b.isColliding_Orthogonal_F()) {
                     CollisionHandling.stopBouncing(b);
                 }
             }
-            else CollisionHandling.bounceVelocity(b, corner, possibleCorner);
+            else
+                CollisionHandling.bounceVelocity(b, corner, possibleCorner);
 
-            if (w.getOrientation() == 0) {                            // Rotation nach LINKS
-                WallCalculations.initializeForces(w, b, 0);
-            }
-            else if (w.getOrientation() == 1) {                       // Rotation nach RECHTS
-                WallCalculations.initializeForces(w,b,1);
-            }
+                if(w.getOrientation() == 2){
+                    b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+                }
+                else if (w.getOrientation() == 0) {                            // Rotation nach LINKS
+                    WallCalculations.initializeForces(w, b, 0);
+                }
+                else if (w.getOrientation() == 1) {                            // Rotation nach RECHTS
+                    WallCalculations.initializeForces(w,b,1);
+                }
 
             reset();
             WallCalculations.reset();

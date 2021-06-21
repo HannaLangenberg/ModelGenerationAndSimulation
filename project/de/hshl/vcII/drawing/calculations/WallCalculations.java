@@ -263,7 +263,7 @@ public class WallCalculations {
     private static void calcForces(double a, Ball b) {
         f_H = Utils.CONSTANT_OF_GRAVITATION * Math.sin(Math.toRadians(a));
         f_N = Utils.CONSTANT_OF_GRAVITATION * Math.cos(Math.toRadians(a));
-        f_R_H = b.getFrcVec().x * f_N;
+        //f_R_H = b.getFrcVec().x * f_N;
         f_R_R = b.getRolVec().x * f_N;
     }
 
@@ -381,8 +381,8 @@ public class WallCalculations {
 
     //Berechne Rollreibung
     private static void calcRollreibung(Ball b) {
-        rk_R = b.getRolVec().x;
-        f_R_R = rk_R * f_N;
+        //rk_R = b.getRolVec().x;
+        //f_R_R = rk_R * f_N;
 
         a_R_R = MyVector.multiply(a_R, f_R_R);
     }
