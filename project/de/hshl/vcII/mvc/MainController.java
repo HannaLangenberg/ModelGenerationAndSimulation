@@ -291,6 +291,7 @@ public class MainController implements Initializable {
         if(!chb_Wind.isSelected())
         {
             Utils.setWind(new MyVector(0,0));
+            settingsController.updateParams();
         }
     }
 

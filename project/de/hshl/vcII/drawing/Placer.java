@@ -134,7 +134,7 @@ public class Placer {
     public void place(Object o, MyVector posVec) {
         x = posVec.x;;
         y = posVec.y;
-                
+
         if(o instanceof Ball) {
             ball = (Ball) o;
             if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {

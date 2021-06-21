@@ -52,6 +52,10 @@ public class SettingsController {
 
     //_Parameter_Display________________________________________________________________________________________________
     public void updateParams() {
+        if(tf_Wind_X != null & tf_Wind_Y != null) {
+            tf_Wind_X.setText(String.valueOf(Math.round(Utils.getWind().x)));
+            tf_Wind_Y.setText(String.valueOf(Math.round(Utils.getWind().x)));
+        }
         MainModel.get().getCurrentParamsController().update();
     }
 
