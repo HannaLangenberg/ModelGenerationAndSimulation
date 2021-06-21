@@ -5,7 +5,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.MyVector;
 import project.de.hshl.vcII.utils.Utils;
