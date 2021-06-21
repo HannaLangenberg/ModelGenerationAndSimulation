@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.entities.moving.Ball;
 import project.de.hshl.vcII.utils.Utils;
 
@@ -56,6 +57,7 @@ public class CurrentParamsController {
     }
 
     public void update() {
+        Calculator.calcTotalEnergy();
         lWind.setText("(" +  Math.round(Utils.getWind().x) + "/" + Math.round(Utils.getWind().y) + ")");
 
         if(ballObservableList.size() != 0) {

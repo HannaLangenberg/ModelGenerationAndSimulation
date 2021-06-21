@@ -100,7 +100,7 @@ public class Ball extends Ellipse {
      * @param totE parsed to double
      * @param potE parsed to double
      * @param kinE parsed to double
-     * @param lostE_c parsed to double
+     * @param lostE parsed to double
      * @param posVec parsed to MYVector
      * @param velVec parsed to MYVector
      * @param vel0Vec parsed to MYVector
@@ -164,7 +164,7 @@ public class Ball extends Ellipse {
                 return;
             }
             String sTooltip = this.toString();
-            sTooltip = sTooltip.replace(".", "");
+            //sTooltip = sTooltip.replace(".", "");
             sTooltip = sTooltip.replace(" -- ", "\n");
             tooltip.setText(sTooltip);
             tooltip.setShowDelay(Duration.ZERO);
@@ -401,12 +401,11 @@ public class Ball extends Ellipse {
     public String toString() {
         return "Ball No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
                 + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
-                + ") -- a: (" + Math.round(this.accVec.x) +"/"+ accVec.y
-                + ") -- Masse: " + this.mass + " -- Radius: " + this.getRadius()
-                + " -- ges Energie: " + this.totE_c
-                + " -- pot Energie: " + this.potE_c
-                + " -- kin Energie: " + this.kinE_c
-                + " -- Verlust: " + this.lostE_c;
+                + ") -- Masse: " + this.mass.getValue() + " -- Radius: " + this.getRadius()
+                + " -- ges Energie: " + this.totE.getValue()
+                + " -- pot Energie: " + this.potE.getValue()
+                + " -- kin Energie: " + this.kinE.getValue()
+                + " -- Verlust: " +     this.lostE.getValue();
     }
 
     //_SAVE_____________________________________________________________________________________________________________
