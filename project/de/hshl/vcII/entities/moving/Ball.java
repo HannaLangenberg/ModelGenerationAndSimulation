@@ -399,9 +399,9 @@ public class Ball extends Ellipse {
     //_toString()_______________________________________________________________________________________________________
     @Override
     public String toString() {
-        return "Ball No: " + this.number + ". -- Pos: (" + Math.round(this.posVec.x)+"/"+ Math.round(this.posVec.y)
-                + ") -- v: (" + Math.round(this.velVec.x) +"/"+ Math.round(this.velVec.y)
-                + ") -- Masse: " + this.mass.getValue() + " -- Radius: " + this.getRadius()
+        return "Ball No: " + this.number + ". -- Pos: " + posVec
+                + " -- v: " + velVec
+                + " -- Masse: " + this.mass.getValue() + " -- Radius: " + this.getRadius()
                 + " -- ges Energie: " + this.totE.getValue()
                 + " -- pot Energie: " + this.potE.getValue()
                 + " -- kin Energie: " + this.kinE.getValue()

@@ -22,8 +22,6 @@ public class SettingsController {
     private AnchorPane cRootPane;
     private CurrentParamsController currentParamsController;
 
-    private boolean currentParamsOpen = false;
-
     public void initialize(Slider sl_ScissorsSpeed, Slider sl_Radius, Label lCurrentRadius, Slider sl_Weight, Label lCurrentWeight,
                            Slider sl_Elasticity, Label lCurrentElasticity, TextField tf_Wind_X, TextField tf_Wind_Y,
                            TextField tf_v0_X, TextField tf_v0_Y, VBox vb_displayCurrentParams){
@@ -57,35 +55,6 @@ public class SettingsController {
             tf_Wind_Y.setText(String.valueOf(Math.round(Utils.getWind().x)));
         }
         MainModel.get().getCurrentParamsController().update();
-    }
-
-    public void btn_showCurrentParams_OnAction(){
-        Stage stage = mainWindowModel.getStage();
-
-        if(currentParamsOpen)
-        {
-            stage.setHeight(mainWindowModel.getSavedSceneHeight());
-            vb_displayCurrentParams.getChildren().remove(cRootPane);
-            currentParamsOpen = false;
-        }
-        else if(!currentParamsOpen & !mainWindowModel.getSimulator().isRunning())
-        {
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-
-            stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
-
-            vb_displayCurrentParams.getChildren().add(cRootPane);
-            currentParamsOpen = true;
-        }
-        else if(!currentParamsOpen & mainWindowModel.getSimulator().isRunning()){
-            mainWindowModel.setSavedSceneHeight(stage.getHeight());
-
-            stage.setHeight(stage.getHeight() + cRootPane.getPrefHeight());
-
-            // check all TextFields for values
-            vb_displayCurrentParams.getChildren().add(cRootPane);
-            currentParamsOpen = true;
-        }
     }
 
 
