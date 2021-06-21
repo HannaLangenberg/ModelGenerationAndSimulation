@@ -134,7 +134,7 @@ public class Placer {
     public void place(Object o, MyVector posVec) {
         x = posVec.x;;
         y = posVec.y;
-
+                
         if(o instanceof Ball) {
             ball = (Ball) o;
             if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
@@ -142,7 +142,6 @@ public class Placer {
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, y));
                 ball.setNumber(mainWindowModel.getBallManager().getBalls().size() + 1);
-                mainWindowModel.getBallManager().addBall(ball);
                 mainWindowModel.getADrawingPane().getChildren().add(ball);
                 mainWindowModel.setCurrentlySelected(ball);
             } else {
@@ -155,7 +154,6 @@ public class Placer {
             if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, y));
                 wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
-                mainWindowModel.getWallManager().addWall(wall);
                 mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
                 mainWindowModel.setCurrentlySelected(wall);
             } else {
