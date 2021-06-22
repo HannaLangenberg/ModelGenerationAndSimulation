@@ -172,7 +172,6 @@ public class Scissors {
 
     public void calcDirectionalVector() {
         directionalVector = MyVector.multiply(MyVector.norm(MyVector.subtract(lowerLeft, upperLeft)), 1 * MainModel.get().getScissorsSpeed());
-//        directionalVector = MyVector.multiply(MyVector.subtract(lowerLeft, upperLeft), MainModel.get().getScissorsSpeed());
     }
 
     public void animate(AnchorPane aDrawingPane) {

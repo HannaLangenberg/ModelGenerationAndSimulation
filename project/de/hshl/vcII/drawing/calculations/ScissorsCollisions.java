@@ -140,10 +140,8 @@ public class ScissorsCollisions {
     }
 
     public static void deflect_Static(Ball b, int decision) {
-        MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel;
         switch (decision) {
             case 0: // lambda
-                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), lambda_dp));
                 if (inside_Blades) {
                     side = 0;
                 }
@@ -153,7 +151,6 @@ public class ScissorsCollisions {
                 lambda_dp = new MyVector(0,0);
                 break;
             case 1: // rho
-                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), rho_dp));
                 if (inside_Blades) {
                     side = 3;
                 }
@@ -163,14 +160,9 @@ public class ScissorsCollisions {
                 rho_dp = new MyVector(0,0);
                 break;
             case 2:
-                normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), possibleTip));
                 break;
         }
-        vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-        vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
 
-
-        //b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
     }
     public static void deflect_Kinetic(Ball b, Scissors s, int decision) {
         MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel;
@@ -189,14 +181,12 @@ public class ScissorsCollisions {
                 rho_dp = new MyVector(0,0);
                 break;
         }
-        vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-        vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
+        vOrthogonal = Calculator.calc_O_component(normedCenterLine, b);
+        vParallel = Calculator.calc_P_component(normedCenterLine, b);
 
         if (vParallel.y > 0 || vParallel.x > 0) {
             b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(Collisions.centerShock(vParallel, b.getMass(), vParallel_Blade, 1.5), b.getElasticity())));
         }
-//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-
     }
 
     private static void reset() {
