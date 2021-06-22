@@ -20,11 +20,9 @@ public class Placer {
     private Ball ball;
     private Wall wall;
     private Scissors scissors;
-    private MainModel mainWindowModel = MainModel.get();
+    private MainModel mainModel = MainModel.get();
     private double epsilon = 5;
     private MyVector s_t_parameters;
-    SettingsController settingsController = new SettingsController();
-
 
     private double x, y, xStart, yStart, xEnd, yEnd;
 
@@ -39,7 +37,7 @@ public class Placer {
         //-Snap Ball to wall's surface if close enough
         if (w == null && b != null) {
             // if w is null we are about to place a ball → run through walls and calc distance
-            List<Wall> walls = mainWindowModel.getWallManager().getWalls();
+            List<Wall> walls = mainModel.getWallManager().getWalls();
 
             for(Wall wall : walls) {
                 if (wall.getSpin() == 0) {
@@ -63,7 +61,7 @@ public class Placer {
         }
         else if (b == null && w != null){
             // if b is null we are about to place a wall → run through balls and calc distance
-            List<Ball> balls = mainWindowModel.getBallManager().getBalls();
+            List<Ball> balls = mainModel.getBallManager().getBalls();
 
             for(Ball ball : balls) {
                 double deltaY = mouse.y - ball.getPosVec().y;
@@ -90,37 +88,37 @@ public class Placer {
         x = e.getX();
         y = e.getY();
 
-        if(mainWindowModel.getGrid().isSnapOn()){
-            mainWindowModel.getGrid().snapToGrid(this);
+        if(mainModel.getGrid().isSnapOn()){
+            mainModel.getGrid().snapToGrid(this);
         }
 
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
-            ball = (Ball) mainWindowModel.getCurrentlySelected();
-            if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
+        if(mainModel.getCurrentlySelected() instanceof Ball) {
+            ball = (Ball) mainModel.getCurrentlySelected();
+            if (!mainModel.getADrawingPane().getChildren().contains(ball)) {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, snapBallOnWall(null, ball, new MyVector(x,y))));
-                ball.setNumber(mainWindowModel.getBallManager().getBalls().size() + 1);
-                mainWindowModel.getBallManager().addBall(ball);
-                mainWindowModel.getADrawingPane().getChildren().add(ball);
-                mainWindowModel.setCurrentlySelected(ball);
+                ball.setNumber(mainModel.getBallManager().getBalls().size() + 1);
+                mainModel.getBallManager().addBall(ball);
+                mainModel.getADrawingPane().getChildren().add(ball);
+                mainModel.setCurrentlySelected(ball);
                 Calculator.calcInitial_TotalEnergy(ball);
-                settingsController.updateParams();
+                mainModel.getSettingsController().updateParams();
             } else {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, snapBallOnWall(null, ball, new MyVector(x,y))));
                 Calculator.calcInitial_TotalEnergy(ball);
-                settingsController.updateParams();
+                mainModel.getSettingsController().updateParams();
             }
-        } else if(mainWindowModel.getCurrentlySelected() instanceof Wall) {
-            wall = (Wall) mainWindowModel.getCurrentlySelected();
-            if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
+        } else if(mainModel.getCurrentlySelected() instanceof Wall) {
+            wall = (Wall) mainModel.getCurrentlySelected();
+            if (!mainModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x, y))));
-                wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
-                mainWindowModel.getWallManager().addWall(wall);
-                mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
-                mainWindowModel.setCurrentlySelected(wall);
+                wall.setNumber(mainModel.getWallManager().getWalls().size() + 1);
+                mainModel.getWallManager().addWall(wall);
+                mainModel.getADrawingPane().getChildren().add(wall.getTexture());
+                mainModel.setCurrentlySelected(wall);
             } else {
                 wall.setPosVec(new MyVector(x, snapBallOnWall(wall, null, new MyVector(x, y))));
             }
@@ -137,13 +135,13 @@ public class Placer {
 
         if(o instanceof Ball) {
             ball = (Ball) o;
-            if (!mainWindowModel.getADrawingPane().getChildren().contains(ball)) {
+            if (!mainModel.getADrawingPane().getChildren().contains(ball)) {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
                 ball.setPosVec(new MyVector(x, y));
-                ball.setNumber(mainWindowModel.getBallManager().getBalls().size() + 1);
-                mainWindowModel.getADrawingPane().getChildren().add(ball);
-                mainWindowModel.setCurrentlySelected(ball);
+                ball.setNumber(mainModel.getBallManager().getBalls().size() + 1);
+                mainModel.getADrawingPane().getChildren().add(ball);
+                mainModel.setCurrentlySelected(ball);
             } else {
                 ball.setCenterX(x);
                 ball.setCenterY(y);
@@ -151,11 +149,11 @@ public class Placer {
             }
         } else if(o instanceof Wall) {
             wall = (Wall) o;
-            if (!mainWindowModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
+            if (!mainModel.getADrawingPane().getChildren().contains(wall.getTexture())) {
                 wall.setPosVec(new MyVector(x, y));
-                wall.setNumber(mainWindowModel.getWallManager().getWalls().size() + 1);
-                mainWindowModel.getADrawingPane().getChildren().add(wall.getTexture());
-                mainWindowModel.setCurrentlySelected(wall);
+                wall.setNumber(mainModel.getWallManager().getWalls().size() + 1);
+                mainModel.getADrawingPane().getChildren().add(wall.getTexture());
+                mainModel.setCurrentlySelected(wall);
             } else {
                 wall.setPosVec(new MyVector(x, y));
             }
@@ -163,7 +161,7 @@ public class Placer {
     }
 
     public void onMousePressed(MouseEvent e) {
-        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+        if(mainModel.getCurrentlySelected() instanceof Scissors) {
             xStart =  xEnd = e.getX();
             yStart =  yEnd = e.getY();
             scissors = new Scissors();
@@ -172,7 +170,7 @@ public class Placer {
     }
 
     public void onMouseDragged(MouseEvent e) {
-        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+        if(mainModel.getCurrentlySelected() instanceof Scissors) {
             xEnd = e.getX();
             yEnd = e.getY();
             redrawLines_s();
@@ -180,7 +178,7 @@ public class Placer {
     }
 
     public void onMouseReleased(MouseEvent e) {
-        if(mainWindowModel.getCurrentlySelected() instanceof Scissors) {
+        if(mainModel.getCurrentlySelected() instanceof Scissors) {
             xEnd = e.getX();
             yEnd = e.getY();
             drawLines_s();
@@ -188,20 +186,20 @@ public class Placer {
     }
 
     public void redrawLines_s() {
-        mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
+        mainModel.getADrawingPane().getChildren().remove(scissors.getG());
         if(Math.abs(xEnd - xStart) < 200)
             scissors.getRectangle().setWidth(Math.abs(xEnd - xStart));
         if (Math.abs(yEnd - yStart) < 350)
             scissors.getRectangle().setHeight(Math.abs(yEnd - yStart));
         scissors.setPosVec(new MyVector(xStart, yStart));
-        mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
+        mainModel.getADrawingPane().getChildren().add(scissors.getG());
     }
 
     public void drawLines_s() {
-        mainWindowModel.getScissorsManager().setS(scissors);
-        mainWindowModel.setCurrentlySelected(scissors);
-        mainWindowModel.getADrawingPane().getChildren().remove(scissors.getG());
-        mainWindowModel.getADrawingPane().getChildren().add(scissors.getG());
+        mainModel.getScissorsManager().setS(scissors);
+        mainModel.setCurrentlySelected(scissors);
+        mainModel.getADrawingPane().getChildren().remove(scissors.getG());
+        mainModel.getADrawingPane().getChildren().add(scissors.getG());
     }
 
     public Scissors getScissors() {

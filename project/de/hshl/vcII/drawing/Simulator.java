@@ -1,7 +1,6 @@
 package project.de.hshl.vcII.drawing;
 
 import project.de.hshl.vcII.drawing.calculations.BallCollisions;
-import project.de.hshl.vcII.drawing.calculations.Calculator;
 import project.de.hshl.vcII.drawing.calculations.Movement;
 import project.de.hshl.vcII.drawing.calculations.ScissorsCollisions;
 import project.de.hshl.vcII.entities.moving.Ball;
@@ -18,7 +17,7 @@ public class Simulator {
     private ScheduledExecutorService timer;
 
     // MWM for getting the model (and all it's saves).
-    private MainModel mainWindowModel = MainModel.get();
+    private MainModel mainModel = MainModel.get();
     private SettingsController settingsController = new SettingsController();
 
     // Variable to maintain the simulation.
@@ -53,21 +52,21 @@ public class Simulator {
     private void runSimulation(){
         runSim_called++;
 
-        if(mainWindowModel.getScissorsManager().getS() != null) {
-            s = mainWindowModel.getScissorsManager().getS();
+        if(mainModel.getScissorsManager().getS() != null) {
+            s = mainModel.getScissorsManager().getS();
             if (s.isClosing()) {
-                s.animate(mainWindowModel.getADrawingPane());
+                s.animate(mainModel.getADrawingPane());
             }
         }
 
-        for (Ball b: mainWindowModel.getBallManager().getBalls()) {
+        for (Ball b: mainModel.getBallManager().getBalls()) {
             Movement.calcAcceleration(b);
             Movement.checkCollisions(b, epsilon);
             BallCollisions.checkBalls(b, epsilon);
             ScissorsCollisions.checkScissors(b, epsilon);
             Movement.calcVelocity(b);
             Movement.calcPosition(b);
-            b.draw(mainWindowModel.getADrawingPane());
+            b.draw(mainModel.getADrawingPane());
         }
         if (runSim_called%10 == 0) {
             settingsController.updateParams();
