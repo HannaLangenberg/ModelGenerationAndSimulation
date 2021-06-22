@@ -93,11 +93,6 @@ public class IO {
                 }
             }
 
-            String scissorsCsv = "";
-            if(ballCount != 0) {
-                scissorsCsv = splitCsv[wallCount + ballCount + offset];
-            }
-
             //_CREATE_THE_GAME-OBJECTS__________________________________________________________________________________
             // Split each one at ',,'
             // Split again at ': '  and always save the 2nd value in the rawData String[]
@@ -130,19 +125,6 @@ public class IO {
                 mainWindowModel1.getPlacer().place(w, w.getPosVec());
                 mainWindowModel1.getWallManager().getWalls().add(w);
             }
-
-            int paramCount = 18;
-            String[] params = scissorsCsv.split(",,");
-            String[] rawData = new String[paramCount];
-            for(int i = 0; i < paramCount; i++){
-                rawData[i] = params[i].split(": ")[1];
-            }
-            //System.out.println(Arrays.toString(rawData));
-            Scissors s = new Scissors(rawData[0], rawData[1], rawData[2], rawData[3], rawData[4], rawData[5], rawData[6],
-                    rawData[7], rawData[8], rawData[9], rawData[10], rawData[11], rawData[12], rawData[13], rawData[14],
-                    rawData[15], rawData[16], rawData[17]);
-            mainWindowModel1.getADrawingPane().getChildren().add(s.getG());
-            mainWindowModel1.getScissorsManager().setS(s);
         } catch (IOException e) {
             e.printStackTrace();
         }
