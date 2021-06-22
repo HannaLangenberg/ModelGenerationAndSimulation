@@ -37,19 +37,10 @@ public class Ball extends Ellipse {
     private Color randomCol = Color.color(Math.random(), Math.random(), Math.random());
     private int number;
 
-    private double randomSeed = pickColor();
-    private double pickColor() {
-        double r = Math.random();
-
-        while(r < 0.5 && MainModel.get().getMode().isMode())
-            r = Math.random();
-        while(r > 0.5 && !MainModel.get().getMode().isMode())
-            r = Math.random();
-
-        return r;
-    }
+    private double randomSeed = Math.random();
     private Color strokeColor = randomSeed > 0.5 ? randomCol.brighter() : randomCol.darker();
 
+    //Empty constructor
     public Ball() {
         this.mass = new SimpleDoubleProperty(MASS);
         this.radius = new SimpleDoubleProperty(RADIUS);
@@ -66,6 +57,7 @@ public class Ball extends Ellipse {
         addMouseMoved();
     }
 
+    //Default constructor
     public Ball(int number, MyVector posVec, MyVector velVec, MyVector vel0Vec, MyVector accVec, MyVector frcVec, double radius, double mass, double elasticity, double totE, double potE, double kinE, double lostE) {
         this.number = number;
         this.posVec = posVec;
@@ -191,7 +183,9 @@ public class Ball extends Ellipse {
     }
 
     /**
-     * The Arrow class was taken fro stackoverflow.com: ___LINK___
+     * The Arrow class was taken fro stackoverflow.com:
+     *      Link: https://stackoverflow.com/questions/41353685/how-to-draw-arrow-javafx-pane
+     *      Website opened 26 May 2021-
      * but modified ;)
      * Sets the position of the arrow according to the direction, which is calculated by adding the Position Vector to the Velocity Vector
      * @return an Arrow which can be drawn to any JavaFx Pane

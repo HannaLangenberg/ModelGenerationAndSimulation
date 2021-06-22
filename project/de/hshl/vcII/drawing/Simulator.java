@@ -40,18 +40,16 @@ public class Simulator {
         {
             timer.shutdownNow();
             running = false;
-            /*for(Ball b : mainWindowModel.getBallManager().getBalls()) {
-                System.out.println("PosX: " + b.getCenterX() + " PosY: " + b.getCenterY()
-                        + " Velocity: {" + b.getVelVec().x + ". " + b.getVelVec().y + "}");
-            }*/
         }
     }
+
     /**
      * Calls all the necessary methods to run the simulation.
      */
     private void runSimulation(){
         runSim_called++;
 
+        // Close the scissors
         if(mainModel.getScissorsManager().getS() != null) {
             s = mainModel.getScissorsManager().getS();
             if (s.isClosing()) {
@@ -59,6 +57,7 @@ public class Simulator {
             }
         }
 
+        // Apply the physics to each ball
         for (Ball b: mainModel.getBallManager().getBalls()) {
             Movement.calcAcceleration(b);
             Movement.checkCollisions(b, epsilon);
@@ -68,6 +67,8 @@ public class Simulator {
             Movement.calcPosition(b);
             b.draw(mainModel.getADrawingPane());
         }
+
+        // Update TableView
         if (runSim_called%10 == 0) {
             settingsController.updateParams();
         }

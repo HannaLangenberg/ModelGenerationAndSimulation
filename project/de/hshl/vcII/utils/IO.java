@@ -7,6 +7,11 @@ import project.de.hshl.vcII.mvc.MainModel;
 import java.io.*;
 
 public class IO {
+
+    /**
+     * Openes a buffered writer and writes data in the specified file. Closes it afterwards.
+     * @param file      specified file
+     */
     public static void save(File file){
         if(file == null)
             return;
@@ -38,6 +43,10 @@ public class IO {
 
     }
 
+    /**
+     * Openes a buffered loader and loads a chosen file. Closes it afterwards.
+     * @param file      specified file
+     */
     public static void load(File file){
         if (file == null)
             return;

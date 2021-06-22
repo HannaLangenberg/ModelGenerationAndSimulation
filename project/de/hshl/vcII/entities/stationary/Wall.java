@@ -26,6 +26,7 @@ public class Wall {
     private int number;
     private int orientation; //repräsentiert die Orientierung der Wand: 0 → level; 1 → rotateLeft; 2 → rotateRight
 
+    //default constructor
     public Wall(){
         texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/blocks/BlockNormal.png")));
         collision = new Rectangle(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -35,6 +36,7 @@ public class Wall {
         orientation = 2;
     }
 
+    //Used by the load function
     public Wall(String texture, String collision, String posVec, String e_alpha, String spin, String orientation) {
         this.texture = new Image(Objects.requireNonNull(getClass().getResourceAsStream(texture)));
         this.collision = Utils.constructRectFromString(collision);

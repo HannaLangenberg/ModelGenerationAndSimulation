@@ -28,7 +28,14 @@ public class WallCalculations {
     static int side; //0 = top, 1 = right, 2 = bottom, 3 = left
 
     //COLLISION_________________________________________________________________________________________________________
-    //_Calculate_Plane_Parameters_______________________________________________________________________________________
+    /**
+     * This method calculates the s (scaling factor on long side of the wall) and t (on short side) for the
+     * dropped perpendicular of the current ball.
+     *
+     * @param w             current wall
+     * @param position      ball's centerpoint
+     * @return              s and t as a new MyVector
+     */
     public static MyVector calc_s_t_Parameters(Wall w, MyVector position) {
         deltas = calcDeltas(w, position);
 
@@ -46,56 +53,27 @@ public class WallCalculations {
         return new MyVector(s,t);
     }
 
-    //_Calculate_deltas_used_in_both_(t_&_s)____________________________________________________________________________
-    private static MyVector calcDeltas(Wall w, MyVector pos) {
-        /*
-         * The delta for X and Y are used in s and t, thus an extra method.
-         *   xDelta = bX - wPosX
-         *   yDelta = bY - wPosY
-         * */
+    /**
+     * The delta for X and Y are used in s and t, thus calculated in an extra method.
+     *
+     * @param w             current wall
+     * @param position      ball's centerpoint
+     * @return              delta as a new MyVector
+     */
+    private static MyVector calcDeltas(Wall w, MyVector position) {
         return new MyVector(
-                pos.x - w.getPosVec().x,
-                pos.y - w.getPosVec().y
+                position.x - w.getPosVec().x,
+                position.y - w.getPosVec().y
         );
     }
 
-    //_Split_and_rearrange_velocity_vector_using_orthogonal_projection__________________________________________________
-    public static void bounceVelocity(Ball b) {
-        // Calculate values
-        // The directional vector between the ball's position and its dropped perpendicular.
-        // It has to be normed:
-        MyVector normedCenterLine = MyVector.norm(MyVector.subtract(b.getPosVec(), droppedPerpendicular));
-
-        // Find the orthogonal and the parallel velocity vectors of b
-        MyVector vOrthogonal = MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
-        MyVector vParallel = MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
-
-//        b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -1)));
-
-        if( (side == 1 & vParallel.x < 0)
-         || (side == 3 & vParallel.x > 0)) {
-            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
-        }
-
-        if ((side == 2 & vParallel.y < 0)) {
-            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
-        }
-
-        if(side == 0 & vParallel.y > 0) {
-            b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, -b.getElasticity())));
-            if(Math.abs(vParallel.y) < Utils.CONSTANT_OF_GRAVITATION/3)
-            {
-                b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, 0)));
-                b.setColliding_Orthogonal_F(true);
-            }
-        }
-        if(MyVector.length(b.getVelVec()) == MyVector.length(vOrthogonal) & b.isColliding_Parallel_B()) {
-            b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
-        }
-        b.setColliding_Parallel_B(false);
-    }
-
-    //_Calculate_"dropped_perpendicular"'s_missing_coordinate___________________________________________________________
+    /**
+     * Calculates any needed coordinate on the wall, mainly along the edges.
+     *
+     * @param w         current wall
+     * @param s_t       the scaling factors s and t
+     * @return          calculated point as a new MyVector
+     */
     public static MyVector calcCoord_onEdge(Wall w, MyVector s_t) {
         /*
          *       e_x: (posX) + 1/2 ( s*rW*( cos(a)) + t*rH(sin(a)) )
@@ -115,8 +93,14 @@ public class WallCalculations {
         return new MyVector(x,y);
     }
 
-    //_Check_plane's_sides_for_collisions_______________________________________________________________________________
-    public static void calcDroppedPerpendicular(Ball b, Wall w, MyVector s_t, int decision) {
+    /**
+     * Calculated the dropped perpendicular with the provided s and t scaling factors.
+     *
+     * @param w             current wall
+     * @param s_t           the scaling factors s and t
+     * @param decision      decision variable for which side
+     */
+    public static void calcDroppedPerpendicular(Wall w, MyVector s_t, int decision) {
         switch (decision) {
             case 0:
                 if(s_t.y < 0) {
@@ -141,7 +125,14 @@ public class WallCalculations {
         }
     }
 
-    //_Overloaded_checkDistance_(for_sides_&_placer)____________________________________________________________________
+    /**
+     * Checks if the ball is close enough to the wall to be colliding
+     *
+     * @param b             current ball
+     * @param sidesHit      if a collision is probable
+     * @param epsilon       double, safety distance for checking for collisions.
+     * @return              true if ball is colliding, false if not
+     */
     public static boolean checkDistance(Ball b, boolean sidesHit, double epsilon) {
         if (sidesHit) {
             double distance = MyVector.distance(b.getPosVec(), droppedPerpendicular);
@@ -158,8 +149,8 @@ public class WallCalculations {
      * Damit man nicht umdenken muss, sind die Quadrantenangaben, als hätte man das Karthesische darüber gelegt.
      * So ist bezeichnet beispielsweise Q4 den Bereich wo x und y Achse positiv sind ( "unten rechts" )
      * Die Formeln sind:
-     *      Betrag der Hangabtriebskraft:         F_H = sin(a) * F_G
-     *      Betrag der Normalkraft:               F_N = cos(a) * F_G
+     *      Betrag der Hangabtriebskraft:    F_H = sin(a) * F_G
+     *      Betrag der Normalkraft:          F_N = cos(a) * F_G
      * Für die zweite Abgabe hatten wir Gleitreibung und Haftreibung verwendet. Da wir allerdings Reibung auf eine Kugel
      * anwenden möchten, wurde im Folgenden auf Rollreibung umgestellt. Allerdings haben wir die Haft- und Gleitreibung
      * im Code gelassen, da sie unsere Arbeit zeigt.
@@ -168,16 +159,30 @@ public class WallCalculations {
      *      rk_H = b.getFrcVec().x;
      *      rk_G = b.getFrcVec().y;
      * Reibungskräfte:
-     *      Maximale Haftreibung:                f_R_H = rk_H * F_N;
-     *              Gleitreibung:                f_R_G = rk_G * F_N;
+     *      Maximale Haftreibung:            f_R_H = rk_H * F_N;
+     *              Gleitreibung:            f_R_G = rk_G * F_N;
      *
      * maximaler Winkel, der möglich ist, ohne, dass der Gegenstand sich bewegt:
-     *      max Böschungswinkel:                 angle_max_H = Math.atan(rk_H);
+     *      max Böschungswinkel:             angle_max_H = Math.atan(rk_H);
      * __jetzt Rollreibung________________________________________________
+     * Der Rollreibungskoeffizient ist für jeden Ball in rolVec gespeichert
+     *      rk_R = b.getRolVec().x;
+     * Rollreibungskräfte:
+     *             Rolltreibung:             f_R_R = rk_R * F_N;
+     * "maximaler Rollreibungswinkel", der möglich ist, ohne, dass der Gegenstand sich bewegt:
+     *                                       angle_max_R = Math.atan(rk_R/Radius);
      *
      * */
 
-    //_Berechne_HAFT_und_GLEITreibung_basiert_auf_Rotation______________________________________________________________
+    /**
+     * Initialize the forces and accelerations that are needed for friction.
+     *                      (Formerly Haft und Gleitreibung → commented out)
+     * Currently Rollreibung.
+     *
+     * @param w             current wall
+     * @param b             current ball
+     * @param decision      decision variable for current rotation (0 = left, 1 = right)
+     */
     public static void initializeForces(Wall w, Ball b, int decision) {
         /*
          * Entscheidung zwischen rotateLeft und rotateRight
@@ -189,8 +194,8 @@ public class WallCalculations {
 //        angle_max_H = Math.atan(b.getFrcVec().x);                   //Rückgabe in Radians
 //        angle_max_H = Math.toDegrees(angle_max_H);                  //Wir rechnen aber in Degree
 
-        angle_max_R = Math.atan(b.getRolVec().x / b.getRadius());   //Rückgabe in Radians
-        angle_max_R = Math.toDegrees(angle_max_R);                  //Wir rechnen aber in Degree
+        angle_max_R = Math.atan(b.getRolVec().x / b.getRadius());     //Rückgabe in Radians
+        angle_max_R = Math.toDegrees(angle_max_R);                    //Wir rechnen aber in Degree
         double vel = MyVector.length(b.getVelVec());
 
         switch (decision)
@@ -232,7 +237,7 @@ public class WallCalculations {
                 //Winkel: +360--
                 beeteUmstechen(b, w.getE_alpha());
                 if(Math.abs(w.getSpin()) <= angle_max_R & vel <= f_R_R) {
-                    dontMove(b); //TODO
+                    dontMove(b);
                 }
                 else {
                     calcRollreibung(b);
@@ -250,14 +255,14 @@ public class WallCalculations {
         }
     }
 
+    /**
+     * As long as the angle at which the wall is rotated is smaller than the max Rollreibungswinkel, the ball does not
+     * move as the forces that are applied to it cancel each other out.
+     *
+     * @param b     current ball
+     */
     private static void dontMove(Ball b) {
-        /*
-        * Was passiert, solange dieser Winkel noch nicht überschritten ist, ist, dass sich alle wirkenden Kräfte
-        * gegenseitig aufheben. Daher setzen wir sie hier der Einfachheit halber direkt auf null
-        * TODO ggf später ausführlicher machen
-        * */
-        b.setVelVec(MyVector.multiply(b.getVelVec(), 0));
-        b.setAccVec(MyVector.multiply(b.getAccVec(), 0));
+        b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
     }
 
     private static void calcForces(double a, Ball b) {
@@ -266,8 +271,8 @@ public class WallCalculations {
         //f_R_H = b.getFrcVec().x * f_N;
     }
 
-    //LINKS
-    /*
+    //LEFT
+    /**
      * Kräfte in Vektoren zerlegen bei Rotation nach LINKS
      * a_H:
      * Hangabtriebskraft als Vektor zeigt in Q3
@@ -308,13 +313,13 @@ public class WallCalculations {
         /*
          * a_R
          * */
-        x =  Math.cos(Math.toRadians(a));      // sin(a+90) =  cos(a)
-        y = -Math.sin(Math.toRadians(a));      // cos(a+90) = -sin(a)
+        x =  Math.cos(Math.toRadians(a));           // sin(a+90) =  cos(a)
+        y = -Math.sin(Math.toRadians(a));           // cos(a+90) = -sin(a)
         a_R = new MyVector(x,y);
     }
 
-    //RECHTS
-    /*
+    //RIGHT
+    /**
      * Kräfte in Vektoren zerlegen bei Rotation nach RECHTS
      *
      * a_H:
@@ -341,7 +346,6 @@ public class WallCalculations {
     private static void beeteUmstechen(Ball b, double a)
     {
         double x, y;
-
         /*
          * a_H
          * */
@@ -364,13 +368,21 @@ public class WallCalculations {
         a_R = new MyVector(x,y);
     }
 
-    //Berechne Haftreibung
+    /**
+     * Calculate Haftreibung
+     *
+     * @param b     current ball
+     */
     private static void calcHaftreibung(Ball b) {
         a_R_H = MyVector.multiply(b.getVelVec(), -1);   // HAFT_reibungs_BESCHLEUNIGUNG
-        b.setAccVec(MyVector.multiply(b.getAccVec(), 0));
+        b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
     }
 
-    //Berechne Gleitreibung
+    /**
+     * Calculate Gleitreibung
+     *
+     * @param b     current ball
+     */
     private static void calcGleitreibung(Ball b) {
         rk_G = b.getFrcVec().y;                                 // GLEIT_reibungs_KOEFF_izient
         f_R_G = rk_G * f_N;                                     // GLEIT_reibungs_KRAFT
@@ -378,7 +390,11 @@ public class WallCalculations {
         a_R_G = MyVector.multiply(a_R, f_R_G);                  // GLEIT_reibungs_BESCHLEUNIGUNG
     }
 
-    //Berechne Rollreibung
+    /**
+     * Calculate Rollreibung
+     *
+     * @param b     current ball
+     */
     private static void calcRollreibung(Ball b) {
         rk_R = b.getRolVec().x;
         f_R_R = rk_R * f_N;

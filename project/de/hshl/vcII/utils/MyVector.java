@@ -11,7 +11,7 @@
         this.y = y;
      }
 
-        /**
+     /**
          * used for the load function
          * @param xy String, only accepted format: "(x/y)"
          */
@@ -30,34 +30,24 @@
     public static double length(MyVector vec){
             return Math.sqrt(Math.pow(Math.abs(vec.x), 2) + Math.pow(Math.abs(vec.y), 2));
             }
-
     // Calculates the distance between two vectors
     public static double distance(MyVector v1, MyVector v2){
        return Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
     }
-
     // Calculates the dot product. (vector * vector) (Skalarprodukt)
     public static double dot(MyVector v1, MyVector v2){
         return (v1.x * v2.x) + (v1.y * v2.y);
     }
-
-    // Calculates the cross product. (vector x vector) (Kreuzprodukt)
-    public static double cross(MyVector v1, MyVector v2){
-            return (v1.x*v2.y) - (v1.y*v2.x);
-            }
-
     // Method for calculating the angle between two 2D vectors.
     public static double angle(MyVector v1, MyVector v2){
 //        MyVector dot = dot(v1, v2);
         return Math.toDegrees(Math.acos( dot(v1, v2) / (length(v1) * length(v2)) ));
     }
-
     // Norm the MyVector vec (make its length 1)
     public  static MyVector norm(MyVector vec){
         return MyVector.divide(vec, length(vec));
     }
-
-    // Construct and apply a variable Vector
+    // Construct a vectorequation and insert a specific point to calculate the scalingfactor
     public static double insertPintoEquation(MyVector ov, MyVector rv, MyVector p) {
         // ov + s * rv
         double s = (p.x - ov.x)/(rv.x);
@@ -68,26 +58,22 @@
         }
         return s;
     }
-
+    // Construct a vectorequation and insert a specific scalingfactor to calculate the point
     public static MyVector insertScalingFactorIntoEquation(MyVector ov, MyVector rv, double s) {
         return MyVector.add(ov, MyVector.multiply(rv, s));
     }
-
     // Calculate the orthogonal projection between given vector and shock normal
     public static MyVector orthogonalProjection(MyVector vec, MyVector normal) {
         return MyVector.multiply(normal, MyVector.dot(normal, vec));
     }
-
     // Method for multiplying two 2D vectors from each other.
     public static MyVector multiply(MyVector vec, double lambda){
        return new MyVector(vec.x * lambda, vec.y * lambda);
     }
-
     // Method for dividing two 2D vectors from each other.
     public static MyVector divide(MyVector vec, double lambda){
         return new MyVector(vec.x / lambda, vec.y / lambda);
     }
-
     // Method for adding two 2D vectors to each other.
     public static MyVector add(MyVector v1, MyVector v2){
             return new MyVector(v1.x + v2.x, v1.y + v2.y);
@@ -103,27 +89,12 @@
 
         return new MyVector(x,y);
     }
-
-    public static int collinearity(MyVector v1, MyVector v2) {
-        int c = 0; // default not collinear dependent
-        double a = v2.x/v1.x;
-        double b = v2.y/v1.y;
-        if ((v2.x / v1.x) == (v2.y / v1.y)) {
-            if((v2.x / v1.x) >= 0)
-                c = 2; // scaling factor positive
-            if((v2.x / v1.x) <= 0)
-                c = 1; // scaling factor negative
-        }
-        return  c;
-    }
-
     // Method for subtracting two 2D vectors from each other.
     public static MyVector subtract(MyVector v1, MyVector v2){
         return new MyVector(v2.x - v1.x, v2.y - v1.y);
     }
 
-
-    // Overridden because of te TableView
+    // Overridden because of the TableView
     @Override
     public String toString() {
         return "(" + Math.round(this.x) +"/"+ Math.round(this.y) + ")";

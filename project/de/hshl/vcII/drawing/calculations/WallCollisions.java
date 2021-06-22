@@ -168,10 +168,10 @@ public class WallCollisions {
         boolean t_onEdge = t >= -1 && t <= 1;
 
         if (s_onEdge) {
-            WallCalculations.calcDroppedPerpendicular(b, w, s_t_Parameters, 0);
+            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 0);
         }
         if (t_onEdge) {
-            WallCalculations.calcDroppedPerpendicular(b, w, s_t_Parameters, 1);
+            WallCalculations.calcDroppedPerpendicular(w, s_t_Parameters, 1);
         }
         collision_onEdge = WallCalculations.checkDistance(b, s_onEdge||t_onEdge, e);
         b.setColliding_Parallel_B(collision_onEdge);

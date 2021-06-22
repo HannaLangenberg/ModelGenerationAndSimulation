@@ -6,6 +6,13 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+/**
+ * Class that constructs an arrow as JavaFX shapes does not provide one.
+ * Most of this code was copied from Stackoverflow:
+ *      Link: https://stackoverflow.com/questions/41353685/how-to-draw-arrow-javafx-pane
+ * Website opened 26 May 2021
+ * We slightly modified it to fit our purposes
+ */
 public class Arrow extends Group {
     private final Line line;
 
@@ -72,18 +79,16 @@ public class Arrow extends Group {
     }
 
     // start/end properties
-
     public final Line getLine() {
         return this.line;
     }
+
     public final void setStartX(double value) {
         line.setStartX(value);
     }
-
     public final double getStartX() {
         return line.getStartX();
     }
-
     public final DoubleProperty startXProperty() {
         return line.startXProperty();
     }
@@ -91,11 +96,9 @@ public class Arrow extends Group {
     public final void setStartY(double value) {
         line.setStartY(value);
     }
-
     public final double getStartY() {
         return line.getStartY();
     }
-
     public final DoubleProperty startYProperty() {
         return line.startYProperty();
     }
@@ -103,11 +106,9 @@ public class Arrow extends Group {
     public final void setEndX(double value) {
         line.setEndX(value);
     }
-
     public final double getEndX() {
         return line.getEndX();
     }
-
     public final DoubleProperty endXProperty() {
         return line.endXProperty();
     }
@@ -115,11 +116,9 @@ public class Arrow extends Group {
     public final void setEndY(double value) {
         line.setEndY(value);
     }
-
     public final double getEndY() {
         return line.getEndY();
     }
-
     public final DoubleProperty endYProperty() {
         return line.endYProperty();
     }

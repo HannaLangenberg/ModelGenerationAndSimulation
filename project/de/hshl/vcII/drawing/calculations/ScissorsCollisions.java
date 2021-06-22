@@ -7,12 +7,12 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCollisions {
     private static int closest_decision;
-    static double lambda, rho, blade_length, a_inside_Blades;
+    static double lambda, rho, blade_length;
     private static boolean lambda_onBlade, lambda_onPosTip, lambda_onNegTip;
     private static boolean rho_onBlade, rho_onPosTip, rho_onNegTip;
     private static boolean inside_Blades;
-    private static boolean collision_LambdaOnBlade, collision_LambdaOnTip;
-    private static boolean collision_RhoOnBlade, collision_RhoOnTip;
+    private static boolean collision_LambdaOnBlade;
+    private static boolean collision_RhoOnBlade;
     static MyVector lambda_dp = new MyVector(0,0), rho_dp = new MyVector(0,0);
     private static MyVector lambda_rho_Parameters;
     private static MyVector possibleTip = new MyVector(0,0);
@@ -20,7 +20,7 @@ public class ScissorsCollisions {
     private static int side = 0;
 
     /**
-     * Checks for any blade collision with the ball specified (also takes the epsilon value into account).
+     * Checks for the scissors collision with the ball specified (also takes the epsilon value into account).
      * @param b Ball, the specified Ball-Object
      * @param e double, safety distance for checking for collisions.
      */
@@ -37,7 +37,12 @@ public class ScissorsCollisions {
         }
     }
 
-    //_HELPER___________________________________________________________________________________________________________
+    /**
+     * Checks if the current ball collides with the blades of the scissors.
+     *
+     * @param b     current ball
+     * @param e     double, safety distance for checking for collisions.
+     */
     private static void checkBlades(Ball b, double e) {
         lambda = lambda_rho_Parameters.x; // Wo befinden wir uns auf dem von der Klinge aufgespannten Vektor
         rho    = lambda_rho_Parameters.y;
@@ -63,7 +68,7 @@ public class ScissorsCollisions {
          * durch das epsilon werden an engen Stellen beide Kollisions-booleans auf true gesetzt.
          * Daher prüfen welche die nähere Klinge ist
          * */
-        closest_decision = checkClosest(b); // 0 = left blade 1 = right blade 2 = both blades
+        closest_decision = checkClosest(); // 0 = left blade 1 = right blade 2 = both blades
         switch (closest_decision) {
             case 0: // left blade
                 if (collision_LambdaOnBlade) {
@@ -87,14 +92,21 @@ public class ScissorsCollisions {
             shoot(b, s);
     }
 
+    /**
+     * Checks if the current ball collides with the tips of the scissors.
+     *
+     * @param b     current ball
+     * @param e     double, safety distance for checking for collisions.
+     */
     private static void checkTips(Ball b, double e) {
-        blade_length    = MyVector.distance(s.getCrossingPoint(), s.getLlStart());
-
+        blade_length    = MyVector.distance(s.getCrossingPoint(), s.getLlStart()); // radius und epsilon wie auch die
+                                                                                   // Klinge selbst herunterskalieren
         lambda_onPosTip = (lambda >=  1 + (-b.getRadius()-e-1)/blade_length)   &  (lambda <=  1 + (b.getRadius()+e+1)/blade_length);
         lambda_onNegTip = (lambda >=  0 + (-b.getRadius()-e-1)/blade_length)   &  (lambda <=  0 + (b.getRadius()+e+1)/blade_length);
         rho_onPosTip    = (   rho >=  1 + (-b.getRadius()-e-1)/blade_length)   &  (   rho <=  1 + (b.getRadius()+e+1)/blade_length);
         rho_onNegTip    = (   rho >=  0 + (-b.getRadius()-e-1)/blade_length)   &  (   rho <=  0 + (b.getRadius()+e+1)/blade_length);
 
+        //checkBlades wird vorher ausgeführt, daher ist closest_decision schon gesetzt und kann wiederverwendet werden
         switch (closest_decision) {
             case 0:
                 if(lambda_onPosTip) {
@@ -117,28 +129,45 @@ public class ScissorsCollisions {
             case 2:
                 break;
         }
-
         if(Calculator.checkDistance(b, possibleTip, e))
             deflect_Static(b, 2);
     }
 
-    private static int checkClosest(Ball b) {
+    /**
+     * Checks which blade the ball is closest to. ScissorsCalculations.f was set in
+     * {@link ScissorsCollisions#checkBlades(Ball, double)} and can be reused.
+     *
+     * @return 0 if closest to left blade, 1 if closest to right blade
+     */
+    private static int checkClosest() {
         if (ScissorsCalculations.f < 0.5)
-            return 0;                               // Collision on left blade
+            return 0;                      // Collision on left blade
         else
-            return 1;                               // collision on right blade
+            return 1;                      // collision on right blade
     }
 
-    /*
-    * directional vector ist immer die parallele Komponente und auch nur die wird mit der Elastizität skaliert
-    * */
+    /**
+     * If the scissors is closing and the ball collides with both sides, shoot is called. The directional vector is
+     * calculated using the helper-rectangle and is always directed along the ball's parallel velocity component.
+     * The directional vector is scaled with scissorsSpeed, averageDeflectVelocity and the ball's elasticity and
+     * applied against the ball's current velocity.
+     *
+     * @param b     current ball
+     * @param s     the scissors
+     */
     public static void shoot(Ball b, Scissors s) {
         s.calcDirectionalVector();
         ScissorsCalculations.calcAverageDeflectVelocity(s, lambda_dp, rho_dp);
         b.setVelVec(MyVector.add(b.getVelVec(), MyVector.multiply(MyVector.multiply(s.getDirectionalVector(), ScissorsCalculations.average_velocity), b.getElasticity())));
-
     }
 
+    /**
+     * Used to deflect (bounce) the ball if the scissors is static. Depending on which blade the ball is colliding and
+     * from which side it is approaching, {@link CollisionHandling#bounceVelocity(Ball, int, MyVector)} is called.
+     *
+     * @param b             current ball
+     * @param decision      decision variable for which blade
+     */
     public static void deflect_Static(Ball b, int decision) {
         switch (decision) {
             case 0: // lambda
@@ -164,6 +193,17 @@ public class ScissorsCollisions {
         }
 
     }
+
+    /**
+     * Used to deflect (bounce) the ball if the scissors is closing. Depending on which blade the ball is colliding with
+     * the parallel component of the according blade is calculated and scaled using the deflectVelocity calculated in
+     * {@link ScissorsCalculations#calcDeflectVelocity(Scissors, MyVector, MyVector)}. The ball's velocity vector is then
+     * split into its parallel and orthogonal components and rearranged using the blades parallel vector.
+     *
+     * @param b             current ball
+     * @param s             the scissors
+     * @param decision      decision variable for which blade
+     */
     public static void deflect_Kinetic(Ball b, Scissors s, int decision) {
         MyVector normedCenterLine = new MyVector(0,0), vOrthogonal, vParallel;
         MyVector vParallel_Blade = new MyVector(0,0);
@@ -189,8 +229,9 @@ public class ScissorsCollisions {
         }
     }
 
+    //_HELPER___________________________________________________________________________________________________________
     private static void reset() {
-        collision_LambdaOnBlade = collision_LambdaOnTip = collision_RhoOnBlade = collision_RhoOnTip = inside_Blades = false;
+        collision_LambdaOnBlade = collision_RhoOnBlade = inside_Blades = false;
         lambda_onBlade = lambda_onPosTip = lambda_onNegTip = rho_onBlade = rho_onPosTip = rho_onNegTip = false;
         lambda = rho = side = 0;
     }

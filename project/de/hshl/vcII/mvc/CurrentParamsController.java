@@ -56,6 +56,10 @@ public class CurrentParamsController {
         ballObservableList = FXCollections.observableArrayList();
     }
 
+    /**
+     * Updates the TableView that displays the current ball parameters. Called whenever an initial velocity is set and
+     * every 10th frame to be up to date.
+     */
     public void update() {
         Calculator.calcTotalEnergy();
 

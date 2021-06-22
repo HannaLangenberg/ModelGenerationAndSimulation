@@ -14,8 +14,6 @@ public class Grid {
     private boolean snapOn = false;
     private double gridSpacingX = 100, gridSpacingY = 100;
 
-    //_GRID_____________________________________________________________________________________________________________
-
     /**
      * Turn the Grin on/off.
      * @param aDrawingPane draws the grid on the specified Pane
@@ -51,9 +49,6 @@ public class Grid {
             yLines.add(new Line(0, posY, screenX, posY));
             posY += gridSpacingY;
         }
-                /*Rectangle rec = new Rectangle(25, 0, 550, 339);
-                rec.setFill(Color.RED);
-                aDrawingPane.getChildren().add(rec);*/
         aDrawingPane.getChildren().addAll(xLines);
         aDrawingPane.getChildren().addAll(yLines);
     }

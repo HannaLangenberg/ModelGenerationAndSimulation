@@ -22,7 +22,6 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-//            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate());
             s.getG().getTransforms().add(new Rotate(s.getG().getRotate() < 90 ? s.getG().getRotate() - 1 : s.getG().getRotate(), s.getCrossingPoint().x, s.getCrossingPoint().y));
             s.setSpin(s.getSpin() - 1);
             determineOrientation(s);
@@ -46,7 +45,6 @@ public class Rotation {
         }
         else if(o instanceof Scissors) {
             Scissors s = (Scissors) o;
-//            s.getG().setRotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate());
             s.getG().getTransforms().add(new Rotate(s.getG().getRotate() < 90 ? s.getG().getRotate() + 1 : s.getG().getRotate(), s.getCrossingPoint().x, s.getCrossingPoint().y));
             s.setSpin(s.getSpin() + 1);
             determineOrientation(s);
@@ -54,6 +52,10 @@ public class Rotation {
         }
     }
 
+    /**
+     * Determine the wall's or scissors' orientation based on their rotation
+     * @param o Object, which was previously rotated
+     */
     private void determineOrientation(Object o) {
         if(o instanceof Wall) {
             Wall w = (Wall) o;

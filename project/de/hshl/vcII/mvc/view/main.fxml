@@ -86,7 +86,7 @@
                                         </Button>
                                         <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="50.0">
                                             <children>
-                                                <Polygon fx:id="d_play" fill="GREEN" onMouseClicked="#d_play_changeSimSpd" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="90.0" scaleX="0.15" scaleY="0.125" scaleZ="0.25" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
+                                                <Polygon fx:id="d_play" fill="GREEN" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" rotate="90.0" scaleX="0.15" scaleY="0.125" scaleZ="0.25" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" visible="false" />
                                                 <HBox fx:id="hb_pause" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="50.0" visible="false">
                                                     <children>
                                                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="18.0" translateY="9.75" width="3.0" />

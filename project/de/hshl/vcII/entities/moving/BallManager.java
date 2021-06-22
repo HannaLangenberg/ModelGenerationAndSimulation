@@ -22,7 +22,6 @@ public class BallManager {
     public void setB(Ball b) {
         this.b = b;
     }
-
     public Ball getB() {
         return b;
     }

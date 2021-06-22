@@ -28,6 +28,7 @@ public class Placer {
 
     /**
      * If close enough snap the currently placed Wall to the Ball, or vice versa.
+     *
      * @param w the instance of Wall to be placed
      * @param b the instance of Ball to be placed
      * @param mouse where the cursor is located currently
@@ -82,6 +83,7 @@ public class Placer {
 
     /**
      * Place the currently selected Item (Ball, Wall or Scissors) at the X/Y Location of the cursor.
+     *
      * @param e MouseEvent to get the cursor position
      */
     public void place(MouseEvent e){
@@ -127,6 +129,7 @@ public class Placer {
 
     /**
      * Ussed for the load function
+     *
      * @param posVec
      */
     public void place(Object o, MyVector posVec) {
@@ -160,6 +163,7 @@ public class Placer {
         }
     }
 
+    // Methods for dragging the scissors________________________________________________________________________________
     public void onMousePressed(MouseEvent e) {
         if(mainModel.getCurrentlySelected() instanceof Scissors) {
             xStart =  xEnd = e.getX();
@@ -201,33 +205,31 @@ public class Placer {
         mainModel.getADrawingPane().getChildren().remove(scissors.getG());
         mainModel.getADrawingPane().getChildren().add(scissors.getG());
     }
+    //__________________________________________________________________________________________________________________
 
-    public Scissors getScissors() {
-        return scissors;
-    }
-
+    //GETTER_AND_SETTER_________________________________________________________________________________________________
     public void setScissors(Scissors scissors) {
         this.scissors = scissors;
+    }
+    public Scissors getScissors() {
+        return scissors;
     }
 
     public Ball getBall() {
         return ball;
     }
 
-    public double getX() {
-        return x;
-    }
-
     public void setX(double x) {
         this.x = x;
     }
-
-    public double getY() {
-        return y;
+    public double getX() {
+        return x;
     }
 
     public void setY(double y) {
         this.y = y;
     }
-
+    public double getY() {
+        return y;
+    }
 }

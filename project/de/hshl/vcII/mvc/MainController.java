@@ -101,7 +101,7 @@ public class MainController implements Initializable {
     private boolean lightMode = true;
     private boolean firstTime = true;
 
-    // Used for resizing.
+    // Used for resizing
     private ResizePane resizePane;
 
     /**
@@ -152,8 +152,10 @@ public class MainController implements Initializable {
 
     //_MENU_____________________________________________________________________________________________________________
 
-    // Start the simulation
-    // Is called whenever the 'Start/Stop' button is clicked.
+    /**
+     * Start the simulation
+     * Is called whenever the 'Start/Stop' button is clicked.
+     */
     @FXML
     private void run(){
         //settingsController.fillVariables();
@@ -177,13 +179,9 @@ public class MainController implements Initializable {
         }
     }
 
-    //TODO: Was schlaues dazu schreiben.
-    @FXML
-    private void d_play_changeSimSpd(){
-
-    }
-
-    // Is called whenever 'clear screen' is clicked in the 'File' menu.
+    /**
+     * Is called whenever 'clear screen' is clicked in the 'File' menu.
+     */
     @FXML
     private void clearScreen() {
         mainModel.getBallManager().getBalls().removeAll(mainModel.getBallManager().getBalls());
@@ -201,7 +199,10 @@ public class MainController implements Initializable {
         mainModel.getCurrentParamsController().reset();
         firstTime = true;
     }
-    // Is called whenever 'save' is clicked in the 'File' menu.
+
+    /**
+     * Is called whenever 'save' is clicked in the 'File' menu.
+     */
     @FXML
     private void save(){
         FileChooser fileChooser = new FileChooser();
@@ -210,7 +211,10 @@ public class MainController implements Initializable {
         File save = fileChooser.showSaveDialog(aRootPane.getScene().getWindow());
         IO.save(save);
     }
-    // Is called whenever 'load' is clicked in the 'File' menu.
+
+    /**
+     * Is called whenever 'load' is clicked in the 'File' menu.
+     */
     @FXML
     private void load(){
         FileChooser fileChooser = new FileChooser();
@@ -224,7 +228,9 @@ public class MainController implements Initializable {
         btn_start_stop.setDisable(false);
     }
 
-    // Is called whenever 'Ball' is clicked in the 'Edit' menu.
+    /**
+     * Is called whenever 'Ball' is clicked in the 'Edit' menu.
+     */
     @FXML
     private void choiceBall() {
         Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 2.75,0.5,0,0,0,0);
@@ -233,7 +239,10 @@ public class MainController implements Initializable {
         mainModel.getWallManager().setW(null);
         activateLists();
     }
-    // Is called whenever 'Wall' is clicked in the 'Edit' menu.
+
+    /**
+     * Is called whenever 'Wall' is clicked in the 'Edit' menu.
+     */
     @FXML
     private void choiceWall(){
         Wall w = new Wall();
@@ -242,7 +251,10 @@ public class MainController implements Initializable {
         mainModel.getBallManager().setB(null);
         activateLists();
     }
-    // Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
+
+    /**
+     * Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
+     */
     @FXML
     private void choiceSchere(){
         Scissors s = new Scissors();
@@ -251,12 +263,17 @@ public class MainController implements Initializable {
         mainModel.getWallManager().setW(null);
     }
 
-    // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
+    /**
+     * Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
+     */
     @FXML
     private void toggleGrid() {
         mainModel.getGrid().toggleGrid(aDrawingPane);
     }
-    // Is called whenever 'Snap To Grid' is clicked in the 'Grid' menu
+
+    /**
+     * Is called whenever 'Snap To Grid' is clicked in the 'Grid' menu
+     */
     @FXML
     private void snapToGrid() {
         mainModel.getGrid().toggleSnapToGrid();
@@ -271,7 +288,9 @@ public class MainController implements Initializable {
         }
     }
 
-    // Is called when ever 'Light' / 'Dark' is clicked
+    /**
+     * Is called when ever 'Light' / 'Dark' is clicked
+     */
     @FXML
     private void switch_mode() {
         mainModel.getMode().toggleMode(!lightMode);
@@ -329,7 +348,10 @@ public class MainController implements Initializable {
 
 
     //_MOUSE_EVENTS_____________________________________________________________________________________________________
-    // Is called whenever the mouse is clicked.
+    /**
+     * Is called whenever the mouse is clicked.
+     * @param e mouseEvent
+     */
     @FXML
     private void onMouse(MouseEvent e){
         switch(e.getButton()) {
@@ -475,13 +497,5 @@ public class MainController implements Initializable {
         mainModel.getKeyManager().mark(b);
         mainModel.getBallManager().setB(b);
         mainModel.setChoiceMade(true);
-    }
-
-    public boolean isFirstTime() {
-        return firstTime;
-    }
-
-    public void setFirstTime(boolean firstTime) {
-        this.firstTime = firstTime;
     }
 }

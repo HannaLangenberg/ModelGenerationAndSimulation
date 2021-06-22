@@ -3,14 +3,13 @@ package project.de.hshl.vcII.drawing.visuals;
 import project.de.hshl.vcII.mvc.MainModel;
 import project.de.hshl.vcII.utils.Utils;
 
-
 public class Mode {
 
     private boolean mode = false;
 
     /**
      * Turn the darkmode on/off.
-     * @param mode
+     * @param mode true if lightmode is chosen, false for darkmode
      */
     public void toggleMode(boolean mode) {
         this.mode = mode;

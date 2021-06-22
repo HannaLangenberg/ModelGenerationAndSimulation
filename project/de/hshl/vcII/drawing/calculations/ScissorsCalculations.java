@@ -6,36 +6,37 @@ import project.de.hshl.vcII.utils.MyVector;
 
 public class ScissorsCalculations {
 
-    static double lambda, rho, a, o, f;
+    static double lambda, rho, a, f;
     private static MyVector a_onLambdaBlade, a_onRhoBlade;
     static double lambda_velocity, rho_velocity, average_velocity;
     static MyVector cp, rv, bp, hv;
 
     /**
-     * Method for checking if the Ball is colliding with the top-bit of the Scissors.
-     * (Could be expanded to check collision with the whole Scissors.)
-     * @param s check this Scissors
-     * @param b check this Ball
-     * @return true if the Scissors collides, false if not
+     * Method for checking if the Ball is between the blades of the Scissors.
+     *
+     * @param s     check this Scissors
+     * @param b     check this Ball
+     * @return      true if the ball is between the blades, false if not
      */
     public static boolean checkPosition(Scissors s, Ball b) {
-        //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llStart
+        // Schnittpunkt ball mit hv der kurzen Rechteckseite und linke Klinge von cp bis llStart
          calcCommonPoint(s, b);
         // lambda (a) auch für rho verwenden und Punkte für Vektoren berechnen
         a_onLambdaBlade = MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getLlStart()), a);
         a_onRhoBlade    = MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getRlStart()), a);
-        // ball schnittpunkt zwischen 0 und 1 innen
+        // Ball Schnittpunkt zwischen 0 und 1 innen
         f = MyVector.insertPintoEquation(a_onLambdaBlade, MyVector.subtract(a_onLambdaBlade, a_onRhoBlade), b.getPosVec());
 
-        if(f >= 0 & f <= 1)
-            return true;
-        else
-            return false;
-
+        return f >= 0 & f <= 1;
     }
 
     /**
-     * Calculate the common point, meaning the point where thr blades touch
+     * Calculate the scaling factor that is used as lambda on the left and rho on the right blade. Have a look at our
+     * documentation for an illustrating sketch.
+     *     \---------/
+     *      \------/
+     *       \---/
+     *        \/
      * @param s Scissors, the specified Scissors-Object
      * @param b Ball, the specified Ball-Object
      */
@@ -48,22 +49,19 @@ public class ScissorsCalculations {
         // entspricht unserem lambda, also Skalierungsfaktor entlang der linken Klinge
         a = ((cp.y - bp.y) * hv.x + (-cp.x + bp.x) * hv.y)
             /(-rv.y * hv.x + rv.x * hv.y);
-
-        // Skalierungsfaktor entlang des Hilfsvektors
-        o = ((cp.x - bp.x)*(-s.getLlStart().y - cp.y) + (cp.y - bp.y)*(rv.x))
-            /(-(rv.y) * hv.x + (rv.x) * hv.y);
     }
 
     //_HELPER___________________________________________________________________________________________________________
     public static void reset() {
-        lambda = rho = a = o = f = 0 ;
+        lambda = rho = a = f = 0 ;
         lambda_velocity = rho_velocity = average_velocity = 0;
         a_onLambdaBlade = a_onRhoBlade = cp = hv = bp = rv = new MyVector(0,0);
     }
 
     /**
      * This method calculates the lambda (scaling factor on left blade) and rho (on right blade) for the
-     * dropped perpendicular of our ball.
+     * dropped perpendicular of the current ball.
+     *
      * @param s         the scissors
      * @param b         current ball
      * @param left      vector of left blades starting point
@@ -80,7 +78,8 @@ public class ScissorsCalculations {
     }
 
     /**
-     * Calculates the deflect velocity depending on the rotating motion
+     * Calculates the deflect velocity depending on the rotating motion.
+     *
      * @param s             the scissors
      * @param lambda_dp     dropped perpendicular on left blade
      * @param rho_dp        dropped perpendicular on right blade
@@ -91,7 +90,8 @@ public class ScissorsCalculations {
     }
 
     /**
-     * Calculates the average deflect velocity, used if ball is in contact with both blades
+     * Calculates the average deflect velocity, used if ball is in contact with both blades.
+     *
      * @param s             the scissors
      * @param lambda_dp     dropped perpendicular on left blade
      * @param rho_dp        dropped perpendicular on right blade

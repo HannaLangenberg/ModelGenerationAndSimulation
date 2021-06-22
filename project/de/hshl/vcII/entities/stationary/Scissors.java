@@ -30,6 +30,22 @@ public class Scissors {
     private int orientation;
     private boolean closing = false;
 
+    //default constructor
+    public Scissors() {
+        rectangle = new Rectangle();
+        leftLine = new Line();
+        rightLine = new Line();
+        g = new Group();
+        posVec = new MyVector(0,0);
+        orientation = 2;
+        setUnmarkedStroke();
+        initializeLines();
+        updateLines();
+        calcCrossingPoint();
+        g.getChildren().addAll(rectangle, leftLine, rightLine);
+        closing = false;
+    }
+
     // Currently UNUSED
     public Scissors(String outline, String leftline, String rightline, String group, String pos, String centerPoint,
                     String crossingPoint, String llStart, String llStart_angle, String llEnd, String rlStart, String rlStart_angle,
@@ -57,20 +73,6 @@ public class Scissors {
         initializeLines();
     }
 
-    public Scissors() {
-        rectangle = new Rectangle();
-        leftLine = new Line();
-        rightLine = new Line();
-        g = new Group();
-        posVec = new MyVector(0,0);
-        orientation = 2;
-        setUnmarkedStroke();
-        initializeLines();
-        updateLines();
-        calcCrossingPoint();
-        g.getChildren().addAll(rectangle, leftLine, rightLine);
-        closing = false;
-    }
     private void initializeLines() {
         leftLine.setStroke(Color.NAVY);
         leftLine.setStrokeWidth(3);
@@ -102,6 +104,14 @@ public class Scissors {
         rectangle.setStrokeWidth(2);
     }
 
+    /**
+     * When using JavaFX's transform or rotate options their coordinates are only sudo applied. To retrieve the correct
+     * coordinates for calculating any collisions the rotation has to be applied to a helper object which can then be
+     * used.
+     *
+     * @param decision      0 for applying the group rotation from {@link project.de.hshl.vcII.drawing.Rotation}
+     *                      1 for applying the line rotation form {@link #animate(AnchorPane)}
+     */
     public void applyRotation(int decision) {
         switch (decision) {
             case 0: // abhängig von Gruppenrotation
@@ -180,7 +190,6 @@ public class Scissors {
         angle = MyVector.angle(llVector, rlVector);
         Rotate rotate_left = new Rotate(0,  crossingPoint.x, crossingPoint.y);
         Rotate rotate_right = new Rotate(0,  crossingPoint.x, crossingPoint.y);
-//        System.out.println(angle);
         if(angle > 1) {
             rotate_left.setAngle(rotate_left.getAngle() + MainModel.get().getScissorsSpeed());
             rotate_right.setAngle(rotate_right.getAngle() - MainModel.get().getScissorsSpeed());
@@ -212,6 +221,9 @@ public class Scissors {
     public void setClosing(boolean closing) {
         this.closing = closing;
     }
+    public boolean isClosing() {
+        return closing;
+    }
 
     public void setDirectionalVector(MyVector directionalVector) {
         this.directionalVector = directionalVector;
@@ -225,10 +237,6 @@ public class Scissors {
     }
     public MyVector getCrossingPoint() {
         return crossingPoint;
-    }
-
-    public boolean isClosing() {
-        return closing;
     }
 
     public void setCenterPoint(MyVector centerPoint) {
@@ -285,28 +293,25 @@ public class Scissors {
         return rightLine;
     }
 
-    public MyVector getLlStart() {
-        return llStart;
-    }
-
     public void setLlStart(MyVector llStart) {
         this.llStart = llStart;
     }
-
-    public MyVector getRlStart() {
-        return rlStart;
+    public MyVector getLlStart() {
+        return llStart;
     }
 
     public void setRlStart(MyVector rlStart) {
         this.rlStart = rlStart;
     }
-
-    public MyVector getLlEnd() {
-        return llEnd;
+    public MyVector getRlStart() {
+        return rlStart;
     }
 
     public MyVector getRlEnd() {
         return rlEnd;
+    }
+    public MyVector getLlEnd() {
+        return llEnd;
     }
 
     public String save(){

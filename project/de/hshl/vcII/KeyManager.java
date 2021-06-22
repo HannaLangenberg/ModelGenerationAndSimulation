@@ -35,7 +35,6 @@ public class KeyManager {
      * @param e to know where the cursor currently is
      */
     public void manageMouse(MouseEvent e){
-       // mainWindowModel.setChoiceMade(false);
         mainModel.setCurrentlySelected(null);
         Rectangle clickingHitBox = new Rectangle((int) e.getX(), (int) e.getY(),1,1);
         for(Wall w : mainModel.getWallManager().getWalls()){
@@ -107,9 +106,10 @@ public class KeyManager {
             case DELETE:
                 // The chosen block is deleted
                 if(mainModel.isChoiceMade()) deleteBlockOrWall();
+                break;
             case SPACE:
                 mainModel.getSimulator().run();
-
+                break;
         }
     }
 
@@ -131,6 +131,7 @@ public class KeyManager {
                         mainModel.setCurrentlySelected(w);
                         mark(w);
                         mainModel.getWallManager().setW(w);
+                        mainModel.setChoiceMade(true);
                         if(!mainModel.getADrawingPane().getChildren().contains(w.getCollision())) {
                             mainModel.getADrawingPane().getChildren().add(w.getCollision());
                             return;
@@ -140,6 +141,7 @@ public class KeyManager {
             }else {
                 mainModel.getScissorsManager().getS().setMarkedStroke();
                 mainModel.setCurrentlySelected(mainModel.getScissorsManager().getS());
+                mainModel.setChoiceMade(true);
                 if(!mainModel.getADrawingPane().getChildren().contains(mainModel.getScissorsManager().getS().getG())) {
                     mainModel.getADrawingPane().getChildren().add(mainModel.getScissorsManager().getS().getG());
                     return;
