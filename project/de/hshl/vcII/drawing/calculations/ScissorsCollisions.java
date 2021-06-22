@@ -21,8 +21,8 @@ public class ScissorsCollisions {
 
     /**
      * Checks for any blade collision with the ball specified (also takes the epsilon value into account).
-     * @param b Ball which hits the blade
-     * @param e epsilon value (~speed of the Ball)
+     * @param b Ball, the specified Ball-Object
+     * @param e double, safety distance for checking for collisions.
      */
     public static void checkScissors(Ball b, double e) {
         if(MainModel.get().getScissorsManager().getS() != null) {

@@ -6,6 +6,10 @@ import project.de.hshl.vcII.entities.stationary.Wall;
 
 public class Rotation {
 
+    /**
+     * Rotates the given Object a certain direction according the the kay  that was pressed
+     * @param o Object, which should be rotated
+     */
     public void rotateLeft(Object o){
         if(o instanceof Wall) {
             Wall w = (Wall) o;
@@ -26,6 +30,10 @@ public class Rotation {
         }
     }
 
+    /**
+     * Rotates the given Object a certain direction according the the kay  that was pressed
+     * @param o Object, which should be rotated
+     */
     public void rotateRight(Object o){
         if(o instanceof Wall) {
             Wall w = (Wall) o;

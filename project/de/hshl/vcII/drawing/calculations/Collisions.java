@@ -9,6 +9,13 @@ public class Collisions {
     static int side;
     static MyVector dp;
 
+    /**
+     * Check if the Ball b will go outside the border of the window, if the ball gets outside the Window, it is deflected.
+     * If the ball has a too small velocity in y direction, it doesn't bounce anymore, it just rolls using friction.
+     * If the velocity of the Ball surpasses a certain value (Math.abs(b.getVelVec().x) < 2.5) the Ball stops rolling.
+     * @param b Ball, the specified Ball-Object
+     * @param e double, safety distance for checking for collisions.
+     */
     public static void checkScreen(Ball b, double e)
     {
         /*

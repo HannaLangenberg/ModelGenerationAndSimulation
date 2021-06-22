@@ -7,6 +7,12 @@ import project.de.hshl.vcII.utils.Utils;
 public class CollisionHandling {
     static MyVector normedCenterLine, vOrthogonal, vParallel;
 
+    /**
+     * Splits the velocity vector of b to it's orthogonal and parallel components, and checks if b moves to the wall or away from it.
+     * @param b     Ball, the Ball-Object currently handled
+     * @param side  int, the direction the ball goes
+     * @param dp    MyVector, the dropped perpendicular of the Ball (b) to the according wall
+     */
     public static void bounceVelocity(Ball b, int side, MyVector dp) {
         // Calculate values
         // The directional vector between the ball's position and its dropped perpendicular.
@@ -27,6 +33,10 @@ public class CollisionHandling {
         b.setColliding_Parallel_B(false);
     }
 
+    /**
+     * Stops the Ball b from bouncing if the value of the parallel vector (in y direction) in less than 9.81 [m/s^2].
+     * @param b Ball, this specifies which ball should stop bouncing
+     */
     public static void stopBouncing(Ball b) {
         if (Math.abs(vParallel.y) < Utils.CONSTANT_OF_GRAVITATION / 3) {
             b.setVelVec(MyVector.add(vOrthogonal, MyVector.multiply(vParallel, 0)));

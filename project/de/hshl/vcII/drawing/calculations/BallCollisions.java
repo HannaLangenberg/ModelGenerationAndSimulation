@@ -18,8 +18,7 @@ public class BallCollisions {
      * Check the current ball against every other ball by iterating through the balls list.
      * For each pairing call {@link BallCollisions#ballOnBall(Ball, Ball, double)}.
      * @param b       current ball
-     * @param epsilon safety distance for checking for collisions. [5px]
-     * @author Jan-Gustav Liedtke
+     * @param epsilon safety distance for checking for collisions.
      */
     public static void checkBalls(Ball b, double epsilon){
         List<Ball> balls = new ArrayList<>(MainModel.get().getBallManager().getBalls()); // deep copy of ball list
@@ -34,8 +33,7 @@ public class BallCollisions {
      * both individual radii and epsilon combined, call {@link BallCollisions#angledShock(Ball, Ball)}.
      * @param b1      current ball
      * @param b2      iterated ball from list
-     * @param epsilon safety distance for checking for collisions. [5px]
-     * @author Jan-Gustav Liedtke
+     * @param epsilon safety distance for checking for collisions.
      */
     private static void ballOnBall(Ball b1, Ball b2, double epsilon) {
         double r_b1 = b1.getRadius(),                                  // finds the radii of b1, and b2
@@ -69,7 +67,6 @@ public class BallCollisions {
      *
      * @param b1      current ball
      * @param b2      iterated ball from list
-     * @author Hanna Langenberg
      */
     private static void angledShock(Ball b1, Ball b2){
         // Norm the line from the center of b1 to center of b2

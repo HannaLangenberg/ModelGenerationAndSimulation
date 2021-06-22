@@ -21,7 +21,6 @@ public class Calculator {
      * @param normedCenterLine normed line → shock normal
      * @param b                current ball
      * @return                 parallel component of current ball's velVec
-     * @author Hanna Langenberg
      */
     static MyVector calc_P_component(MyVector normedCenterLine, Ball b) {
         return MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine);
@@ -33,7 +32,6 @@ public class Calculator {
      * @param normedCenterLine normed line → shock normal
      * @param b                current ball
      * @return                 orthogonal component of current ball's velVec
-     * @author Hanna Langenberg
      */
     static MyVector calc_O_component(MyVector normedCenterLine, Ball b) {
         return  MyVector.subtract(MyVector.orthogonalProjection(b.getVelVec(), normedCenterLine), b.getVelVec());
@@ -46,7 +44,6 @@ public class Calculator {
      * @param dp_Coord   dropped perpendicular of the ball
      * @param epsilon    safety distance for checking for collisions. [5px]
      * @return           true if collision happened
-     * @author Jan-Gustav Liedtke
      */
     public static boolean checkDistance(Ball b, MyVector dp_Coord, double epsilon) {
         return MyVector.distance(b.getPosVec(), dp_Coord) <= b.getRadius() + epsilon;

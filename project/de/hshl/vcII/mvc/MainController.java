@@ -92,7 +92,7 @@ public class MainController implements Initializable {
     private SettingsController settingsController = new SettingsController();
     private CustomHeaderController customHeaderController = new CustomHeaderController();
     // Declaration of original model.
-    private MainModel mainWindowModel;
+    private MainModel mainModel;
 
     // Variables to maintain the screen.
     private double windowCursorPosX, windowCursorPosY;
@@ -115,16 +115,16 @@ public class MainController implements Initializable {
         aSettingsPane.setDisable(true);
 
         // Get the original MainModel
-        mainWindowModel = MainModel.get();
+        mainModel = MainModel.get();
 
-        mainWindowModel.setMainController(this);
+        mainModel.setMainController(this);
 
         currentParamsController.initialize(lWind, lDt, lGravity, tv_ball_params, tc_Radius, tc_Mass, tc_V, tc_PotE, tc_KinE,
                 tc_LostE, tc_TotE, tc_Elasticity, tc_Pos, tc_No);
-        mainWindowModel.setCurrentParamsController(currentParamsController);
+        mainModel.setCurrentParamsController(currentParamsController);
         settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
                 lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
-        mainWindowModel.setSettingsController(settingsController);
+        mainModel.setSettingsController(settingsController);
         customHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane, sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
                 mousePressedInHeader, windowCursorPosX, windowCursorPosY);
 
@@ -132,21 +132,21 @@ public class MainController implements Initializable {
 
         // Setting up the screen dimensions.
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        mainWindowModel.setScreenWidth(dimension.width);
-        mainWindowModel.setScreenHeight(dimension.height);
+        mainModel.setScreenWidth(dimension.width);
+        mainModel.setScreenHeight(dimension.height);
 
         // Setting up the pane used for resizing.
         resizePane = new ResizePane();
         aRootPane.getChildren().add(resizePane);
 
         // Inits when stage is Shown (booted up)
-        mainWindowModel.getStage().setOnShown(e -> {
-            mainWindowModel.init(aDrawingPane);
-            mainWindowModel.initSettings(aSettingsPane);
+        mainModel.getStage().setOnShown(e -> {
+            mainModel.init(aDrawingPane);
+            mainModel.initSettings(aSettingsPane);
             resizePane.initResizeLines();
             resizePane.alignResizeLines();
             customHeaderController.draggablePrimaryStage();
-            mainWindowModel.getMode().toggleMode(lightMode);
+            mainModel.getMode().toggleMode(lightMode);
         });
     }
 
@@ -163,11 +163,11 @@ public class MainController implements Initializable {
             tf_v0_Y.setDisable(true);
             firstTime = false;
         }
-        if(!mainWindowModel.isArrowsActive()) mainWindowModel.getBallManager().removeArrows();
+        if(!mainModel.isArrowsActive()) mainModel.getBallManager().removeArrows();
 
-        mainWindowModel.getSimulator().run();
+        mainModel.getSimulator().run();
 
-        if (mainWindowModel.getSimulator().isRunning()) {
+        if (mainModel.getSimulator().isRunning()) {
             d_play.setVisible(true);
             hb_pause.setVisible(false);
         } else {
@@ -186,10 +186,10 @@ public class MainController implements Initializable {
     // Is called whenever 'clear screen' is clicked in the 'File' menu.
     @FXML
     private void clearScreen() {
-        mainWindowModel.getBallManager().getBalls().removeAll(mainWindowModel.getBallManager().getBalls());
-        mainWindowModel.getWallManager().getWalls().removeAll(mainWindowModel.getWallManager().getWalls());
-        mainWindowModel.getScissorsManager().setS(null);
-        mainWindowModel.setCurrentlySelected(null);
+        mainModel.getBallManager().getBalls().removeAll(mainModel.getBallManager().getBalls());
+        mainModel.getWallManager().getWalls().removeAll(mainModel.getWallManager().getWalls());
+        mainModel.getScissorsManager().setS(null);
+        mainModel.setCurrentlySelected(null);
         aDrawingPane.getChildren().clear();
         hb_pause.setVisible(false);
         d_play.setVisible(false);
@@ -197,8 +197,8 @@ public class MainController implements Initializable {
         aSettingsPane.setDisable(true);
         tf_v0_X.setDisable(false);
         tf_v0_Y.setDisable(false);
-        mainWindowModel.getSettingsController().getChangedBalls().clear();
-        mainWindowModel.getCurrentParamsController().reset();
+        mainModel.getSettingsController().getChangedBalls().clear();
+        mainModel.getCurrentParamsController().reset();
         firstTime = true;
     }
     // Is called whenever 'save' is clicked in the 'File' menu.
@@ -228,39 +228,39 @@ public class MainController implements Initializable {
     @FXML
     private void choiceBall() {
         Ball b = new Ball(0, new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), new MyVector(0,0), 25, 2.75,0.5,0,0,0,0);
-        mainWindowModel.setCurrentlySelected(b);
-        mainWindowModel.getBallManager().setB(b);
-        mainWindowModel.getWallManager().setW(null);
+        mainModel.setCurrentlySelected(b);
+        mainModel.getBallManager().setB(b);
+        mainModel.getWallManager().setW(null);
         activateLists();
     }
     // Is called whenever 'Wall' is clicked in the 'Edit' menu.
     @FXML
     private void choiceWall(){
         Wall w = new Wall();
-        mainWindowModel.setCurrentlySelected(w);
-        mainWindowModel.getWallManager().setW(w);
-        mainWindowModel.getBallManager().setB(null);
+        mainModel.setCurrentlySelected(w);
+        mainModel.getWallManager().setW(w);
+        mainModel.getBallManager().setB(null);
         activateLists();
     }
     // Is called whenever 'Elastic band' is clicked in the 'Edit' menu.
     @FXML
     private void choiceSchere(){
         Scissors s = new Scissors();
-        mainWindowModel.setCurrentlySelected(s);
-        mainWindowModel.getBallManager().setB(null);
-        mainWindowModel.getWallManager().setW(null);
+        mainModel.setCurrentlySelected(s);
+        mainModel.getBallManager().setB(null);
+        mainModel.getWallManager().setW(null);
     }
 
     // Is called whenever 'Toggle Grid' is clicked in the 'Grid' menu
     @FXML
     private void toggleGrid() {
-        mainWindowModel.getGrid().toggleGrid(aDrawingPane);
+        mainModel.getGrid().toggleGrid(aDrawingPane);
     }
     // Is called whenever 'Snap To Grid' is clicked in the 'Grid' menu
     @FXML
     private void snapToGrid() {
-        mainWindowModel.getGrid().toggleSnapToGrid();
-        if(mainWindowModel.getGrid().isSnapOn()){
+        mainModel.getGrid().toggleSnapToGrid();
+        if(mainModel.getGrid().isSnapOn()){
             lGridSnapActive.setVisible(true);
             miSnap.setStyle("-fx-border-color: green;" +
                     "-fx-border-width: 0 0 2 0;");
@@ -274,7 +274,7 @@ public class MainController implements Initializable {
     // Is called when ever 'Light' / 'Dark' is clicked
     @FXML
     private void switch_mode() {
-        mainWindowModel.getMode().toggleMode(!lightMode);
+        mainModel.getMode().toggleMode(!lightMode);
         lightMode = !lightMode;
         if (!lightMode) {
             lMode.setText("Dark");
@@ -301,7 +301,7 @@ public class MainController implements Initializable {
     private void chb_Choice_OnAction(ActionEvent actionEvent) {
         cb_choose.setDisable(!cb_choice_active.isSelected());
         if (cb_choose.isDisabled()) {
-            mainWindowModel.getKeyManager().unMarkAll();
+            mainModel.getKeyManager().unMarkAll();
         }
         else {
             cb_choose.setPromptText("wähle...");
@@ -336,12 +336,12 @@ public class MainController implements Initializable {
             // Which button is pressed?
             case PRIMARY:
                 // Left MouseButton.
-                if(mainWindowModel.isChoiceEnabled())
+                if(mainModel.isChoiceEnabled())
                     // Was 'W' previously pressed
-                    mainWindowModel.getKeyManager().manageMouse(e);
+                    mainModel.getKeyManager().manageMouse(e);
                 else {
-                    mainWindowModel.getPlacer().place(e);
-                    if(mainWindowModel.getCurrentlySelected() instanceof Ball) {
+                    mainModel.getPlacer().place(e);
+                    if(mainModel.getCurrentlySelected() instanceof Ball) {
                         btn_start_stop.setDisable(false);
                         aSettingsPane.setDisable(false);
                     }
@@ -350,29 +350,29 @@ public class MainController implements Initializable {
 
                 break;
             case SECONDARY:
-                if(mainWindowModel.isChoiceEnabled())
+                if(mainModel.isChoiceEnabled())
                     // Was 'W' previously pressed
-                    mainWindowModel.getKeyManager().manageMouse(e);
+                    mainModel.getKeyManager().manageMouse(e);
                 break;
         }
     }
 
     @FXML
     private void onMousePressed(MouseEvent e){
-        if(mainWindowModel.getScissorsManager().getS() == null)
-            mainWindowModel.getPlacer().onMousePressed(e);
+        if(mainModel.getScissorsManager().getS() == null)
+            mainModel.getPlacer().onMousePressed(e);
     }
 
     @FXML
     private void onMouseDragged(MouseEvent e) {
-        if(mainWindowModel.getScissorsManager().getS() == null)
-            mainWindowModel.getPlacer().onMouseDragged(e);
+        if(mainModel.getScissorsManager().getS() == null)
+            mainModel.getPlacer().onMouseDragged(e);
     }
 
     @FXML
     private void onMouseReleased(MouseEvent e) {
-        if(mainWindowModel.getScissorsManager().getS() == null) {
-            mainWindowModel.getPlacer().onMouseReleased(e);
+        if(mainModel.getScissorsManager().getS() == null) {
+            mainModel.getPlacer().onMouseReleased(e);
             activateLists();
         }
     }
@@ -428,53 +428,53 @@ public class MainController implements Initializable {
     //_KEY_EVENTS_______________________________________________________________________________________________________
     @FXML
     private void onKey(KeyEvent e) {
-        mainWindowModel.getKeyManager().manageInputs(e.getCode());
+        mainModel.getKeyManager().manageInputs(e.getCode());
     }
 
     @FXML
     private void arrows() {
-        mainWindowModel.setArrowsActive(!mainWindowModel.isArrowsActive());
+        mainModel.setArrowsActive(!mainModel.isArrowsActive());
     }
 
     //_MISC_____________________________________________________________________________________________________________
     public void activateLists(){
         // Add change listener for cb_choose to always keep it updated
-        mainWindowModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
+        mainModel.getBallManager().getBalls().addListener((InvalidationListener) observable -> {
             cb_update();
         });
-        mainWindowModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
+        mainModel.getWallManager().getWalls().addListener((InvalidationListener) observable -> {
             cb_update();
         });
-        if(mainWindowModel.getScissorsManager().getS() != null)
+        if(mainModel.getScissorsManager().getS() != null)
             cb_update();
 
     }
 
     public void cb_update() {
         cb_choose.getItems().clear();
-        for (Ball b : mainWindowModel.getBallManager().getBalls())
+        for (Ball b : mainModel.getBallManager().getBalls())
             cb_choose.getItems().add("Ball Nummer " + b.getNumber());
 
-        for (Wall w : mainWindowModel.getWallManager().getWalls())
+        for (Wall w : mainModel.getWallManager().getWalls())
             cb_choose.getItems().add("Wand Nummer " + w.getNumber());
 
-        if(mainWindowModel.getScissorsManager().getS() != null)
+        if(mainModel.getScissorsManager().getS() != null)
             cb_choose.getItems().add("Schere");
     }
 
     public void cb_choose(String s) {
         if(cb_choose.getValue() == null) return;
-        mainWindowModel.getKeyManager().choose(s);
+        mainModel.getKeyManager().choose(s);
     }
 
     @FXML
     public void selectBall_onAction(ActionEvent actionEvent) {
         Ball b = (Ball) tv_ball_params.getSelectionModel().getSelectedItem();
-        mainWindowModel.getKeyManager().unMarkAll();
-        mainWindowModel.setCurrentlySelected(b);
-        mainWindowModel.getKeyManager().mark(b);
-        mainWindowModel.getBallManager().setB(b);
-        mainWindowModel.setChoiceMade(true);
+        mainModel.getKeyManager().unMarkAll();
+        mainModel.setCurrentlySelected(b);
+        mainModel.getKeyManager().mark(b);
+        mainModel.getBallManager().setB(b);
+        mainModel.setChoiceMade(true);
     }
 
     public boolean isFirstTime() {

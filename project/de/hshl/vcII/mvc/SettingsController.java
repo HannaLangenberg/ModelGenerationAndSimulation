@@ -15,7 +15,7 @@ import java.util.List;
 import static project.de.hshl.vcII.utils.Utils.isDouble;
 
 public class SettingsController {
-    private MainModel mainWindowModel = MainModel.get();
+    private MainModel mainModel = MainModel.get();
 
     private Slider sl_Radius, sl_Weight, sl_Elasticity, sl_ScissorsSpeed;
     private Label lCurrentRadius, lCurrentWeight, lCurrentElasticity;
@@ -60,38 +60,38 @@ public class SettingsController {
             tf_Wind_X.setText(String.valueOf(Math.round(Utils.getWind().x)));
             tf_Wind_Y.setText(String.valueOf(Math.round(Utils.getWind().y)));
         }
-        mainWindowModel.getCurrentParamsController().update();
+        mainModel.getCurrentParamsController().update();
     }
 
 
     //_Parameter_Setting________________________________________________________________________________________________
     //_slider__
     public void sl_Radius_OnDragDetected(){
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
-            lCurrentRadius.setText("Aktueller Radius [px]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getRadius()));
+        if(mainModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainModel.getCurrentlySelected()).setRadius(sl_Radius.getValue());
+            lCurrentRadius.setText("Aktueller Radius [px]: " + ((int)((Ball) mainModel.getCurrentlySelected()).getRadius()));
         }
         System.out.println("-----\t" + sl_Radius.getValue() + "\t-----");
     }
 
     public void sl_Weight_OnDragDetected() {
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
-            lCurrentWeight.setText("Aktuelles Gewicht [Kg]: " + ((int)((Ball) mainWindowModel.getCurrentlySelected()).getMass()));
+        if(mainModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainModel.getCurrentlySelected()).setMass(sl_Weight.getValue());
+            lCurrentWeight.setText("Aktuelles Gewicht [Kg]: " + ((int)((Ball) mainModel.getCurrentlySelected()).getMass()));
         }
         System.out.println("-----\t" + sl_Weight.getValue() + "\t-----");
     }
 
     public void sl_Elasticity_OnDragDetected() {
-        if(mainWindowModel.getCurrentlySelected() instanceof Ball){
-            ((Ball) mainWindowModel.getCurrentlySelected()).setElasticity(sl_Elasticity.getValue());
-            lCurrentElasticity.setText("Aktuelle Elastizität [%]: " + (((Ball) mainWindowModel.getCurrentlySelected()).getElasticity())*100);
+        if(mainModel.getCurrentlySelected() instanceof Ball){
+            ((Ball) mainModel.getCurrentlySelected()).setElasticity(sl_Elasticity.getValue());
+            lCurrentElasticity.setText("Aktuelle Elastizität [%]: " + (((Ball) mainModel.getCurrentlySelected()).getElasticity())*100);
         }
         System.out.println("-----\t" + sl_Elasticity.getValue()*100 + "\t-----");
     }
 
     public void sl_ScissorsSpeed_OnDragDetected(){
-        mainWindowModel.setScissorsSpeed(sl_ScissorsSpeed.getValue());
+        mainModel.setScissorsSpeed(sl_ScissorsSpeed.getValue());
     }
 
     //_Helpers,_Getter_&_Setter_________________________________________________________________________________________
@@ -110,22 +110,22 @@ public class SettingsController {
     }
     private void initVelocityFields(TextField tf) {
         tf.textProperty().addListener((observableValue, s, t1) -> {
-            if(mainWindowModel.isChoiceMade() & mainWindowModel.getCurrentlySelected() instanceof Ball) {
+            if(mainModel.isChoiceMade() & mainModel.getCurrentlySelected() instanceof Ball) {
                 if (tf.equals(tf_v0_X)) {
-                    ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(isDouble(tf_v0_X), ((Ball) mainWindowModel.getCurrentlySelected()).getVelVec().y));
-                    ((Ball) mainWindowModel.getCurrentlySelected()).setVel0Vec(new MyVector(isDouble(tf_v0_X), ((Ball) mainWindowModel.getCurrentlySelected()).getVel0Vec().y));
+                    ((Ball) mainModel.getCurrentlySelected()).setVelVec(new MyVector(isDouble(tf_v0_X), ((Ball) mainModel.getCurrentlySelected()).getVelVec().y));
+                    ((Ball) mainModel.getCurrentlySelected()).setVel0Vec(new MyVector(isDouble(tf_v0_X), ((Ball) mainModel.getCurrentlySelected()).getVel0Vec().y));
                 }
                 else if(tf.equals(tf_v0_Y)) {
-                    ((Ball) mainWindowModel.getCurrentlySelected()).setVelVec(new MyVector(((Ball) mainWindowModel.getCurrentlySelected()).getVelVec().x, isDouble(tf_v0_Y)));
-                    ((Ball) mainWindowModel.getCurrentlySelected()).setVel0Vec(new MyVector(((Ball) mainWindowModel.getCurrentlySelected()).getVel0Vec().x, isDouble(tf_v0_Y)));
+                    ((Ball) mainModel.getCurrentlySelected()).setVelVec(new MyVector(((Ball) mainModel.getCurrentlySelected()).getVelVec().x, isDouble(tf_v0_Y)));
+                    ((Ball) mainModel.getCurrentlySelected()).setVel0Vec(new MyVector(((Ball) mainModel.getCurrentlySelected()).getVel0Vec().x, isDouble(tf_v0_Y)));
                 }
                     MainModel.get().getCurrentParamsController().update();
-                if (changedBalls.contains((Ball) mainWindowModel.getCurrentlySelected())) {
-                    changedBalls.add((Ball) mainWindowModel.getCurrentlySelected());
+                if (changedBalls.contains((Ball) mainModel.getCurrentlySelected())) {
+                    changedBalls.add((Ball) mainModel.getCurrentlySelected());
                 }
             }
-            if(!mainWindowModel.isChoiceMade()) {
-                for(Ball b : mainWindowModel.getBallManager().getBalls()) {
+            if(!mainModel.isChoiceMade()) {
+                for(Ball b : mainModel.getBallManager().getBalls()) {
                     if (!changedBalls.contains(b)) {
                         if (tf.equals(tf_v0_X)) {
                             b.setVelVec(new MyVector(isDouble(tf_v0_X),  b.getVelVec().y));

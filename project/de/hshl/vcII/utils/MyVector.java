@@ -13,7 +13,7 @@
 
         /**
          * used for the load function
-         * @param xy only accepted format: "(x/y)"
+         * @param xy String, only accepted format: "(x/y)"
          */
      public MyVector(String xy){
          xy = xy.replace("(", "");

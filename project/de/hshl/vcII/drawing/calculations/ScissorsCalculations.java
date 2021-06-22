@@ -34,6 +34,11 @@ public class ScissorsCalculations {
 
     }
 
+    /**
+     * Calculate the common point, meaning the point where thr blades touch
+     * @param s Scissors, the specified Scissors-Object
+     * @param b Ball, the specified Ball-Object
+     */
     private static void calcCommonPoint(Scissors s, Ball b) {
         cp = s.getCrossingPoint();
         rv = MyVector.subtract(s.getCrossingPoint(), s.getLlStart());

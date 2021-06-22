@@ -30,6 +30,7 @@ public class Scissors {
     private int orientation;
     private boolean closing = false;
 
+    // Currently UNUSED
     public Scissors(String outline, String leftline, String rightline, String group, String pos, String centerPoint,
                     String crossingPoint, String llStart, String llStart_angle, String llEnd, String rlStart, String rlStart_angle,
                     String rlEnd, String upperLeft, String lowerLeft, String upperRight, String lowerRight, String angle) {
