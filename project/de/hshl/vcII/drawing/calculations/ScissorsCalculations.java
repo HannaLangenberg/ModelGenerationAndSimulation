@@ -22,8 +22,8 @@ public class ScissorsCalculations {
         //Schnittpunkt ball mit hv der kurzen Rechteckseite und linke klinge von cp bis llStart
          calcCommonPoint(s, b);
         // lambda (a) auch für rho verwenden und Punkte für Vektoren berechnen
-         a_onLambdaBlade = calcDroppedPerpendicular(s, a, s.getLlStart());
-         a_onRhoBlade    = calcDroppedPerpendicular(s, a, s.getRlStart());
+        a_onLambdaBlade = MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getLlStart()), a);
+        a_onRhoBlade    = MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getRlStart()), a);
         // ball schnittpunkt zwischen 0 und 1 innen
         f = MyVector.insertPintoEquation(a_onLambdaBlade, MyVector.subtract(a_onLambdaBlade, a_onRhoBlade), b.getPosVec());
 
@@ -61,6 +61,15 @@ public class ScissorsCalculations {
         a_onLambdaBlade = a_onRhoBlade = cp = hv = bp = rv = new MyVector(0,0);
     }
 
+    /**
+     * This method calculates the lambda (scaling factor on left blade) and rho (on right blade) for the
+     * dropped perpendicular of our ball.
+     * @param s         the scissors
+     * @param b         current ball
+     * @param left      vector of left blades starting point
+     * @param right     vector of right blades starting point
+     * @return          lambda and rho for the ball's dropped perpendicular
+     */
     public static MyVector calc_lambda_rho_Parameters(Scissors s, Ball b, MyVector left, MyVector right) {
         lambda = ((s.getCrossingPoint().x - b.getPosVec().x)*(left.x - s.getCrossingPoint().x)+(s.getCrossingPoint().y - b.getPosVec().y)*(left.y - s.getCrossingPoint().y))
                 /(-Math.pow((left.x-s.getCrossingPoint().x), 2) - Math.pow((left.y - s.getCrossingPoint().y), 2));
@@ -70,20 +79,23 @@ public class ScissorsCalculations {
         return new MyVector(lambda, rho);
     }
 
-    public static MyVector calcCoordOnBlade(Scissors s, Ball b, MyVector line) {
-        double x = s.getCrossingPoint().x + ((b.getPosVec().y - s.getCrossingPoint().y)/(line.y - s.getCrossingPoint().y))*(line.x - s.getCrossingPoint().x);
-        return new MyVector(x, b.getPosVec().y);
-    }
-
-    public static MyVector calcDroppedPerpendicular(Scissors s, double omega, MyVector line) {
-        return MyVector.add(s.getCrossingPoint(), MyVector.multiply(MyVector.subtract(s.getCrossingPoint(), line), omega));
-    }
-
+    /**
+     * Calculates the deflect velocity depending on the rotating motion
+     * @param s             the scissors
+     * @param lambda_dp     dropped perpendicular on left blade
+     * @param rho_dp        dropped perpendicular on right blade
+     */
     public static void calcDeflectVelocity(Scissors s, MyVector lambda_dp, MyVector rho_dp) {
         lambda_velocity = (Math.PI * Math.abs(MyVector.distance(s.getCrossingPoint(), lambda_dp)))/3;
         rho_velocity    = (Math.PI * Math.abs(MyVector.distance(s.getCrossingPoint(), rho_dp)))/3;
     }
 
+    /**
+     * Calculates the average deflect velocity, used if ball is in contact with both blades
+     * @param s             the scissors
+     * @param lambda_dp     dropped perpendicular on left blade
+     * @param rho_dp        dropped perpendicular on right blade
+     */
     public static void calcAverageDeflectVelocity(Scissors s, MyVector lambda_dp, MyVector rho_dp) {
         calcDeflectVelocity(s, lambda_dp, rho_dp);
         average_velocity = (lambda_velocity + rho_velocity) / 2;

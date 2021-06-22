@@ -50,12 +50,12 @@ public class ScissorsCollisions {
 
         if(lambda_onBlade) // Parametermäßig auf der linken Klinge
         {
-            lambda_dp = ScissorsCalculations.calcDroppedPerpendicular(s, lambda, s.getLlStart());
+            lambda_dp = MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getLlStart()), lambda);
             collision_LambdaOnBlade = Calculator.checkDistance(b, lambda_dp, e); // Kollidieren mit der linken Klinge
         }
         if(rho_onBlade) // Parametermäßig auf der rechten Klinge
         {
-            rho_dp = ScissorsCalculations.calcDroppedPerpendicular(s, rho, s.getRlStart());
+            rho_dp =  MyVector.insertScalingFactorIntoEquation(s.getCrossingPoint(), MyVector.subtract(s.getCrossingPoint(), s.getRlStart()), rho);
             collision_RhoOnBlade = Calculator.checkDistance(b, rho_dp, e); // Kollidieren mit der rechten Klinge
         }
 
