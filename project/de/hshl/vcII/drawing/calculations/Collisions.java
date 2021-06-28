@@ -30,7 +30,6 @@ public class Collisions {
             b.setColliding_Parallel_B(true);
         }
 
-
         if(b.isColliding_Parallel_B()) {
             // Gegen "Decke" → einfach nur abstoßen
             // Gegen Boden → Bouncen irgendwann verbieten
@@ -58,23 +57,22 @@ public class Collisions {
 
             b.setColliding_Parallel_B(false);
 
-                if (b.isColliding_Orthogonal_F()) {
-                    // Horizontale Ebene → F_G = F_N
-                    // F_G = Utils.CONSTANT_OF_GRAVITATION
-                    // f_R_R = R_R_K * F_N
-                    // a_R = gespiegelte x-Komponente von bVelVec
-                    // a_R_R = a_R * f_R_R
+            if (b.isColliding_Orthogonal_F()) {
+                // Horizontale Ebene → F_G = F_N
+                // F_G = Utils.CONSTANT_OF_GRAVITATION
+                // f_R_R = R_R_K * F_N
+                // a_R = gespiegelte x-Komponente von bVelVec
+                // a_R_R = a_R * f_R_R
 
-                    double f_R_R = b.getRolVec().x * Utils.CONSTANT_OF_GRAVITATION;
-                    if (Math.abs(b.getVelVec().x) < 2.5) {
-                        b.setVelVec(new MyVector(0, b.getVelVec().y));
-                        b.setColliding_Orthogonal_F(false);
-                    } else {
-                        b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(new MyVector(-b.getVelVec().x, 0), f_R_R)));
-                    }
+                double f_R_R = b.getRolVec().x * Utils.CONSTANT_OF_GRAVITATION;
+                if (Math.abs(b.getVelVec().x) < 2.5) {
+                    b.setVelVec(new MyVector(0, b.getVelVec().y));
+                    b.setColliding_Orthogonal_F(false);
+                } else {
+                    b.setAccVec(MyVector.add(b.getAccVec(), MyVector.multiply(new MyVector(-b.getVelVec().x, 0), f_R_R)));
                 }
             }
-
+        }
     }
 
     public static void reset() {

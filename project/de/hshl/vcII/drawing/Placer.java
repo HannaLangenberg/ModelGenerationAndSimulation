@@ -128,7 +128,7 @@ public class Placer {
     }
 
     /**
-     * Ussed for the load function
+     * Used for the load function
      *
      * @param posVec
      */

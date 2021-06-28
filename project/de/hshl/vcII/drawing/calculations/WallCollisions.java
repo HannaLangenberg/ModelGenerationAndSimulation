@@ -94,16 +94,15 @@ public class WallCollisions {
             else
                 CollisionHandling.bounceVelocity(b, corner, possibleCorner);
 
-                if(w.getOrientation() == 2){
-                    b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
-                }
-                else if (w.getOrientation() == 0) {                            // Rotation nach LINKS
-                    WallCalculations.initializeForces(w, b, 0);
-                }
-                else if (w.getOrientation() == 1) {                            // Rotation nach RECHTS
-                    WallCalculations.initializeForces(w,b,1);
-                }
-
+            if(w.getOrientation() == 2){
+                b.setAccVec(MyVector.add(b.getAccVec(), new MyVector(0, -Utils.CONSTANT_OF_GRAVITATION)));
+            }
+            else if (w.getOrientation() == 0) {                            // Rotation nach LINKS
+                WallCalculations.initializeForces(w, b, 0);
+            }
+            else if (w.getOrientation() == 1) {                            // Rotation nach RECHTS
+                WallCalculations.initializeForces(w,b,1);
+            }
             reset();
             WallCalculations.reset();
             CollisionHandling.reset();
@@ -158,7 +157,6 @@ public class WallCollisions {
         }
         collision_onCorner = Calculator.checkDistance(b, possibleCorner, e);
         b.setColliding_Parallel_B(collision_onCorner);
-
     }
 
     private static void checkSides(Wall w, Ball b, double e) {

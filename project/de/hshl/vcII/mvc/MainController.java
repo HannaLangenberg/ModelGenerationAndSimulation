@@ -2,6 +2,8 @@ package project.de.hshl.vcII.mvc;
 
 import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -125,7 +127,8 @@ public class MainController implements Initializable {
         settingsController.initialize(sl_ScissorsSpeed, sl_Radius, lCurrentRadius, sl_Weight, lCurrentWeight, sl_Elasticity,
                 lCurrentElasticity, tf_Wind_X, tf_Wind_Y, tf_v0_X, tf_v0_Y, vb_displayCurrentParams);
         mainModel.setSettingsController(settingsController);
-        customHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane, sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
+        customHeaderController.initialize(aSettingsPane, resizePane, sMinPane, sMinMaxPane,
+                sExitPane, hHeader, sceneOnWindowPosX, sceneOnWindowPosY,
                 mousePressedInHeader, windowCursorPosX, windowCursorPosY);
 
         aDrawingPane.getStyleClass().add("anchor-drawing-pane");
